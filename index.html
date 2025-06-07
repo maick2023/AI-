@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专业级提示词生成器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            background-color: #111827;
+            color: #d1d5db;
+        }
+        .step-header {
+            @apply text-xl font-bold text-indigo-400 border-b-2 border-indigo-500/30 pb-2 mb-4 flex items-center;
+        }
+        .step-number {
+            @apply bg-indigo-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 font-bold text-lg;
+        }
+        .category-title {
+            @apply font-semibold text-gray-300 mb-2 text-base;
+        }
+        select {
+            @apply w-full bg-gray-800 border border-gray-600 text-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 p-2;
+        }
+        select[multiple] {
+            height: 120px;
+        }
+        option {
+            @apply p-2 bg-gray-800 text-gray-300;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1f2937; }
+        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        .loader, .spinner-sm {
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loader {
+            border: 4px solid #4b5563;
+            border-top: 4px solid #818cf8;
+            width: 50px;
+            height: 50px;
+        }
+        .spinner-sm {
+            border: 2px solid #4b5563;
+            border-top: 2px solid #818cf8;
+            width: 16px;
+            height: 16px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        #generate-button:disabled {
+            @apply bg-gray-500 cursor-not-allowed hover:bg-gray-500 shadow-none;
+        }
+        #lightbox {
+            @apply hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50;
+        }
+        #lightbox img {
+            @apply max-w-[90vw] max-h-[90vh] rounded-lg;
+        }
+        .gemini-button {
+            @apply text-sm text-indigo-400 hover:text-indigo-300 font-semibold flex items-center disabled:opacity-50 disabled:cursor-not-allowed;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 lg:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">专业级美女提示词生成器</h1>
+            <p class="mt-3 text-lg text-gray-400">遵循专业工作流，或在此自由创作</p>
+        </header>
+
+        <!-- **FIX START**: Changed grid to flexbox for a sidebar layout -->
+        <div class="flex flex-col lg:flex-row lg:gap-8">
+            <!-- Left Column (Sidebar) -->
+            <div id="builder-container" class="lg:w-2/5 xl:w-1/3 bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700 space-y-6 mb-8 lg:mb-0">
+                
+                <!-- Steps 1 to 4 -->
+                 <div>
+                    <div class="step-header"><span class="step-number">1</span>画质与风格 (引导模式)</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="category-title">艺术风格 (可选)</div>
+                            <select data-group="style"><option value="">-- 请选择风格 --</option></select>
+                        </div>
+                        <div>
+                             <div class="category-title">图像质量</div>
+                             <select multiple data-group="quality"></select>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="step-header"><span class="step-number">2</span>人物与气质</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div>
+                             <div class="category-title">气质类型</div>
+                             <select multiple data-group="temperament"></select>
+                        </div>
+                        <div><div class="category-title">面部特征</div><select multiple data-group="face"></select></div>
+                        <div><div class="category-title">发型</div><select multiple data-group="hair"></select></div>
+                        <div><div class="category-title">穿着服饰</div><select multiple data-group="clothing"></select>
+                    </div>
+                </div>
+                <div>
+                    <div class="step-header"><span class="step-number">3</span>场景与光影</div>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div><div class="category-title">地点/背景</div><select multiple data-group="scene"></select></div>
+                        <div><div class="category-title">环境光与氛围</div><select multiple data-group="lighting"></select></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="step-header"><span class="step-number">4</span>镜头语言</div>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div><div class="category-title">景别与构图</div><select multiple data-group="composition"></select></div>
+                        <div><div class="category-title">视角与透视</div><select multiple data-group="angle"></select></div>
+                        <div><div class="category-title">相机与景深</div><select multiple data-group="camera"></select></div>
+                        <div><div class="category-title">色彩与动感</div><select multiple data-group="color_motion"></select></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column (Main Content) -->
+            <div class="lg:w-3/5 xl:w-2/3 space-y-8">
+                <div class="bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-indigo-400">最终指令</h2>
+                        <div class="flex items-center space-x-4">
+                             <button id="inspire-button" class="gemini-button">✨ 随机灵感</button>
+                             <button id="clear-button" class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button>
+                        </div>
+                    </div>
+                    <div class="relative">
+                        <div class="flex justify-between items-center mb-1">
+                             <p class="text-center text-gray-400 text-sm">专业英文指令 (可编辑)</p>
+                             <button id="enrich-button" class="gemini-button" title="使用Gemini丰富细节">✨ 丰富</button>
+                        </div>
+                         <textarea id="final-prompt-input" rows="8" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="可直接在此输入，或通过左侧引导模式构建..."></textarea>
+                         <button id="copy-button-en" class="absolute top-8 right-3 text-gray-400 hover:text-white transition" title="复制英文指令">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                         </button>
+                    </div>
+                     <div class="mt-4">
+                        <h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3>
+                        <input id="negative-prompt" type="text" class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono" value="ng_deepnegative_v1_75t, (worst quality, low quality:1.4), (bad anatomy), (inaccurate limb:1.2), bad hands, extra fingers, (realistic, 3d:1.3), man, boy, blurry, simple background, text, watermark">
+                    </div>
+                </div>
+
+                <div class="bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700">
+                    <h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2>
+                    <button id="generate-button" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50">
+                        <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        生成杰作 (一次4张)
+                    </button>
+                    <div id="gallery-container" class="mt-4 w-full aspect-square bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-700">
+                        <div id="placeholder-text" class="text-gray-500 text-center">
+                           <p class="text-lg">艺术品，即将诞生</p>
+                           <p class="text-sm">请开始你的创作</p>
+                        </div>
+                         <div id="loader" class="loader hidden"></div>
+                         <div id="image-gallery" class="w-full h-full grid grid-cols-2 gap-2 p-2 hidden"></div>
+                    </div>
+                    <div id="error-message" class="mt-2 text-red-400 text-sm text-center font-semibold"></div>
+                </div>
+            </div>
+        </div>
+        <!-- **FIX END** -->
+    </div>
+    
+    <div id="lightbox">
+        <img id="lightbox-image" src="" alt="Enlarged image"/>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const promptData = {
+                style: { "逼真写实": "photorealistic", "二次元动漫": "anime", "CG渲染": "cg render", "油画质感": "oil painting", "水墨国风": "ink wash painting", "复古港风": "hong kong retro", "赛博朋克": "cyberpunk", "蒸汽朋克": "steampunk", "水彩": "watercolor", "素描": "sketch" },
+                quality: { "杰作": "masterpiece", "最佳质量": "best quality", "极其精细": "ultra-detailed", "8K画质": "8k", "逼真细节": "photorealistic details", "复杂细节": "intricate details" },
+                temperament: { "清冷御姐": "cold and elegant lady", "纯欲少女": "pure and seductive girl", "元气少女": "energetic girl", "书卷气": "scholarly", "赛博魅影": "cyber phantom", "复古女郎": "retro lady" },
+                face: { "精致脸庞": "delicate face", "鹅蛋脸": "oval face", "心形脸": "heart-shaped face", "桃花眼": "peach blossom eyes", "蓝色眼眸": "blue eyes", "微笑": "smile", "红唇": "red lips", "长睫毛": "long eyelashes", "无辜表情": "innocent expression", "泪痣": "tear mole", "水光唇釉": "glossy lips", "雀斑": "freckles" },
+                hair: { "及腰长发": "waist-length long hair", "银色长发": "silver long hair", "双马尾": "twintails", "麻花辫": "braids", "蓬松卷发": "fluffy curly hair", "飘逸的": "flowing hair", "绸缎黑发": "silky black hair", "铂金渐变挑染": "platinum ombre highlights", "湿发": "wet hair" },
+                clothing: { "白色连衣裙": "white dress", "丝绸旗袍": "silk cheongsam", "JK校服": "JK uniform", "哥特式长裙": "gothic long dress", "机能风外套": "techwear jacket", "婚纱": "wedding dress", "缎面吊带裙": "satin slip dress", "牛仔喇叭裤": "denim flare pants", "宽大男友衬衫": "oversized boyfriend shirt", "荧光纹身": "fluorescent tattoo", "翡翠耳坠": "jade earrings", "皮夹克": "leather jacket" },
+                dynamics: { "回头看": "looking back", "奔跑中": "running", "跳舞": "dancing", "沉思": "pondering", "害羞地笑": "shyly smiling", "自信地凝视": "confidently gazing", "咬唇思索": "biting lip and pondering", "撩发回眸": "flicking hair and looking back", "抱膝远眺": "hugging knees and gazing into the distance", "湿发贴颈": "wet hair sticking to neck", "动态抓拍": "dynamic action shot" },
+                scene: { "樱花树下": "under a cherry blossom tree", "未来都市": "futuristic city", "巴洛克城堡": "baroque castle", "海边": "seaside", "雨中街头": "rainy street", "图书馆": "library", "极光雪原": "aurora snowfield", "薰衣草田": "lavender field", "霓虹街巷": "neon alley", "地铁隧道": "subway tunnel", "天台夜景": "rooftop night view", "复古咖啡馆": "retro cafe", "音乐节后台": "backstage at a music festival" },
+                lighting: { "电影感光效": "cinematic lighting", "黄金时刻": "golden hour", "伦勃朗光": "Rembrandt lighting", "霓虹灯光": "neon light", "体积光": "volumetric light", "戏剧性阴影": "dramatic shadows", "丁达尔效应": "Tyndall effect", "晨光": "morning light", "夕阳": "sunset light", "柔焦光晕": "soft focus halo", "菲林颗粒": "film grain", "发丝轮廓光": "rim light on hair" },
+                composition: { "全身像": "full body shot", "半身像": "medium shot", "大特写": "extreme close-up", "脸部特写": "close-up", "远景": "long shot", "建环镜头": "establishing shot", "黄金分割": "golden ratio composition", "对称构图": "symmetrical composition", "三分法构图": "rule of thirds", "引导线构图": "leading lines", "画中画构图": "frame within a frame", "牛仔景别": "cowboy shot" },
+                angle: { "低角度": "low angle shot", "高角度": "high angle shot", "鸟瞰视角": "bird's-eye view", "仰视视角": "worm's-eye view", "荷兰角": "dutch angle", "单点透视": "one-point perspective", "大气透视": "atmospheric perspective" },
+                camera: { "85mm f/1.2": "85mm f/1.2 lens", "35mm 电影感": "35mm cinematic", "鱼眼镜头": "fisheye lens", "哈苏色彩": "Hasselblad natural colors", "富士胶片色彩": "Fujifilm film color", "浅景深": "shallow depth of field", "大景深": "deep depth of field" },
+                color_motion: { "鲜艳色彩": "vibrant colors", "单色调": "monochromatic", "对比色": "contrasting colors", "高饱和度": "highly saturated colors", "动态模糊": "motion blur", "摇摄": "panning shot"}
+            };
+
+            const styleKeywords = {
+                'photorealistic': '1girl',
+                'anime': 'anime style, anime artwork, key visual, 1girl',
+                'cg render': 'cgstation, 3d render, octane render, 1girl',
+                'oil painting': 'oil painting, impressionistic, thick brush strokes, 1girl',
+                'ink wash painting': 'Chinese ink painting, guofeng, traditional art, 1girl',
+                'hong kong retro': 'cinematic film still, Hong Kong movie style, 1990s, kodak portra 400, 1girl',
+                'cyberpunk': 'cyberpunk, futuristic, neon, night city, cinematic, 1girl',
+                'steampunk': 'steampunk, victorian, gears, brass, 1girl',
+                'watercolor': 'watercolor painting, vibrant, soft edges, paper texture, 1girl',
+                'sketch': 'graphite pencil sketch, detailed, black and white, hatching, 1girl',
+                'default': '1girl'
+            };
+
+            const selectedTags = new Map();
+
+            // DOM Elements
+            const finalPromptInput = document.getElementById('final-prompt-input');
+            const copyBtnEn = document.getElementById('copy-button-en');
+            const generateBtn = document.getElementById('generate-button');
+            const clearBtn = document.getElementById('clear-button');
+            const inspireBtn = document.getElementById('inspire-button');
+            const enrichBtn = document.getElementById('enrich-button');
+            const gallery = document.getElementById('image-gallery');
+            const placeholderText = document.getElementById('placeholder-text');
+            const loader = document.getElementById('loader');
+            const errorMessage = document.getElementById('error-message');
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+
+            // --- Initialize UI ---
+            for (const group in promptData) {
+                const selectEl = document.querySelector(`select[data-group="${group}"]`);
+                if (selectEl) {
+                     Object.keys(promptData[group]).forEach(tagText => {
+                        const optionEl = document.createElement('option');
+                        optionEl.value = tagText;
+                        optionEl.textContent = tagText;
+                        selectEl.appendChild(optionEl);
+                    });
+                }
+            }
+             
+            updateOutput();
+
+            // --- Event Handlers ---
+            document.querySelectorAll('select').forEach(select => {
+                select.addEventListener('change', () => {
+                    const group = select.dataset.group;
+                    const selectedOptions = Array.from(select.selectedOptions).map(opt => opt.value);
+                    selectedTags.set(group, group === 'style' ? selectedOptions[0] : selectedOptions);
+                    updateOutput(true); 
+                });
+            });
+            
+            finalPromptInput.addEventListener('input', () => {
+                generateBtn.disabled = finalPromptInput.value.trim() === '';
+            });
+
+            clearBtn.addEventListener('click', () => {
+                document.querySelectorAll('select').forEach(select => {
+                    select.selectedIndex = 0;
+                });
+                selectedTags.clear();
+                updateOutput();
+                gallery.innerHTML = '';
+                gallery.classList.add('hidden');
+                placeholderText.classList.remove('hidden');
+            });
+            
+            inspireBtn.addEventListener('click', async () => {
+                const prompt = "Generate a creative, highly detailed, and visually stunning English prompt for an AI image generator. The subject is a beautiful woman. The prompt should be a single, continuous string of keywords and phrases, describing her appearance, clothing, a unique and interesting scene, the atmosphere, and specific lighting and camera details. Do not use any line breaks.";
+                const inspiration = await callGemini(prompt, inspireBtn);
+                if (inspiration) {
+                    finalPromptInput.value = `(masterpiece, best quality), 1girl, ${inspiration}`;
+                    updateOutput(false); 
+                }
+            });
+
+            enrichBtn.addEventListener('click', async () => {
+                let currentPrompt = finalPromptInput.value.trim();
+                if (!currentPrompt) return;
+                
+                if (!currentPrompt.includes('1girl')) {
+                    currentPrompt = `(masterpiece, best quality), 1girl, ${currentPrompt}`;
+                }
+
+                const prompt = `Take the following AI image generator prompt and make it more detailed, vivid, and artistic. Add more specific details about the character's expression, the background, the atmosphere, and the lighting. Return only the enhanced prompt as a single, continuous string of keywords and phrases. Do not use any line breaks. The prompt to enhance is: "${currentPrompt}"`;
+                const enrichment = await callGemini(prompt, enrichBtn);
+                if (enrichment) {
+                    finalPromptInput.value = enrichment;
+                    updateOutput(false);
+                }
+            });
+
+            function setupCopyButton(button, textarea) {
+                button.addEventListener('click', () => {
+                    if (!textarea.value) return;
+                    navigator.clipboard.writeText(textarea.value).then(() => {
+                        const originalIcon = button.innerHTML;
+                        button.innerHTML = `<svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                        setTimeout(() => { button.innerHTML = originalIcon; }, 2000);
+                    }).catch(err => console.error('Copy failed', err));
+                });
+            }
+            // Removed Chinese copy button setup as the element is gone
+            setupCopyButton(copyBtnEn, finalPromptInput);
+            
+            lightbox.addEventListener('click', () => {
+                lightbox.style.display = 'none';
+            });
+
+            // --- Core Functions ---
+            function updateOutput(fromSelection = false) {
+                const styleZh = selectedTags.get('style');
+
+                if (fromSelection || finalPromptInput.value.trim() === '') {
+                    if (!styleZh) {
+                        finalPromptInput.value = '';
+                    } else {
+                        const translate = (group) => (selectedTags.get(group) || []).map(key => promptData[group][key]);
+                        
+                        const styleEn = promptData.style[styleZh];
+                        const coreStyle = styleKeywords[styleEn];
+                        
+                        let promptEnParts = [];
+                        
+                        const qualityEn = translate('quality');
+                        promptEnParts.push(`(${(qualityEn.join(', ') || 'masterpiece, best quality')}, ${coreStyle})`);
+
+                        const sceneEn = translate('scene');
+                        if (sceneEn.length > 0) {
+                            promptEnParts.push(`((${sceneEn.join(' and ')} scene:1.5))`);
+                        }
+                        
+                        const temperamentEn = translate('temperament');
+                        const faceEn = translate('face');
+                        const hairEn = translate('hair');
+                        const clothingEn = translate('clothing');
+                        const dynamicsEn = translate('dynamics');
+                        const compositionEn = translate('composition');
+                        
+                        let characterDetailsEn = [...temperamentEn, ...faceEn, ...hairEn, ...dynamicsEn];
+                        let characterStr = `((${compositionEn.join(', ') || 'medium shot'} of a beautiful woman`;
+                        if (characterDetailsEn.length > 0) characterStr += ` with ${characterDetailsEn.join(' and ')}`;
+                        if (clothingEn.length > 0) characterStr += `, wearing ${clothingEn.join(' and ')}`;
+                        characterStr += `))`;
+                        promptEnParts.push(characterStr);
+                        
+                        const lightingEn = translate('lighting');
+                        if (lightingEn.length > 0) {
+                            promptEnParts.push(`((${lightingEn.join(' and ')} lighting)):1.2`);
+                        }
+                        
+                        const angleEn = translate('angle');
+                        const cameraEn = translate('camera');
+                        const colorMotionEn = translate('color_motion');
+                        const lensDetailsEn = [...angleEn, ...cameraEn, ...colorMotionEn];
+                        if (lensDetailsEn.length > 0) {
+                             promptEnParts.push(`((${lensDetailsEn.join(', ')})):1.1`);
+                        }
+                        
+                        finalPromptInput.value = promptEnParts.join(', ');
+                    }
+                }
+                
+                generateBtn.disabled = finalPromptInput.value.trim() === '';
+            }
+            
+            async function callGemini(prompt, button) {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<div class="spinner-sm"></div>';
+                button.disabled = true;
+                errorMessage.textContent = '';
+                
+                try {
+                    const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+                    const apiKey = "AIzaSyCOiaWZzimDTiPAyHVr6rF1pJqCzF4N3tI"; 
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+
+                    if (!response.ok) throw new Error(`Gemini API Error: ${response.status}`);
+
+                    const result = await response.json();
+                    
+                    if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                        return result.candidates[0].content.parts[0].text.trim();
+                    } else {
+                        console.error("Unexpected Gemini API response:", result);
+                        throw new Error("从Gemini获取灵感失败，请检查控制台。");
+                    }
+                } catch (error) {
+                    showError(error.message);
+                    return null;
+                } finally {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            }
+
+
+            generateBtn.addEventListener('click', async () => {
+                showLoading(true);
+                let englishPrompt = finalPromptInput.value.trim();
+                const negativePrompt = document.getElementById('negative-prompt').value;
+                
+                if (!englishPrompt) {
+                    showError('指令输入框不能为空！');
+                    showLoading(false);
+                    return;
+                }
+                
+                if (!englishPrompt.includes('1girl')) {
+                    englishPrompt = `${styleKeywords['default']}, ${englishPrompt}`;
+                }
+
+                const uniqueId = `id-${Date.now()}`;
+                const fullPrompt = `${englishPrompt}, ${uniqueId} --no ${negativePrompt}`;
+                
+                try {
+                    const payload = { instances: [{ prompt: fullPrompt }], parameters: { sampleCount: 4 } };
+                    const apiKey = "AIzaSyCOiaWZzimDTiPAyHVr6rF1pJqCzF4N3tI";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        let errorMsg = `图片生成失败 (状态码: ${response.status})。`;
+                         try { errorMsg = JSON.parse(errorText).error?.message || errorMsg; } catch (e) { if(errorText) errorMsg = errorText; }
+                        throw new Error(errorMsg);
+                    }
+
+                    const result = await response.json();
+                    if (result.predictions && result.predictions.length > 0) {
+                        displayGallery(result.predictions);
+                    } else {
+                        console.error('Unexpected API response:', result);
+                        if (result.predictions?.[0]?.safetyRatings) { throw new Error('图片因安全策略被拦截。请调整提示词。'); }
+                        throw new Error('API返回数据格式异常，无法获取图片。');
+                    }
+                } catch (error) {
+                    console.error('Image generation error:', error);
+                    showError(error.message || '未知错误，请检查控制台日志。');
+                } finally {
+                    showLoading(false);
+                }
+            });
+
+            function showLoading(isLoading) {
+                generateBtn.disabled = isLoading;
+                if (isLoading) {
+                    generateBtn.classList.add('opacity-70');
+                    loader.classList.remove('hidden');
+                    placeholderText.classList.add('hidden');
+                    gallery.classList.add('hidden');
+                    errorMessage.textContent = '';
+                } else {
+                    generateBtn.disabled = finalPromptInput.value.trim() === '';
+                    loader.classList.add('hidden');
+                }
+            }
+            
+            function displayGallery(predictions) {
+                gallery.innerHTML = ''; 
+                gallery.classList.remove('hidden');
+                placeholderText.classList.add('hidden');
+                
+                predictions.forEach((prediction, index) => {
+                    if (prediction.bytesBase64Encoded) {
+                        const imgSrc = `data:image/png;base64,${prediction.bytesBase64Encoded}`;
+                        
+                        const container = document.createElement('div');
+                        container.className = 'relative group w-full h-full';
+
+                        const img = document.createElement('img');
+                        img.src = imgSrc;
+                        img.className = 'w-full h-full object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity';
+                        img.addEventListener('click', () => { lightboxImage.src = imgSrc; lightbox.style.display = 'flex'; });
+
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = imgSrc;
+                        downloadLink.download = `ai-creation-${Date.now()}-${index}.png`;
+                        downloadLink.className = 'absolute bottom-2 right-2 bg-black/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80';
+                        downloadLink.title = '下载图片';
+                        downloadLink.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
+
+                        container.appendChild(img);
+                        container.appendChild(downloadLink);
+                        gallery.appendChild(container);
+                    }
+                });
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                placeholderText.classList.remove('hidden');
+                gallery.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
