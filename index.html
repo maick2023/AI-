@@ -12,17 +12,17 @@
             background-color: #111827;
             color: #d1d5db;
         }
-        .step-header {
-            @apply text-xl font-bold text-indigo-400 border-b-2 border-indigo-500/30 pb-2 mb-4 flex items-center;
+        .section-container {
+            @apply bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700;
         }
-        .step-number {
-            @apply bg-indigo-500 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 font-bold text-lg;
+        .section-title {
+            @apply text-xl font-bold text-indigo-400 border-b-2 border-indigo-500/30 pb-2 mb-4;
         }
         .category-title {
-            @apply font-semibold text-gray-300 mb-2 text-base;
+            @apply font-semibold text-gray-300 mb-2 text-sm;
         }
         select {
-            @apply w-full bg-gray-800 border border-gray-600 text-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 p-2;
+            @apply w-full bg-gray-800 border border-gray-600 text-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 p-2 text-sm;
         }
         select[multiple] {
             height: 120px;
@@ -72,102 +72,124 @@
 
     <div class="container mx-auto p-4 lg:p-8">
         <header class="text-center mb-8">
-            <h1 class="text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">专业级美女提示词生成器</h1>
+            <h1 class="text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">专业级提示词生成器</h1>
             <p class="mt-3 text-lg text-gray-400">遵循专业工作流，或在此自由创作</p>
         </header>
-
-        <!-- **FIX START**: Changed grid to flexbox for a sidebar layout -->
-        <div class="flex flex-col lg:flex-row lg:gap-8">
-            <!-- Left Column (Sidebar) -->
-            <div id="builder-container" class="lg:w-2/5 xl:w-1/3 bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700 space-y-6 mb-8 lg:mb-0">
-                
-                <!-- Steps 1 to 4 -->
-                 <div>
-                    <div class="step-header"><span class="step-number">1</span>画质与风格 (引导模式)</div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <div class="category-title">艺术风格 (可选)</div>
-                            <select data-group="style"><option value="">-- 请选择风格 --</option></select>
+        
+        <!-- **FIX START**: Complete layout refactor to a top-down structure based on the user's sketch -->
+        <div class="space-y-8">
+            <!-- Builder Section -->
+            <div id="builder-container" class="section-container">
+                <div class="space-y-6">
+                    <div>
+                        <div class="section-title">1. 画质与风格</div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div>
+                                <div class="category-title">艺术风格</div>
+                                <select data-group="style"><option value="">-- 可选 --</option></select>
+                            </div>
+                            <div>
+                                 <div class="category-title">图像质量</div>
+                                 <select multiple data-group="quality"></select>
+                            </div>
                         </div>
-                        <div>
-                             <div class="category-title">图像质量</div>
-                             <select multiple data-group="quality"></select>
+                    </div>
+                     <div>
+                        <div class="section-title">2. 人物与气质</div>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                             <div>
+                                 <div class="category-title">气质类型</div>
+                                 <select multiple data-group="temperament"></select>
+                            </div>
+                            <div>
+                                <div class="category-title">面部特征</div>
+                                <select multiple data-group="face"></select>
+                            </div>
+                            <div>
+                                <div class="category-title">发型</div>
+                                <select multiple data-group="hair"></select>
+                            </div>
+                            <div>
+                                <div class="category-title">穿着服饰</div>
+                                <select multiple data-group="clothing"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section-title">3. 场景与光影</div>
+                         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div>
+                                <div class="category-title">地点/背景</div>
+                                <select multiple data-group="scene"></select>
+                            </div>
+                            <div>
+                                <div class="category-title">环境光与氛围</div>
+                                <select multiple data-group="lighting"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="section-title">4. 镜头语言</div>
+                         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div>
+                                <div class="category-title">景别与构图</div>
+                                <select multiple data-group="composition"></select>
+                            </div>
+                            <div>
+                                <div class="category-title">视角与透视</div>
+                                <select multiple data-group="angle"></select>
+                            </div>
+                            <div>
+                                <div class="category-title">相机与景深</div>
+                                <select multiple data-group="camera"></select>
+                            </div>
+                            <div>
+                                <div class="category-title">色彩与动感</div>
+                                <select multiple data-group="color_motion"></select>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div class="step-header"><span class="step-number">2</span>人物与气质</div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <div>
-                             <div class="category-title">气质类型</div>
-                             <select multiple data-group="temperament"></select>
-                        </div>
-                        <div><div class="category-title">面部特征</div><select multiple data-group="face"></select></div>
-                        <div><div class="category-title">发型</div><select multiple data-group="hair"></select></div>
-                        <div><div class="category-title">穿着服饰</div><select multiple data-group="clothing"></select>
-                    </div>
-                </div>
-                <div>
-                    <div class="step-header"><span class="step-number">3</span>场景与光影</div>
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div><div class="category-title">地点/背景</div><select multiple data-group="scene"></select></div>
-                        <div><div class="category-title">环境光与氛围</div><select multiple data-group="lighting"></select></div>
-                    </div>
-                </div>
-                <div>
-                    <div class="step-header"><span class="step-number">4</span>镜头语言</div>
-                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div><div class="category-title">景别与构图</div><select multiple data-group="composition"></select></div>
-                        <div><div class="category-title">视角与透视</div><select multiple data-group="angle"></select></div>
-                        <div><div class="category-title">相机与景深</div><select multiple data-group="camera"></select></div>
-                        <div><div class="category-title">色彩与动感</div><select multiple data-group="color_motion"></select></div>
-                    </div>
-                </div>
-
             </div>
 
-            <!-- Right Column (Main Content) -->
-            <div class="lg:w-3/5 xl:w-2/3 space-y-8">
-                <div class="bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold text-indigo-400">最终指令</h2>
-                        <div class="flex items-center space-x-4">
-                             <button id="inspire-button" class="gemini-button">✨ 随机灵感</button>
-                             <button id="clear-button" class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <div class="flex justify-between items-center mb-1">
-                             <p class="text-center text-gray-400 text-sm">专业英文指令 (可编辑)</p>
-                             <button id="enrich-button" class="gemini-button" title="使用Gemini丰富细节">✨ 丰富</button>
-                        </div>
-                         <textarea id="final-prompt-input" rows="8" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="可直接在此输入，或通过左侧引导模式构建..."></textarea>
-                         <button id="copy-button-en" class="absolute top-8 right-3 text-gray-400 hover:text-white transition" title="复制英文指令">
-                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                         </button>
-                    </div>
-                     <div class="mt-4">
-                        <h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3>
-                        <input id="negative-prompt" type="text" class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono" value="ng_deepnegative_v1_75t, (worst quality, low quality:1.4), (bad anatomy), (inaccurate limb:1.2), bad hands, extra fingers, (realistic, 3d:1.3), man, boy, blurry, simple background, text, watermark">
+            <!-- Prompt Input Section -->
+            <div class="section-container">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-bold text-indigo-400">最终指令 (可编辑)</h2>
+                    <div class="flex items-center space-x-4">
+                         <button id="inspire-button" class="gemini-button">✨ 随机灵感</button>
+                         <button id="enrich-button" class="gemini-button" title="使用Gemini丰富细节">✨ 丰富</button>
+                         <button id="clear-button" class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button>
                     </div>
                 </div>
+                <div class="relative">
+                     <textarea id="final-prompt-input" rows="6" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="可直接在此输入，或通过上方引导模式构建..."></textarea>
+                     <button id="copy-button-en" class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="复制英文指令">
+                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                     </button>
+                </div>
+                 <div class="mt-4">
+                    <h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3>
+                    <input id="negative-prompt" type="text" class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono" value="ng_deepnegative_v1_75t, (worst quality, low quality:1.4), (bad anatomy), (inaccurate limb:1.2), bad hands, extra fingers, (realistic, 3d:1.3), man, boy, blurry, simple background, text, watermark">
+                </div>
+            </div>
 
-                <div class="bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700">
-                    <h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2>
-                    <button id="generate-button" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50">
-                        <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        生成杰作 (一次4张)
-                    </button>
-                    <div id="gallery-container" class="mt-4 w-full aspect-square bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-700">
-                        <div id="placeholder-text" class="text-gray-500 text-center">
-                           <p class="text-lg">艺术品，即将诞生</p>
-                           <p class="text-sm">请开始你的创作</p>
-                        </div>
-                         <div id="loader" class="loader hidden"></div>
-                         <div id="image-gallery" class="w-full h-full grid grid-cols-2 gap-2 p-2 hidden"></div>
+            <!-- Gallery Section -->
+            <div class="section-container">
+                <h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2>
+                <button id="generate-button" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50">
+                    <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    生成杰作 (一次4张)
+                </button>
+                <div id="gallery-container" class="mt-4 w-full aspect-video bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-700 min-h-[300px]">
+                    <div id="placeholder-text" class="text-gray-500 text-center">
+                       <p class="text-lg">艺术品，即将诞生</p>
+                       <p class="text-sm">请开始你的创作</p>
                     </div>
-                    <div id="error-message" class="mt-2 text-red-400 text-sm text-center font-semibold"></div>
+                     <div id="loader" class="loader hidden"></div>
+                     <div id="image-gallery" class="w-full h-full grid grid-cols-2 md:grid-cols-4 gap-2 p-2 hidden"></div>
                 </div>
+                <div id="error-message" class="mt-2 text-red-400 text-sm text-center font-semibold"></div>
             </div>
         </div>
         <!-- **FIX END** -->
@@ -259,17 +281,17 @@
                     select.selectedIndex = 0;
                 });
                 selectedTags.clear();
-                updateOutput();
+                updateOutput(true);
                 gallery.innerHTML = '';
                 gallery.classList.add('hidden');
                 placeholderText.classList.remove('hidden');
             });
             
             inspireBtn.addEventListener('click', async () => {
-                const prompt = "Generate a creative, highly detailed, and visually stunning English prompt for an AI image generator. The subject is a beautiful woman. The prompt should be a single, continuous string of keywords and phrases, describing her appearance, clothing, a unique and interesting scene, the atmosphere, and specific lighting and camera details. Do not use any line breaks.";
+                const prompt = "Generate a creative, highly detailed, and visually stunning English prompt for an AI image generator. The subject can be anything, not just a beautiful woman. The prompt should be a single, continuous string of keywords and phrases, describing the subject, a unique and interesting scene, the atmosphere, and specific lighting and camera details. Do not use any line breaks.";
                 const inspiration = await callGemini(prompt, inspireBtn);
                 if (inspiration) {
-                    finalPromptInput.value = `(masterpiece, best quality), 1girl, ${inspiration}`;
+                    finalPromptInput.value = inspiration;
                     updateOutput(false); 
                 }
             });
@@ -278,11 +300,7 @@
                 let currentPrompt = finalPromptInput.value.trim();
                 if (!currentPrompt) return;
                 
-                if (!currentPrompt.includes('1girl')) {
-                    currentPrompt = `(masterpiece, best quality), 1girl, ${currentPrompt}`;
-                }
-
-                const prompt = `Take the following AI image generator prompt and make it more detailed, vivid, and artistic. Add more specific details about the character's expression, the background, the atmosphere, and the lighting. Return only the enhanced prompt as a single, continuous string of keywords and phrases. Do not use any line breaks. The prompt to enhance is: "${currentPrompt}"`;
+                const prompt = `Take the following AI image generator prompt and make it more detailed, vivid, and artistic. Add more specific details about the subject's expression, the background, the atmosphere, and the lighting. Return only the enhanced prompt as a single, continuous string of keywords and phrases. Do not use any line breaks. The prompt to enhance is: "${currentPrompt}"`;
                 const enrichment = await callGemini(prompt, enrichBtn);
                 if (enrichment) {
                     finalPromptInput.value = enrichment;
@@ -300,7 +318,6 @@
                     }).catch(err => console.error('Copy failed', err));
                 });
             }
-            // Removed Chinese copy button setup as the element is gone
             setupCopyButton(copyBtnEn, finalPromptInput);
             
             lightbox.addEventListener('click', () => {
@@ -309,9 +326,8 @@
 
             // --- Core Functions ---
             function updateOutput(fromSelection = false) {
-                const styleZh = selectedTags.get('style');
-
-                if (fromSelection || finalPromptInput.value.trim() === '') {
+                if (fromSelection) {
+                    const styleZh = selectedTags.get('style');
                     if (!styleZh) {
                         finalPromptInput.value = '';
                     } else {
@@ -372,7 +388,7 @@
                 
                 try {
                     const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-                    const apiKey = "AIzaSyCOiaWZzimDTiPAyHVr6rF1pJqCzF4N3tI"; 
+                    const apiKey = ""; 
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -408,7 +424,7 @@
                     return;
                 }
                 
-                if (!englishPrompt.includes('1girl')) {
+                if (!englishPrompt.includes('1girl') && !englishPrompt.includes('a man') && !englishPrompt.includes('a boy')) { // more generic check
                     englishPrompt = `${styleKeywords['default']}, ${englishPrompt}`;
                 }
 
@@ -417,7 +433,7 @@
                 
                 try {
                     const payload = { instances: [{ prompt: fullPrompt }], parameters: { sampleCount: 4 } };
-                    const apiKey = "AIzaSyCOiaWZzimDTiPAyHVr6rF1pJqCzF4N3tI";
+                    const apiKey = "";
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
 
