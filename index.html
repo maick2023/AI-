@@ -3,205 +3,1003 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>专业级提示词生成器</title>
+    <title>AI创意工坊</title>
+    <!-- Font Awesome for original site icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS for the prompt generator -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for the prompt generator -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Original Site Styles */
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4A44B6;
+            --accent: #FF6B6B;
+            --accent-light: #FF8E8E;
+            --dark: #1a1a2e;
+            --darker: #0d0d1a;
+            --light: #F5F5F7;
+            --text-light: #e0e0ff;
+            --text-gray: #a0a0c0;
+            --success: #4cc9f0;
+            --danger: #f94144;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border-bottom: 1px solid rgba(108, 99, 255, 0.2);
+            padding: 0 20px;
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: var(--primary);
+            margin-right: 12px;
+            font-size: 2rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .nav-links a i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .main-content {
+            max-width: 1200px;
+            margin: 90px auto 40px;
+            padding: 0 20px;
+            min-height: calc(100vh - 150px);
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding-top: 20px;
+        }
+        
+        .page-title h1 {
+            font-size: 2.8rem;
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .page-title p {
+            color: var(--text-gray);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .card {
+            background: rgba(42, 42, 60, 0.7);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+            position: relative;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(108, 99, 255, 0.35);
+        }
+        
+        .image-card .card-img {
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .image-card .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .image-card:hover .card-img img {
+            transform: scale(1.1);
+        }
+        
+        .card-info {
+            padding: 20px;
+        }
+        
+        .image-card .card-info h3 {
+            margin-bottom: 8px;
+            font-size: 1.4rem;
+            color: var(--text-light);
+        }
+        
+        .image-card .card-info p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        
+        .delete-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            background: rgba(249, 65, 68, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            opacity: 0;
+        }
+        
+        .card:hover .delete-btn {
+            opacity: 1;
+        }
+        
+        .delete-btn:hover {
+            background: var(--danger);
+            transform: scale(1.1);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(108, 99, 255, 0.3);
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn i {
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+        }
+        
+        .upload-section {
+            background: rgba(42, 42, 60, 0.7);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 2px dashed rgba(108, 99, 255, 0.3);
+            text-align: center;
+        }
+        
+        .upload-icon {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .upload-text {
+            margin-bottom: 25px;
+            color: var(--text-gray);
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: var(--dark);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            text-align: center;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .image-preview {
+            max-width: 90%;
+            max-height: 80vh;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        footer {
+            background: rgba(26, 26, 46, 0.95);
+            padding: 40px 0 20px;
+            text-align: center;
+            border-top: 1px solid rgba(108, 99, 255, 0.2);
+        }
+        
+        .copyright {
+            color: var(--text-gray);
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.95rem;
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Styles for Prompt Generator */
+        #prompt-generator {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
-            background-color: #111827;
             color: #d1d5db;
         }
-        .section-container {
+        .pg-section-container {
             @apply bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700;
         }
-        .section-title {
+        .pg-section-title {
             @apply text-xl font-bold text-indigo-400 border-b-2 border-indigo-500/30 pb-2 mb-4;
         }
-        .category-title {
+        .pg-category-title {
             @apply font-semibold text-gray-300 mb-3 text-base;
         }
-        /* **FIX START**: New tag-based styling */
-        .prompt-tag {
+        .pg-prompt-tag {
             @apply text-sm font-medium mr-2 mb-2 px-3 py-1.5 rounded-lg cursor-pointer transition-all duration-200 shadow;
         }
-        .prompt-tag:not(.active) {
+        .pg-prompt-tag:not(.active) {
             @apply hover:scale-105 hover:shadow-lg;
         }
-        .prompt-tag.active {
+        .pg-prompt-tag.active {
             @apply ring-2 ring-offset-2 ring-offset-gray-900;
         }
-        /* **FIX END** */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1f2937; }
-        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
-        .loader, .spinner-sm {
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        #pg-generate-button:disabled {
+            @apply bg-gray-500 cursor-not-allowed hover:bg-gray-500 shadow-none;
         }
-        .loader {
+        #pg-lightbox {
+            @apply hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50;
+        }
+        #pg-lightbox img {
+            @apply max-w-[90vw] max-h-[90vh] rounded-lg;
+        }
+        .pg-gemini-button {
+            @apply text-sm text-indigo-400 hover:text-indigo-300 font-semibold flex items-center disabled:opacity-50 disabled:cursor-not-allowed;
+        }
+        .pg-loader, .pg-spinner-sm {
+            border-radius: 50%;
+            animation: pg-spin 1s linear infinite;
+        }
+        .pg-loader {
             border: 4px solid #4b5563;
             border-top: 4px solid #818cf8;
             width: 50px;
             height: 50px;
         }
-        .spinner-sm {
+        .pg-spinner-sm {
             border: 2px solid #4b5563;
             border-top: 2px solid #818cf8;
             width: 16px;
             height: 16px;
         }
-        @keyframes spin {
+        @keyframes pg-spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        #generate-button:disabled {
-            @apply bg-gray-500 cursor-not-allowed hover:bg-gray-500 shadow-none;
+
+        /* Styles for Video Generator */
+        .video-gen-container {
+             @apply grid grid-cols-1 lg:grid-cols-3 gap-8;
         }
-        #lightbox {
-            @apply hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50;
+        .video-gen-main {
+             @apply lg:col-span-2 bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700 flex flex-col;
         }
-        #lightbox img {
-            @apply max-w-[90vw] max-h-[90vh] rounded-lg;
+         .video-gen-settings {
+             @apply bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700;
         }
-        .gemini-button {
-            @apply text-sm text-indigo-400 hover:text-indigo-300 font-semibold flex items-center disabled:opacity-50 disabled:cursor-not-allowed;
+        .image-upload-box {
+            @apply w-full aspect-video bg-gray-800 border-2 border-dashed border-gray-600 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500 transition-colors;
+        }
+         .image-upload-box img {
+            @apply w-full h-full object-contain;
+         }
+        .setting-group-title {
+             @apply text-lg font-semibold text-gray-300 mb-3 border-b border-gray-700 pb-2;
+        }
+        .setting-button {
+            @apply w-full bg-gray-700 text-gray-300 p-2 rounded-lg transition-colors hover:bg-gray-600;
+        }
+        .setting-button.active {
+            @apply bg-indigo-600 text-white;
+        }
+        .toggle-switch {
+            @apply relative inline-flex items-center cursor-pointer;
+        }
+        .toggle-switch input { @apply sr-only peer; }
+        .toggle-switch-bg {
+            @apply w-11 h-6 bg-gray-600 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600;
+        }
+        .progress-bar-container {
+            @apply w-full bg-gray-700 rounded-full h-4 overflow-hidden relative;
+        }
+        .progress-bar {
+            @apply bg-indigo-600 h-full rounded-full transition-all duration-500 ease-linear;
+        }
+        .progress-text {
+            @apply absolute inset-0 flex items-center justify-center text-xs font-bold text-white;
         }
     </style>
 </head>
-<body class="antialiased">
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showPage('home')">
+                <i class="fas fa-robot"></i>
+                <span>AI创意工坊</span>
+            </a>
+            <ul class="nav-links">
+                <li><a onclick="showPage('prompt-generator')"><i class="fas fa-magic"></i> AI绘画</a></li>
+                <li><a onclick="showPage('video-generator')"><i class="fas fa-video"></i> AI视频</a></li>
+                <li><a onclick="showPage('gallery')"><i class="fas fa-images"></i> 作品图库</a></li>
+            </ul>
+        </div>
+    </nav>
 
-    <div class="container mx-auto p-4 lg:p-8">
-        <header class="text-center mb-8">
-            <h1 class="text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">专业级提示词生成器</h1>
-            <p class="mt-3 text-lg text-gray-400">遵循专业工作流，或在此自由创作</p>
-        </header>
-        
-        <div class="space-y-8">
-            <!-- Builder Section -->
-            <div id="builder-container" class="section-container">
-                <div class="space-y-6">
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <!-- 首页 -->
+        <div id="home" class="page active">
+            <div class="page-title">
+                <h1>AI创意工坊</h1>
+                <p>一个集成了AI绘画、AI视频、作品管理与展示的创意空间</p>
+            </div>
+            
+            <div class="content-grid">
+                 <div class="card image-card" onclick="showPage('prompt-generator')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0?q=80&w=1974" alt="AI绘画">
+                    </div>
+                    <div class="card-info">
+                        <h3>AI绘画</h3>
+                        <p>使用专业提示词生成器创作AI艺术品</p>
+                        <div class="btn">开始创作</div>
+                    </div>
+                </div>
+                <div class="card image-card" onclick="showPage('video-generator')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?q=80&w=2071" alt="AI视频">
+                    </div>
+                    <div class="card-info">
+                        <h3>AI视频</h3>
+                        <p>将您的图片转化为生动的动态视频</p>
+                        <div class="btn">进入视频创作</div>
+                    </div>
+                </div>
+                <div class="card image-card" onclick="showPage('gallery')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=1974" alt="作品图库">
+                    </div>
+                    <div class="card-info">
+                        <h3>作品图库</h3>
+                        <p>展示您所有的AI生成图片作品</p>
+                        <div class="btn btn-outline">浏览图库</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI视频创作页面 -->
+        <div id="video-generator" class="page">
+            <div class="page-title">
+                <h1>AI视频创作中心</h1>
+                <p>选择或上传一张图片，结合描述，为其注入生命的动态</p>
+            </div>
+            <div class="video-gen-container">
+                <main class="video-gen-main">
                     <div>
-                        <div class="section-title">1. 画质与风格</div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                            <div>
-                                <div class="category-title">艺术风格 (单选)</div>
-                                <div class="flex flex-wrap" data-group="style"></div>
+                        <h3 class="pg-category-title mb-3">图像上传</h3>
+                         <div class="image-upload-box" id="video-gen-upload-box">
+                            <div id="video-gen-upload-placeholder" class="p-4">
+                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-500"></i>
+                                <p class="mt-2 text-gray-400">点击或拖动上传图片</p>
+                                <p class="text-xs text-gray-500">没有合适的图片？<span class="text-indigo-400 hover:underline" id="video-gen-load-gallery">从图库选择</span></p>
                             </div>
-                            <div>
-                                 <div class="category-title">图像质量</div>
-                                 <div class="flex flex-wrap" data-group="quality"></div>
-                            </div>
+                            <img id="video-gen-preview" class="hidden" src="" alt="Image preview"/>
                         </div>
+                        <input type="file" id="video-gen-image-upload" class="hidden" accept="image/*">
+                    </div>
+                    <div class="mt-6">
+                        <h3 class="pg-category-title mb-3">创意描述 (选填)</h3>
+                        <textarea id="video-gen-prompt" rows="4" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-gray-300 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="结合图片，描述您想生成的画面和动作。例如：海浪拍打着沙滩，粉色的月亮在天空中缓缓升起。"></textarea>
+                    </div>
+                </main>
+                <aside class="video-gen-settings space-y-6">
+                    <div>
+                        <h3 class="setting-group-title">视频模型</h3>
+                        <button class="setting-button active w-full flex justify-between items-center">
+                            <span>Stable Video Diffusion</span>
+                            <i class="fas fa-cog text-gray-400"></i>
+                        </button>
                     </div>
                      <div>
-                        <div class="section-title">2. 人物与气质</div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4">
-                             <div>
-                                 <div class="category-title">气质类型</div>
-                                 <div class="flex flex-wrap" data-group="temperament"></div>
+                        <h3 class="setting-group-title">基础设置</h3>
+                        <div class="space-y-3">
+                            <p class="text-sm text-gray-400">生成时长</p>
+                            <div class="grid grid-cols-2 gap-2" id="video-duration-buttons">
+                                <button class="setting-button" data-duration="5">5s</button>
+                                <button class="setting-button active" data-duration="10">10s</button>
                             </div>
-                            <div>
-                                <div class="category-title">面部特征</div>
-                                <div class="flex flex-wrap" data-group="face"></div>
+                             <p class="text-sm text-gray-400 mt-2">视频比例</p>
+                             <button class="setting-button active flex justify-between items-center">
+                                <span><i class="fas fa-arrows-alt-h mr-2"></i>自动匹配</span>
+                                <i class="fas fa-sliders-h text-gray-400"></i>
+                             </button>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <label for="inspiration-mode" class="text-sm text-gray-300">灵感模式</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="inspiration-mode" class="peer" checked>
+                                <div class="toggle-switch-bg"></div>
+                            </label>
+                        </div>
+                         <div class="flex justify-between items-center">
+                            <label for="sound-effects" class="text-sm text-gray-300">视频音效</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="sound-effects" class="peer">
+                                <div class="toggle-switch-bg"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="video-gen-button-container">
+                        <button id="video-generate-btn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-lg shadow-lg hover:shadow-indigo-500/50 disabled:opacity-50" disabled>
+                            <i class="fas fa-film mr-2"></i>
+                            生成视频
+                        </button>
+                    </div>
+                </aside>
+            </div>
+            <div id="video-gen-gallery-container" class="pg-section-container mt-8 hidden">
+                 <h2 class="text-2xl font-bold text-indigo-400">视频成果</h2>
+                 <div id="video-output-gallery" class="mt-4 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Generated videos will appear here -->
+                 </div>
+            </div>
+        </div>
+        
+        <div id="prompt-generator" class="page">
+             <div class="space-y-8">
+                <!-- Builder Section -->
+                <div id="pg-builder-container" class="pg-section-container">
+                    <div class="space-y-6">
+                        <div>
+                            <div class="pg-section-title">1. 画质与风格</div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                                <div>
+                                    <div class="pg-category-title">艺术风格 (单选)</div>
+                                    <div class="flex flex-wrap" data-group="style"></div>
+                                </div>
+                                <div>
+                                     <div class="pg-category-title">图像质量</div>
+                                     <div class="flex flex-wrap" data-group="quality"></div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="category-title">发型</div>
-                                <div class="flex flex-wrap" data-group="hair"></div>
+                        </div>
+                         <div>
+                            <div class="pg-section-title">2. 人物与气质</div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4">
+                                 <div>
+                                     <div class="pg-category-title">气质类型</div>
+                                     <div class="flex flex-wrap" data-group="temperament"></div>
+                                </div>
+                                <div>
+                                    <div class="pg-category-title">面部特征</div>
+                                    <div class="flex flex-wrap" data-group="face"></div>
+                                </div>
+                                <div>
+                                    <div class="pg-category-title">发型</div>
+                                    <div class="flex flex-wrap" data-group="hair"></div>
+                                </div>
+                                <div>
+                                    <div class="pg-category-title">穿着服饰</div>
+                                    <div class="flex flex-wrap" data-group="clothing"></div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="category-title">穿着服饰</div>
-                                <div class="flex flex-wrap" data-group="clothing"></div>
+                        </div>
+                        <div>
+                            <div class="pg-section-title">3. 场景与光影</div>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                                <div>
+                                    <div class="pg-category-title">地点/背景</div>
+                                    <div class="flex flex-wrap" data-group="scene"></div>
+                                </div>
+                                <div>
+                                    <div class="pg-category-title">环境光与氛围</div>
+                                    <div class="flex flex-wrap" data-group="lighting"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="pg-section-title">4. 镜头语言</div>
+                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4">
+                                <div>
+                                    <div class="pg-category-title">景别与构图</div>
+                                    <div class="flex flex-wrap" data-group="composition"></div>
+                                </div>
+                                <div>
+                                    <div class="pg-category-title">视角与透视</div>
+                                    <div class="flex flex-wrap" data-group="angle"></div>
+                                </div>
+                                <div>
+                                    <div class="pg-category-title">相机与景深</div>
+                                    <div class="flex flex-wrap" data-group="camera"></div>
+                                </div>
+                                <div>
+                                    <div class="pg-category-title">色彩与动感</div>
+                                    <div class="flex flex-wrap" data-group="color_motion"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="section-title">3. 场景与光影</div>
-                         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                            <div>
-                                <div class="category-title">地点/背景</div>
-                                <div class="flex flex-wrap" data-group="scene"></div>
-                            </div>
-                            <div>
-                                <div class="category-title">环境光与氛围</div>
-                                <div class="flex flex-wrap" data-group="lighting"></div>
-                            </div>
+                </div>
+
+                <!-- Prompt Input Section -->
+                <div class="pg-section-container">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-indigo-400">最终指令 (可编辑)</h2>
+                        <div class="flex items-center space-x-4">
+                             <button id="pg-inspire-button" class="pg-gemini-button">✨ 随机灵感</button>
+                             <button id="pg-enrich-button" class="pg-gemini-button" title="使用Gemini丰富细节">✨ 丰富</button>
+                             <button id="pg-clear-button" class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button>
                         </div>
                     </div>
-                    <div>
-                        <div class="section-title">4. 镜头语言</div>
-                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4">
-                            <div>
-                                <div class="category-title">景别与构图</div>
-                                <div class="flex flex-wrap" data-group="composition"></div>
-                            </div>
-                            <div>
-                                <div class="category-title">视角与透视</div>
-                                <div class="flex flex-wrap" data-group="angle"></div>
-                            </div>
-                            <div>
-                                <div class="category-title">相机与景深</div>
-                                <div class="flex flex-wrap" data-group="camera"></div>
-                            </div>
-                            <div>
-                                <div class="category-title">色彩与动感</div>
-                                <div class="flex flex-wrap" data-group="color_motion"></div>
-                            </div>
-                        </div>
+                    <div class="relative">
+                         <textarea id="pg-final-prompt-input" rows="6" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="可直接在此输入，或通过上方引导模式构建..."></textarea>
+                         <button id="pg-copy-button-en" class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="复制英文指令">
+                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                         </button>
                     </div>
+                     <div class="mt-4">
+                        <h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3>
+                        <input id="pg-negative-prompt" type="text" class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono" value="ng_deepnegative_v1_75t, (worst quality, low quality:1.4), (bad anatomy), (inaccurate limb:1.2), bad hands, extra fingers, (realistic, 3d:1.3), man, boy, blurry, simple background, text, watermark">
+                    </div>
+                </div>
+
+                <!-- Gallery Section -->
+                <div class="pg-section-container">
+                    <h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2>
+                    <button id="pg-generate-button" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50">
+                        <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        生成杰作 (一次4张)
+                    </button>
+                    <div id="pg-gallery-container" class="mt-4 w-full aspect-video bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-700 min-h-[300px]">
+                        <div id="pg-placeholder-text" class="text-gray-500 text-center">
+                           <p class="text-lg">艺术品，即将诞生</p>
+                           <p class="text-sm">请开始你的创作</p>
+                        </div>
+                         <div id="pg-loader" class="pg-loader hidden"></div>
+                         <div id="pg-image-gallery" class="w-full h-full grid grid-cols-2 md:grid-cols-4 gap-2 p-2 hidden"></div>
+                    </div>
+                    <div id="pg-error-message" class="mt-2 text-red-400 text-sm text-center font-semibold"></div>
                 </div>
             </div>
-
-            <!-- Prompt Input Section -->
-            <div class="section-container">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold text-indigo-400">最终指令 (可编辑)</h2>
-                    <div class="flex items-center space-x-4">
-                         <button id="inspire-button" class="gemini-button">✨ 随机灵感</button>
-                         <button id="enrich-button" class="gemini-button" title="使用Gemini丰富细节">✨ 丰富</button>
-                         <button id="clear-button" class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button>
-                    </div>
-                </div>
-                <div class="relative">
-                     <textarea id="final-prompt-input" rows="6" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="可直接在此输入，或通过上方引导模式构建..."></textarea>
-                     <button id="copy-button-en" class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="复制英文指令">
-                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                     </button>
-                </div>
-                 <div class="mt-4">
-                    <h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3>
-                    <input id="negative-prompt" type="text" class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono" value="ng_deepnegative_v1_75t, (worst quality, low quality:1.4), (bad anatomy), (inaccurate limb:1.2), bad hands, extra fingers, (realistic, 3d:1.3), man, boy, blurry, simple background, text, watermark">
-                </div>
+        </div>
+        
+        <!-- 作品图库页面 -->
+        <div id="gallery" class="page">
+            <div class="page-title">
+                <h1>作品图库</h1>
+                <p>管理并展示您所有的AI生成图片作品</p>
             </div>
-
-            <!-- Gallery Section -->
-            <div class="section-container">
-                <h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2>
-                <button id="generate-button" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50">
-                    <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                    生成杰作 (一次4张)
+            
+            <div class="upload-section">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <h2>上传新图片</h2>
+                <p class="upload-text">支持JPG、PNG格式，最大10MB</p>
+                <input type="file" id="image-upload" class="file-input" accept="image/*">
+                <button class="btn" id="image-upload-button">
+                    <i class="fas fa-upload"></i> 选择图片
                 </button>
-                <div id="gallery-container" class="mt-4 w-full aspect-video bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-700 min-h-[300px]">
-                    <div id="placeholder-text" class="text-gray-500 text-center">
-                       <p class="text-lg">艺术品，即将诞生</p>
-                       <p class="text-sm">请开始你的创作</p>
-                    </div>
-                     <div id="loader" class="loader hidden"></div>
-                     <div id="image-gallery" class="w-full h-full grid grid-cols-2 md:grid-cols-4 gap-2 p-2 hidden"></div>
-                </div>
-                <div id="error-message" class="mt-2 text-red-400 text-sm text-center font-semibold"></div>
+                <div id="upload-status" style="margin-top: 15px; color: var(--primary);"></div>
+            </div>
+            
+            <div class="content-grid" id="gallery-grid">
+                <!-- 图片将通过JavaScript动态添加 -->
             </div>
         </div>
     </div>
     
-    <div id="lightbox">
-        <img id="lightbox-image" src="" alt="Enlarged image"/>
+    <div id="pg-lightbox">
+        <img id="pg-lightbox-image" src="" alt="Enlarged image"/>
+    </div>
+    
+    <div id="image-preview-modal" class="modal">
+        <div class="modal-content" style="background: transparent; box-shadow: none;">
+            <button class="close-modal" onclick="closePreviewModal()">&times;</button>
+            <img id="preview-image" class="image-preview" src="" alt="预览图片">
+        </div>
     </div>
 
+    <div id="gallery-selection-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="document.getElementById('gallery-selection-modal').style.display='none'">&times;</button>
+            <h2 class="text-2xl font-bold text-indigo-400 mb-4">从图库中选择一张图片</h2>
+            <div id="gallery-modal-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto">
+                <!-- Gallery images will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="copyright">
+            <p>&copy; 2023 AI创意工坊 | 使用localStorage存储所有内容</p>
+        </div>
+    </footer>
+
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const promptData = {
+        let imageDB = JSON.parse(localStorage.getItem('imageDB')) || [];
+        let videoDB = JSON.parse(localStorage.getItem('videoDB')) || []; 
+        
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            initImageGallery();
+            initVideoGenerator();
+            initPromptGenerator(); 
+        });
+
+        // --- Image Gallery Logic ---
+        const galleryGrid = document.getElementById('gallery-grid');
+        const imageUpload = document.getElementById('image-upload');
+        const imageUploadButton = document.getElementById('image-upload-button');
+        const uploadStatus = document.getElementById('upload-status');
+        
+        function initImageGallery() {
+            imageUploadButton.addEventListener('click', () => {
+                imageUpload.click();
+            });
+
+            imageUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file || !file.type.match('image.*') || file.size > 10 * 1024 * 1024) {
+                    uploadStatus.textContent = '错误：请选择小于10MB的图片文件';
+                    uploadStatus.style.color = 'var(--accent)';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const newImage = { id: Date.now(), name: file.name, src: e.target.result, description: "本地上传的作品" };
+                    imageDB.push(newImage);
+                    localStorage.setItem('imageDB', JSON.stringify(imageDB));
+                    uploadStatus.textContent = `上传成功：${file.name}`;
+                    uploadStatus.style.color = 'var(--primary)';
+                    renderImageGallery();
+                };
+                reader.readAsDataURL(file);
+            });
+            renderImageGallery();
+        }
+        
+        function renderImageGallery() {
+            galleryGrid.innerHTML = '';
+            if (imageDB.length === 0) {
+                galleryGrid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">图库为空，快去创作或上传吧！</p>';
+                return;
+            }
+            imageDB.forEach(image => {
+                const imageCard = document.createElement('div');
+                imageCard.className = 'card image-card';
+                imageCard.innerHTML = `
+                    <div class="card-img" onclick="previewImage('${image.src}', '${image.name}')"> <img src="${image.src}" alt="${image.name}"> </div>
+                    <div class="card-info"> <h3>${image.name.slice(0, 20)}...</h3> <p>${image.description}</p> </div>
+                    <div class="delete-btn" onclick="deleteImage(${image.id}, event)"> <i class="fas fa-trash"></i> </div>
+                `;
+                galleryGrid.appendChild(imageCard);
+            });
+        }
+        
+        function previewImage(src, title) {
+            const previewImg = document.getElementById('preview-image');
+            previewImg.src = src;
+            previewImg.alt = title;
+            document.getElementById('image-preview-modal').style.display = 'flex';
+        }
+        
+        function closePreviewModal() {
+            document.getElementById('image-preview-modal').style.display = 'none';
+        }
+        
+        function deleteImage(id, event) {
+            event.stopPropagation();
+            if (confirm('确定要删除这张图片吗？')) {
+                imageDB = imageDB.filter(image => image.id !== id);
+                localStorage.setItem('imageDB', JSON.stringify(imageDB));
+                renderImageGallery();
+            }
+        }
+        
+        // --- Video Generator Logic ---
+        function initVideoGenerator() {
+            const uploadBox = document.getElementById('video-gen-upload-box');
+            const fileInput = document.getElementById('video-gen-image-upload');
+            const previewImg = document.getElementById('video-gen-preview');
+            const placeholder = document.getElementById('video-gen-upload-placeholder');
+            let generateBtn = document.getElementById('video-generate-btn');
+            const loadGalleryLink = document.getElementById('video-gen-load-gallery');
+            const gallerySelectionModal = document.getElementById('gallery-selection-modal');
+            const galleryModalGrid = document.getElementById('gallery-modal-grid');
+            const durationButtonsContainer = document.getElementById('video-duration-buttons');
+            const buttonContainer = document.getElementById('video-gen-button-container');
+            let selectedImageDataUrl = null;
+            let selectedDuration = 10;
+
+            uploadBox.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+
+            loadGalleryLink.addEventListener('click', (e) => {
+                e.stopPropagation();
+                galleryModalGrid.innerHTML = ''; 
+                if (imageDB.length === 0) {
+                    galleryModalGrid.innerHTML = '<p class="col-span-full text-center">您的作品图库是空的。</p>';
+                } else {
+                    imageDB.forEach(image => {
+                        const img = document.createElement('img');
+                        img.src = image.src;
+                        img.className = 'w-full h-full object-cover rounded-md cursor-pointer hover:opacity-70 transition-opacity';
+                        img.onclick = () => {
+                            selectImageFromGallery(image.src);
+                        };
+                        galleryModalGrid.appendChild(img);
+                    });
+                }
+                gallerySelectionModal.style.display = 'flex';
+            });
+            
+            durationButtonsContainer.addEventListener('click', (e) => {
+                if(e.target.tagName === 'BUTTON') {
+                    durationButtonsContainer.querySelector('.active').classList.remove('active');
+                    e.target.classList.add('active');
+                    selectedDuration = parseInt(e.target.dataset.duration);
+                }
+            });
+
+            function selectImageFromGallery(src) {
+                selectedImageDataUrl = src;
+                previewImg.src = src;
+                previewImg.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                document.getElementById('video-generate-btn').disabled = false;
+                gallerySelectionModal.style.display = 'none';
+            }
+
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                       selectImageFromGallery(e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            function showProgress(duration) {
+                buttonContainer.innerHTML = `
+                    <div class="progress-bar-container">
+                        <div id="video-progress-bar" class="progress-bar" style="width: 0%"></div>
+                         <span id="progress-text" class="progress-text">正在准备...</span>
+                    </div>
+                `;
+                
+                const progressBar = document.getElementById('video-progress-bar');
+                const progressText = document.getElementById('progress-text');
+                let progress = 0;
+                const intervalTime = (duration * 1000) / 100;
+
+                return setInterval(() => {
+                    progress++;
+                    if (progress <= 100) {
+                        progressBar.style.width = `${progress}%`;
+                        progressText.textContent = `AI视频生成中... ${progress}%`;
+                    }
+                }, intervalTime);
+            }
+
+            function hideProgress(progressInterval) {
+                clearInterval(progressInterval);
+                buttonContainer.innerHTML = `
+                    <button id="video-generate-btn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-lg shadow-lg hover:shadow-indigo-500/50 disabled:opacity-50" disabled>
+                        <i class="fas fa-film mr-2"></i>
+                        生成视频
+                    </button>
+                `;
+                generateBtn = document.getElementById('video-generate-btn');
+                generateBtn.addEventListener('click', generateVideo);
+                generateBtn.disabled = (selectedImageDataUrl === null);
+            }
+            
+            async function generateVideo() {
+                 if (!selectedImageDataUrl) {
+                    alert("请先上传一张图片！"); return;
+                }
+                
+                const progressInterval = showProgress(selectedDuration);
+
+                try {
+                    await new Promise(res => setTimeout(res, selectedDuration * 1000));
+                    
+                    const videoResultUrl = 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4';
+                    
+                    const newVideo = { id: Date.now(), name: `AI视频-${Date.now()}.mp4`, src: videoResultUrl, thumbnail: selectedImageDataUrl };
+                    videoDB.push(newVideo);
+                    localStorage.setItem('videoDB', JSON.stringify(videoDB));
+
+                    alert('视频生成成功！');
+                    renderVideoOutput(newVideo);
+
+                } catch(err) {
+                    alert(`视频生成失败: ${err.message}`);
+                } finally {
+                     hideProgress(progressInterval);
+                }
+            }
+
+            generateBtn.addEventListener('click', generateVideo);
+
+            function renderVideoOutput(video) {
+                const galleryContainer = document.getElementById('video-gen-gallery-container');
+                const videoGallery = document.getElementById('video-output-gallery');
+                galleryContainer.classList.remove('hidden');
+
+                const videoCard = document.createElement('div');
+                videoCard.className = 'relative group w-full aspect-video rounded-lg overflow-hidden';
+                videoCard.innerHTML = `
+                    <video autoplay loop muted playsinline class="w-full h-full object-cover" src="${video.src}"></video>
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <p class="text-white text-lg font-bold">视频已生成</p>
+                    </div>
+                `;
+                videoGallery.prepend(videoCard);
+            }
+        }
+        
+        // --- Prompt Generator Logic ---
+        function initPromptGenerator() {
+             const promptData = {
                 style: { "逼真写实": "photorealistic", "二次元动漫": "anime", "CG渲染": "cg render", "油画质感": "oil painting", "水墨国风": "ink wash painting", "复古港风": "hong kong retro", "赛博朋克": "cyberpunk", "蒸汽朋克": "steampunk", "水彩": "watercolor", "素描": "sketch" },
                 quality: { "杰作": "masterpiece", "最佳质量": "best quality", "极其精细": "ultra-detailed", "8K画质": "8k", "逼真细节": "photorealistic details", "复杂细节": "intricate details" },
                 temperament: { "清冷御姐": "cold and elegant lady", "纯欲少女": "pure and seductive girl", "元气少女": "energetic girl", "书卷气": "scholarly", "赛博魅影": "cyber phantom", "复古女郎": "retro lady" },
@@ -231,44 +1029,34 @@
                 'default': '1girl'
             };
 
-            // **FIX START**: Color palette for tags
             const colors = [
-                { bg: 'bg-red-200', text: 'text-red-800', ring: 'ring-red-400' },
-                { bg: 'bg-yellow-200', text: 'text-yellow-800', ring: 'ring-yellow-400' },
-                { bg: 'bg-green-200', text: 'text-green-800', ring: 'ring-green-400' },
-                { bg: 'bg-blue-200', text: 'text-blue-800', ring: 'ring-blue-400' },
-                { bg: 'bg-indigo-200', text: 'text-indigo-800', ring: 'ring-indigo-400' },
-                { bg: 'bg-purple-200', text: 'text-purple-800', ring: 'ring-purple-400' },
-                { bg: 'bg-pink-200', text: 'text-pink-800', ring: 'ring-pink-400' },
-                { bg: 'bg-teal-200', text: 'text-teal-800', ring: 'ring-teal-400' },
+                { bg: 'bg-red-200', text: 'text-red-800', ring: 'ring-red-400' }, { bg: 'bg-yellow-200', text: 'text-yellow-800', ring: 'ring-yellow-400' },
+                { bg: 'bg-green-200', text: 'text-green-800', ring: 'ring-green-400' }, { bg: 'bg-blue-200', text: 'text-blue-800', ring: 'ring-blue-400' },
+                { bg: 'bg-indigo-200', text: 'text-indigo-800', ring: 'ring-indigo-400' }, { bg: 'bg-purple-200', text: 'text-purple-800', ring: 'ring-purple-400' },
+                { bg: 'bg-pink-200', text: 'text-pink-800', ring: 'ring-pink-400' }, { bg: 'bg-teal-200', text: 'text-teal-800', ring: 'ring-teal-400' },
                 { bg: 'bg-orange-200', text: 'text-orange-800', ring: 'ring-orange-400' },
             ];
-            // **FIX END**
 
             const selectedTags = new Map();
+            const finalPromptInput = document.getElementById('pg-final-prompt-input');
+            const copyBtnEn = document.getElementById('pg-copy-button-en');
+            const generateBtn = document.getElementById('pg-generate-button');
+            const clearBtn = document.getElementById('pg-clear-button');
+            const inspireBtn = document.getElementById('pg-inspire-button');
+            const enrichBtn = document.getElementById('pg-enrich-button');
+            const gallery = document.getElementById('pg-image-gallery');
+            const placeholderText = document.getElementById('pg-placeholder-text');
+            const loader = document.getElementById('pg-loader');
+            const errorMessage = document.getElementById('pg-error-message');
+            const lightbox = document.getElementById('pg-lightbox');
+            const lightboxImage = document.getElementById('pg-lightbox-image');
 
-            // DOM Elements
-            const finalPromptInput = document.getElementById('final-prompt-input');
-            const copyBtnEn = document.getElementById('copy-button-en');
-            const generateBtn = document.getElementById('generate-button');
-            const clearBtn = document.getElementById('clear-button');
-            const inspireBtn = document.getElementById('inspire-button');
-            const enrichBtn = document.getElementById('enrich-button');
-            const gallery = document.getElementById('image-gallery');
-            const placeholderText = document.getElementById('placeholder-text');
-            const loader = document.getElementById('loader');
-            const errorMessage = document.getElementById('error-message');
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImage = document.getElementById('lightbox-image');
-
-            // --- Initialize UI ---
-            // **FIX START**: Reworked UI generation to use tags instead of selects
             for (const group in promptData) {
                 const container = document.querySelector(`div[data-group="${group}"]`);
                 if (container) {
                     Object.keys(promptData[group]).forEach((tagText, index) => {
                         const tagEl = document.createElement('span');
-                        tagEl.className = 'prompt-tag';
+                        tagEl.className = 'pg-prompt-tag';
                         tagEl.textContent = tagText;
                         tagEl.dataset.value = tagText;
                         tagEl.dataset.group = group;
@@ -281,27 +1069,25 @@
                     });
                 }
             }
-            // **FIX END**
              
-            updateOutput();
+            pgUpdateOutput();
 
-            // --- Event Handlers ---
-            // **FIX START**: New event handler for tag clicks
-            document.getElementById('builder-container').addEventListener('click', (e) => {
-                if (e.target.classList.contains('prompt-tag')) {
+            document.getElementById('pg-builder-container').addEventListener('click', (e) => {
+                if (e.target.classList.contains('pg-prompt-tag')) {
                     const { value, group, ringColor } = e.target.dataset;
 
                     if (group === 'style') {
-                        // Deselect previous style if any
                         const currentActive = document.querySelector(`[data-group="style"].active`);
                         if (currentActive) {
                             currentActive.classList.remove('active', currentActive.dataset.ringColor);
                         }
-                        // Select new style
-                        e.target.classList.add('active', ringColor);
-                        selectedTags.set('style', value);
+                        if (currentActive?.dataset.value !== value) {
+                            e.target.classList.add('active', ringColor);
+                            selectedTags.set('style', value);
+                        } else {
+                            selectedTags.delete('style');
+                        }
                     } else {
-                        // Multi-select logic for other groups
                         const currentGroupTags = new Set(selectedTags.get(group) || []);
                         if (currentGroupTags.has(value)) {
                             currentGroupTags.delete(value);
@@ -312,26 +1098,23 @@
                         }
                         selectedTags.set(group, Array.from(currentGroupTags));
                     }
-                    updateOutput(true);
+                    pgUpdateOutput(true);
                 }
             });
-            // **FIX END**
             
             finalPromptInput.addEventListener('input', () => {
                 generateBtn.disabled = finalPromptInput.value.trim() === '';
             });
 
             clearBtn.addEventListener('click', () => {
-                // **FIX START**: Clear logic updated for tags
-                document.querySelectorAll('.prompt-tag.active').forEach(tag => {
+                document.querySelectorAll('.pg-prompt-tag.active').forEach(tag => {
                     tag.classList.remove('active', tag.dataset.ringColor);
                 });
                 selectedTags.clear();
-                updateOutput(true);
+                pgUpdateOutput(true);
                 gallery.innerHTML = '';
                 gallery.classList.add('hidden');
                 placeholderText.classList.remove('hidden');
-                // **FIX END**
             });
             
             inspireBtn.addEventListener('click', async () => {
@@ -339,23 +1122,23 @@
                 const inspiration = await callGemini(prompt, inspireBtn);
                 if (inspiration) {
                     finalPromptInput.value = inspiration;
-                    updateOutput(false); 
+                    pgUpdateOutput(false); 
                 }
             });
 
             enrichBtn.addEventListener('click', async () => {
                 let currentPrompt = finalPromptInput.value.trim();
                 if (!currentPrompt) return;
-                
+
                 const prompt = `Take the following AI image generator prompt and make it more detailed, vivid, and artistic. Add more specific details about the subject's expression, the background, the atmosphere, and the lighting. Return only the enhanced prompt as a single, continuous string of keywords and phrases. Do not use any line breaks. The prompt to enhance is: "${currentPrompt}"`;
                 const enrichment = await callGemini(prompt, enrichBtn);
                 if (enrichment) {
                     finalPromptInput.value = enrichment;
-                    updateOutput(false);
+                    pgUpdateOutput(false);
                 }
             });
 
-            function setupCopyButton(button, textarea) {
+            function pgSetupCopyButton(button, textarea) {
                 button.addEventListener('click', () => {
                     if (!textarea.value) return;
                     navigator.clipboard.writeText(textarea.value).then(() => {
@@ -365,85 +1148,63 @@
                     }).catch(err => console.error('Copy failed', err));
                 });
             }
-            setupCopyButton(copyBtnEn, finalPromptInput);
+            pgSetupCopyButton(copyBtnEn, finalPromptInput);
             
             lightbox.addEventListener('click', () => {
                 lightbox.style.display = 'none';
             });
 
-            // --- Core Functions ---
-            function updateOutput(fromSelection = false) {
+            function pgUpdateOutput(fromSelection = false) {
                 if (fromSelection) {
                     const styleZh = selectedTags.get('style');
                     if (!styleZh) {
                         finalPromptInput.value = '';
                     } else {
                         const translate = (group) => (selectedTags.get(group) || []).map(key => promptData[group][key]);
-                        
                         const styleEn = promptData.style[styleZh];
                         const coreStyle = styleKeywords[styleEn];
-                        
                         let promptEnParts = [];
-                        
                         const qualityEn = translate('quality');
                         promptEnParts.push(`(${(qualityEn.join(', ') || 'masterpiece, best quality')}, ${coreStyle})`);
-
                         const sceneEn = translate('scene');
-                        if (sceneEn.length > 0) {
-                            promptEnParts.push(`((${sceneEn.join(' and ')} scene:1.5))`);
-                        }
-                        
+                        if (sceneEn.length > 0) promptEnParts.push(`((${sceneEn.join(' and ')} scene:1.5))`);
                         const temperamentEn = translate('temperament');
                         const faceEn = translate('face');
                         const hairEn = translate('hair');
                         const clothingEn = translate('clothing');
                         const dynamicsEn = translate('dynamics');
                         const compositionEn = translate('composition');
-                        
                         let characterDetailsEn = [...temperamentEn, ...faceEn, ...hairEn, ...dynamicsEn];
                         let characterStr = `((${compositionEn.join(', ') || 'medium shot'} of a beautiful woman`;
                         if (characterDetailsEn.length > 0) characterStr += ` with ${characterDetailsEn.join(' and ')}`;
                         if (clothingEn.length > 0) characterStr += `, wearing ${clothingEn.join(' and ')}`;
                         characterStr += `))`;
                         promptEnParts.push(characterStr);
-                        
                         const lightingEn = translate('lighting');
-                        if (lightingEn.length > 0) {
-                            promptEnParts.push(`((${lightingEn.join(' and ')} lighting)):1.2`);
-                        }
-                        
+                        if (lightingEn.length > 0) promptEnParts.push(`((${lightingEn.join(' and ')} lighting)):1.2`);
                         const angleEn = translate('angle');
                         const cameraEn = translate('camera');
                         const colorMotionEn = translate('color_motion');
                         const lensDetailsEn = [...angleEn, ...cameraEn, ...colorMotionEn];
-                        if (lensDetailsEn.length > 0) {
-                             promptEnParts.push(`((${lensDetailsEn.join(', ')})):1.1`);
-                        }
-                        
+                        if (lensDetailsEn.length > 0) promptEnParts.push(`((${lensDetailsEn.join(', ')})):1.1`);
                         finalPromptInput.value = promptEnParts.join(', ');
                     }
                 }
-                
                 generateBtn.disabled = finalPromptInput.value.trim() === '';
             }
             
             async function callGemini(prompt, button) {
                 const originalText = button.innerHTML;
-                button.innerHTML = '<div class="spinner-sm"></div>';
+                button.innerHTML = '<div class="pg-spinner-sm"></div>';
                 button.disabled = true;
                 errorMessage.textContent = '';
-                
                 try {
                     const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
                     const apiKey = "AIzaSyCOiaWZzimDTiPAyHVr6rF1pJqCzF4N3tI"; 
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-
                     if (!response.ok) throw new Error(`Gemini API Error: ${response.status}`);
-
                     const result = await response.json();
-                    
                     if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
                         return result.candidates[0].content.parts[0].text.trim();
                     } else {
@@ -459,41 +1220,34 @@
                 }
             }
 
-
             generateBtn.addEventListener('click', async () => {
                 showLoading(true);
                 let englishPrompt = finalPromptInput.value.trim();
-                const negativePrompt = document.getElementById('negative-prompt').value;
-                
+                const negativePrompt = document.getElementById('pg-negative-prompt').value;
                 if (!englishPrompt) {
                     showError('指令输入框不能为空！');
                     showLoading(false);
                     return;
                 }
-                
                 if (!englishPrompt.includes('1girl') && !englishPrompt.includes('a man') && !englishPrompt.includes('a boy')) { 
                     englishPrompt = `${styleKeywords['default']}, ${englishPrompt}`;
                 }
-
                 const uniqueId = `id-${Date.now()}`;
                 const fullPrompt = `${englishPrompt}, ${uniqueId} --no ${negativePrompt}`;
-                
                 try {
                     const payload = { instances: [{ prompt: fullPrompt }], parameters: { sampleCount: 4 } };
                     const apiKey = "AIzaSyCOiaWZzimDTiPAyHVr6rF1pJqCzF4N3tI";
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-
                     if (!response.ok) {
                         const errorText = await response.text();
                         let errorMsg = `图片生成失败 (状态码: ${response.status})。`;
                          try { errorMsg = JSON.parse(errorText).error?.message || errorMsg; } catch (e) { if(errorText) errorMsg = errorText; }
                         throw new Error(errorMsg);
                     }
-
                     const result = await response.json();
                     if (result.predictions && result.predictions.length > 0) {
-                        displayGallery(result.predictions);
+                        pgDisplayGallery(result.predictions);
                     } else {
                         console.error('Unexpected API response:', result);
                         if (result.predictions?.[0]?.safetyRatings) { throw new Error('图片因安全策略被拦截。请调整提示词。'); }
@@ -521,32 +1275,40 @@
                 }
             }
             
-            function displayGallery(predictions) {
+            function pgDisplayGallery(predictions) {
                 gallery.innerHTML = ''; 
                 gallery.classList.remove('hidden');
                 placeholderText.classList.add('hidden');
-                
                 predictions.forEach((prediction, index) => {
                     if (prediction.bytesBase64Encoded) {
                         const imgSrc = `data:image/png;base64,${prediction.bytesBase64Encoded}`;
-                        
                         const container = document.createElement('div');
                         container.className = 'relative group w-full h-full';
-
                         const img = document.createElement('img');
                         img.src = imgSrc;
                         img.className = 'w-full h-full object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity';
                         img.addEventListener('click', () => { lightboxImage.src = imgSrc; lightbox.style.display = 'flex'; });
-
                         const downloadLink = document.createElement('a');
                         downloadLink.href = imgSrc;
                         downloadLink.download = `ai-creation-${Date.now()}-${index}.png`;
                         downloadLink.className = 'absolute bottom-2 right-2 bg-black/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80';
                         downloadLink.title = '下载图片';
                         downloadLink.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
-
+                        const addToGalleryBtn = document.createElement('button');
+                        addToGalleryBtn.className = 'absolute top-2 right-2 bg-blue-500/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-500/80';
+                        addToGalleryBtn.title = '添加到作品图库';
+                        addToGalleryBtn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>`;
+                        addToGalleryBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            const newImage = { id: Date.now(), name: `AI作品-${Date.now()}.png`, src: imgSrc, description: "AI生成于创意工坊" };
+                            imageDB.push(newImage);
+                            localStorage.setItem('imageDB', JSON.stringify(imageDB));
+                            renderImageGallery();
+                            alert('已成功添加到作品图库！');
+                        };
                         container.appendChild(img);
                         container.appendChild(downloadLink);
+                        container.appendChild(addToGalleryBtn);
                         gallery.appendChild(container);
                     }
                 });
@@ -557,7 +1319,7 @@
                 placeholderText.classList.remove('hidden');
                 gallery.classList.add('hidden');
             }
-        });
+        }
     </script>
 </body>
 </html>
