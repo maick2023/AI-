@@ -454,6 +454,11 @@
         .progress-text {
             @apply absolute inset-0 flex items-center justify-center text-xs font-bold text-white;
         }
+        .video-card .card-img video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
@@ -468,6 +473,9 @@
                 <li><a onclick="showPage('prompt-generator')"><i class="fas fa-magic"></i> AI绘画</a></li>
                 <li><a onclick="showPage('video-generator')"><i class="fas fa-video"></i> AI视频</a></li>
                 <li><a onclick="showPage('gallery')"><i class="fas fa-images"></i> 作品图库</a></li>
+                <li><a onclick="showPage('videos')"><i class="fas fa-film"></i> 视频集库</a></li>
+                <li><a onclick="showPage('games')"><i class="fas fa-gamepad"></i> 游戏中心</a></li>
+                <li><a onclick="showPage('chat')"><i class="fas fa-comments"></i> AI对话</a></li>
             </ul>
         </div>
     </nav>
@@ -510,6 +518,16 @@
                         <h3>作品图库</h3>
                         <p>展示您所有的AI生成图片作品</p>
                         <div class="btn btn-outline">浏览图库</div>
+                    </div>
+                </div>
+                 <div class="card image-card" onclick="showPage('videos')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1574717024453-354056aafa98?q=80&w=1974" alt="视频集库">
+                    </div>
+                    <div class="card-info">
+                        <h3>视频集库</h3>
+                        <p>欣赏所有生成的AI视频作品</p>
+                        <div class="btn btn-outline">浏览视频</div>
                     </div>
                 </div>
             </div>
@@ -737,6 +755,49 @@
                 <!-- 图片将通过JavaScript动态添加 -->
             </div>
         </div>
+
+        <!-- **FIX START**: Added back the missing pages -->
+        <div id="videos" class="page">
+             <div class="page-title">
+                <h1>视频集库</h1>
+                <p>管理并展示您所有的AI生成视频作品</p>
+            </div>
+             <div class="content-grid" id="videos-grid">
+                <!-- Videos will be dynamically added here -->
+            </div>
+        </div>
+        <div id="games" class="page">
+             <div class="page-title">
+                <h1>游戏中心</h1>
+                <p>体验我们集成的小游戏</p>
+            </div>
+             <div class="content-grid" id="games-grid">
+                <!-- Games will be dynamically added here -->
+            </div>
+        </div>
+        <div id="chat" class="page">
+            <div class="page-title">
+                <h1>AI对话助手</h1>
+                <p>与Gemini AI进行实时对话，获取创意灵感</p>
+            </div>
+            <div class="chat-container" style="max-width: 800px; margin: auto;">
+                 <div class="chat-header" style="background: linear-gradient(90deg, var(--primary), var(--secondary)); padding: 15px; text-align: center;">
+                    <h3 style="font-size: 1.5rem; display: flex; align-items: center; justify-content: center;"><i class="fas fa-robot" style="margin-right: 10px;"></i> Gemini AI助手</h3>
+                </div>
+                <div class="chat-messages" id="chat-messages" style="height: 400px; padding: 20px; overflow-y: auto; background: rgba(26, 26, 46, 0.5);">
+                    <div class="message ai-message" style="background: rgba(42, 42, 60, 0.9); align-self: flex-start; border-bottom-left-radius: 5px; padding: 15px; margin-bottom: 15px; border-radius: 20px; max-width: 80%;">
+                        您好！我是您的AI助手。
+                    </div>
+                </div>
+                <div class="chat-input" style="display: flex; padding: 15px; background: rgba(26, 26, 46, 0.9);">
+                    <input type="text" id="chat-input" placeholder="在此输入您的问题..." style="flex: 1; padding: 15px; border: none; border-radius: 50px 0 0 50px; background: rgba(255, 255, 255, 0.08); color: white; font-size: 1rem; outline: none;">
+                    <button id="send-btn" style="background: var(--primary); color: white; border: none; padding: 0 30px; border-radius: 0 50px 50px 0; cursor: pointer; font-size: 1rem;">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- **FIX END** -->
     </div>
     
     <div id="pg-lightbox">
@@ -780,6 +841,7 @@
             initImageGallery();
             initVideoGenerator();
             initPromptGenerator(); 
+            initVideoGallery();
         });
 
         // --- Image Gallery Logic ---
@@ -852,6 +914,37 @@
             }
         }
         
+        // **FIX START**: Video Gallery Logic Restored
+        function initVideoGallery() {
+            renderVideoGallery();
+        }
+
+        function renderVideoGallery() {
+            const videosGrid = document.getElementById('videos-grid');
+            videosGrid.innerHTML = '';
+            if (videoDB.length === 0) {
+                videosGrid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">视频集库为空，请先在AI视频页面生成视频。</p>';
+                return;
+            }
+            videoDB.forEach(video => {
+                const videoCard = document.createElement('div');
+                videoCard.className = 'card image-card'; // Re-use image card style for consistency
+                videoCard.innerHTML = `
+                    <div class="card-img">
+                        <video loop muted onmouseover="this.play()" onmouseout="this.pause(); this.currentTime=0;" class="w-full h-full object-cover">
+                            <source src="${video.src}" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-info">
+                        <h3>${video.name}</h3>
+                        <p>AI生成的视频</p>
+                    </div>
+                `;
+                videosGrid.appendChild(videoCard);
+            });
+        }
+        // **FIX END**
+
         // --- Video Generator Logic ---
         function initVideoGenerator() {
             const uploadBox = document.getElementById('video-gen-upload-box');
@@ -921,7 +1014,7 @@
                 buttonContainer.innerHTML = `
                     <div class="progress-bar-container">
                         <div id="video-progress-bar" class="progress-bar" style="width: 0%"></div>
-                         <span id="progress-text" class="progress-text">正在准备...</span>
+                         <span id="progress-text" class="progress-text">正在准备... 0%</span>
                     </div>
                 `;
                 
@@ -968,8 +1061,9 @@
                     videoDB.push(newVideo);
                     localStorage.setItem('videoDB', JSON.stringify(videoDB));
 
-                    alert('视频生成成功！');
+                    alert('视频生成成功！已保存至视频集库。');
                     renderVideoOutput(newVideo);
+                    renderVideoGallery(); // Update the video gallery page as well
 
                 } catch(err) {
                     alert(`视频生成失败: ${err.message}`);
