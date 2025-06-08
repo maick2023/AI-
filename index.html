@@ -1152,14 +1152,111 @@
             const durationButtonsContainer = document.getElementById('video-duration-buttons');
             const buttonContainer = document.getElementById('video-gen-button-container');
             let selectedImageDataUrl = null;
-            let selectedDuration = 10;
+            let selectedDuration = 10; // 这个参数在Replicate中不直接用，但我们可以保留UI
 
+            // --- 以下是新代码的核心 ---
+
+            // 替换为您的 Replicate API 密钥
+            const REPLICATE_API_KEY = "r8_PhAf5gK129lz1o93AVJ6vmwWcovysXc4MuOvJ"; // <--- 在这里粘贴您自己的API密钥
+
+            // 轮询检查任务状态的辅助函数
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+
+            async function pollForResult(predictionUrl) {
+                const statusElement = document.getElementById('progress-text');
+                let retries = 0;
+                while (retries < 100) { // 最多轮询100次
+                    const response = await fetch(predictionUrl, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Token ${REPLICATE_API_KEY}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`轮询任务状态失败: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+
+                    if (result.status === 'succeeded') {
+                        statusElement.textContent = "视频生成成功！";
+                        return result.output; // 返回视频URL
+                    } else if (result.status === 'failed' || result.status === 'canceled') {
+                        throw new Error(`视频生成失败: ${result.error || '未知错误'}`);
+                    } else {
+                        statusElement.textContent = `AI视频生成中... 状态: ${result.status}`;
+                        await sleep(2000); // 等待2秒再查询
+                    }
+                    retries++;
+                }
+                throw new Error("任务超时，请重试。");
+            }
+
+            async function generateVideo() {
+                if (!selectedImageDataUrl) {
+                    alert("请先上传一张图片！");
+                    return;
+                }
+                if (REPLICATE_API_KEY === "r8_YourApiKeyHere") {
+                    alert("请在代码中替换为您自己的 Replicate API 密钥！");
+                    return;
+                }
+
+                showProgress(30); // 模拟一个30秒的进度条，实际时间由API决定
+
+                try {
+                    // 1. 发起生成请求
+                    const startResponse = await fetch("https://api.replicate.com/v1/predictions", {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Token ${REPLICATE_API_KEY}`,
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            version: "92a0c9a9cb1fd93ea0361d15e499dc879b35095077b2feed47315ccab4524036", // 这是SVD模型的版本号
+                            input: {
+                                image: selectedImageDataUrl // 将base64格式的图片直接传给API
+                            },
+                        }),
+                    });
+
+                    if (!startResponse.ok) {
+                        throw new Error(`发起任务失败: ${startResponse.status}`);
+                    }
+
+                    const prediction = await startResponse.json();
+                    const predictionStatusUrl = prediction.urls.get;
+
+                    // 2. 轮询获取结果
+                    const videoResultUrl = await pollForResult(predictionStatusUrl);
+
+                    // 3. 处理最终结果 (这部分是您的旧代码，可以复用)
+                    const newVideo = { id: Date.now(), name: `AI视频-${Date.now()}.mp4`, src: videoResultUrl, thumbnail: selectedImageDataUrl };
+                    videoDB.push(newVideo);
+                    localStorage.setItem('videoDB', JSON.stringify(videoDB));
+                    alert('视频生成成功！已保存至视频集库。');
+                    renderVideoOutput(newVideo);
+                    renderVideoGallery();
+
+                } catch (err) {
+                    alert(`视频生成出错: ${err.message}`);
+                    console.error(err);
+                } finally {
+                    hideProgress(); // 无论成功失败，都恢复按钮
+                }
+            }
+
+            // --- 以下是您原有的UI逻辑，无需大改 ---
+            
             uploadBox.addEventListener('click', () => fileInput.click());
             fileInput.addEventListener('change', handleFileSelect);
-
             loadGalleryLink.addEventListener('click', (e) => {
                 e.stopPropagation();
-                galleryModalGrid.innerHTML = ''; 
+                galleryModalGrid.innerHTML = '';
                 if (imageDB.length === 0) {
                     galleryModalGrid.innerHTML = '<p class="col-span-full text-center">您的作品图库是空的。</p>';
                 } else {
@@ -1175,7 +1272,6 @@
                 }
                 gallerySelectionModal.style.display = 'flex';
             });
-            
             durationButtonsContainer.addEventListener('click', (e) => {
                 if(e.target.tagName === 'BUTTON') {
                     durationButtonsContainer.querySelector('.active').classList.remove('active');
@@ -1183,7 +1279,6 @@
                     selectedDuration = parseInt(e.target.dataset.duration);
                 }
             });
-
             function selectImageFromGallery(src) {
                 selectedImageDataUrl = src;
                 previewImg.src = src;
@@ -1208,26 +1303,12 @@
                 buttonContainer.innerHTML = `
                     <div class="progress-bar-container">
                         <div id="video-progress-bar" class="progress-bar" style="width: 0%"></div>
-                         <span id="progress-text" class="progress-text">正在准备... 0%</span>
+                        <span id="progress-text" class="progress-text">正在连接API... 0%</span>
                     </div>
                 `;
-                
-                const progressBar = document.getElementById('video-progress-bar');
-                const progressText = document.getElementById('progress-text');
-                let progress = 0;
-                const intervalTime = (duration * 1000) / 100;
-
-                return setInterval(() => {
-                    progress++;
-                    if (progress <= 100) {
-                        progressBar.style.width = `${progress}%`;
-                        progressText.textContent = `AI视频生成中... ${progress}%`;
-                    }
-                }, intervalTime);
             }
 
-            function hideProgress(progressInterval) {
-                clearInterval(progressInterval);
+            function hideProgress() {
                 buttonContainer.innerHTML = `
                     <button id="video-generate-btn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-lg shadow-lg hover:shadow-indigo-500/50 disabled:opacity-50" disabled>
                         <i class="fas fa-film mr-2"></i>
@@ -1239,50 +1320,23 @@
                 generateBtn.disabled = (selectedImageDataUrl === null);
             }
             
-            async function generateVideo() {
-                 if (!selectedImageDataUrl) {
-                    alert("请先上传一张图片！"); return;
-                }
-                
-                const progressInterval = showProgress(selectedDuration);
-
-                try {
-                    await new Promise(res => setTimeout(res, selectedDuration * 1000));
-                    
-                    const videoResultUrl = 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4';
-                    
-                    const newVideo = { id: Date.now(), name: `AI视频-${Date.now()}.mp4`, src: videoResultUrl, thumbnail: selectedImageDataUrl };
-                    videoDB.push(newVideo);
-                    localStorage.setItem('videoDB', JSON.stringify(videoDB));
-
-                    alert('视频生成成功！已保存至视频集库。');
-                    renderVideoOutput(newVideo);
-                    renderVideoGallery(); 
-
-                } catch(err) {
-                    alert(`视频生成失败: ${err.message}`);
-                } finally {
-                     hideProgress(progressInterval);
-                }
-            }
-
             generateBtn.addEventListener('click', generateVideo);
+        }
 
-            function renderVideoOutput(video) {
-                const galleryContainer = document.getElementById('video-gen-gallery-container');
-                const videoGallery = document.getElementById('video-output-gallery');
-                galleryContainer.classList.remove('hidden');
+        function renderVideoOutput(video) {
+            const galleryContainer = document.getElementById('video-gen-gallery-container');
+            const videoGallery = document.getElementById('video-output-gallery');
+            galleryContainer.classList.remove('hidden');
 
-                const videoCard = document.createElement('div');
-                videoCard.className = 'relative group w-full aspect-video rounded-lg overflow-hidden';
-                videoCard.innerHTML = `
-                    <video autoplay loop muted playsinline class="w-full h-full object-cover" src="${video.src}"></video>
-                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <p class="text-white text-lg font-bold">视频已生成</p>
-                    </div>
-                `;
-                videoGallery.prepend(videoCard);
-            }
+            const videoCard = document.createElement('div');
+            videoCard.className = 'relative group w-full aspect-video rounded-lg overflow-hidden';
+            videoCard.innerHTML = `
+                <video autoplay loop muted playsinline class="w-full h-full object-cover" src="${video.src}"></video>
+                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <p class="text-white text-lg font-bold">视频已生成</p>
+                </div>
+            `;
+            videoGallery.prepend(videoCard);
         }
         
         function initMusicGallery() {
