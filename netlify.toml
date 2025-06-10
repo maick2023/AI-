@@ -1,0 +1,18 @@
+# netlify.toml
+
+[build]
+  # 明确指定网站文件所在的目录 (根目录)
+  publish = "/"
+  # Functions 文件夹的位置
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  # 将函数超时时间设置为 300 秒 (5分钟)
+  timeout = 300
+
+# 建议添加: 创建一个简洁的 API 地址
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
