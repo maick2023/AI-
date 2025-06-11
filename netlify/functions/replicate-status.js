@@ -1,22 +1,19 @@
-// /netlify/functions/replicate.js
+// /netlify/functions/replicate-status.js
 const Replicate = require("replicate");
 
 exports.handler = async (event, context) => {
-  // 设置函数超时为最大值
-  context.callbackWaitsForEmptyEventLoop = false;
-  
   const headers = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+    'Access-Control-Allow-Methods': 'GET, OPTIONS'
   };
 
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
   }
 
-  if (event.httpMethod !== 'POST') {
+  if (event.httpMethod !== 'GET') {
     return { 
       statusCode: 405, 
       headers,
@@ -27,7 +24,6 @@ exports.handler = async (event, context) => {
   try {
     const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
     if (!REPLICATE_API_TOKEN) {
-      console.error('REPLICATE_API_TOKEN 环境变量未设置');
       return {
         statusCode: 500,
         headers,
@@ -35,44 +31,29 @@ exports.handler = async (event, context) => {
       };
     }
 
-    const { image } = JSON.parse(event.body);
-    if (!image) {
-      return { 
-        statusCode: 400, 
+    const predictionId = event.queryStringParameters?.id;
+    if (!predictionId) {
+      return {
+        statusCode: 400,
         headers,
-        body: JSON.stringify({ error: "请求中未包含图片数据" }) 
+        body: JSON.stringify({ error: '缺少 prediction ID' })
       };
     }
 
-    console.log("开始调用 Replicate API...");
-    
     const replicate = new Replicate({ 
       auth: REPLICATE_API_TOKEN 
     });
 
-    // 使用更快的模型版本
-    const prediction = await replicate.predictions.create({
-      version: "25a33b2a0c1e5e9c7b2c5c9c7b2c5c9c7b2c5c9c", // 替换为正确的版本ID
-      input: { 
-        image: image,
-        motion_bucket_id: 127,
-        fps: 6,
-        noise_aug_strength: 0.1
-      }
-    });
+    const prediction = await replicate.predictions.get(predictionId);
 
-    // 直接返回预测ID，让前端轮询状态
     return { 
       statusCode: 200, 
       headers,
-      body: JSON.stringify({ 
-        prediction_id: prediction.id,
-        status: prediction.status 
-      }) 
+      body: JSON.stringify(prediction) 
     };
 
   } catch (error) {
-    console.error("Replicate API 调用失败:", error);
+    console.error("获取预测状态失败:", error);
     return { 
       statusCode: 500, 
       headers,

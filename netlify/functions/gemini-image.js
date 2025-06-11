@@ -20,7 +20,6 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    // 检查环境变量
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
     if (!GEMINI_API_KEY) {
       return {
@@ -32,7 +31,14 @@ exports.handler = async (event, context) => {
 
     const requestBody = JSON.parse(event.body);
     
-    // 注意：Imagen API 需要付费账户[5][6]
+    // 检查是否有付费账户
+    const testResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${GEMINI_API_KEY}`);
+    
+    if (!testResponse.ok) {
+      throw new Error('API密钥无效或账户未激活');
+    }
+
+    // 注意：Imagen API 需要付费账户
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:generateImage?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: {
@@ -45,9 +51,8 @@ exports.handler = async (event, context) => {
       const errorText = await response.text();
       console.error('Gemini API Error:', errorText);
       
-      // 检查是否是计费问题
-      if (errorText.includes('only accessible to billed users')) {
-        throw new Error('Imagen API 需要付费账户。请在 Google AI Studio 中设置计费账户。');
+      if (response.status === 400 && errorText.includes('only accessible to billed users')) {
+        throw new Error('Imagen API 需要付费账户。请在 Google AI Studio 中设置计费账户。详情：https://aistudio.google.com/app/billing');
       }
       
       throw new Error(`Gemini API 错误: ${response.status} ${errorText}`);
