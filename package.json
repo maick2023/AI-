@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "description": "Backend functions for the AI workshop",
   "dependencies": {
-    "replicate": "^0.29.1"
+    "replicate": "^0.25.1"
   }
 }

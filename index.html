@@ -1156,9 +1156,6 @@
 
             // --- 以下是新代码的核心 ---
 
-            // 替换为您的 Replicate API 密钥
-            const REPLICATE_API_KEY = "r8_PhAf5gK129lz1o93AVJ6vmwWcovysXc4MuOvJ"; // <--- 在这里粘贴您自己的API密钥
-
             // 轮询检查任务状态的辅助函数
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
@@ -1201,39 +1198,32 @@
                     alert("请先上传一张图片！");
                     return;
                 }
-                if (REPLICATE_API_KEY === "r8_YourApiKeyHere") {
-                    alert("请在代码中替换为您自己的 Replicate API 密钥！");
-                    return;
-                }
 
-                showProgress(30); // 模拟一个30秒的进度条，实际时间由API决定
+                showProgress(60); // 模拟一个30秒的进度条，实际时间由API决定
 
                 try {
                     // 1. 发起生成请求
-                    const startResponse = await fetch("https://api.replicate.com/v1/predictions", {
+                    const startResponse = await fetch("/api/replicate", { // 注意：地址改为了 /api/replicate
                         method: "POST",
                         headers: {
-                            "Authorization": `Token ${REPLICATE_API_KEY}`,
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({
-                            version: "92a0c9a9cb1fd93ea0361d15e499dc879b35095077b2feed47315ccab4524036", // 这是SVD模型的版本号
-                            input: {
-                                image: selectedImageDataUrl // 将base64格式的图片直接传给API
-                            },
+                         body: JSON.stringify({
+                              image: selectedImageDataUrl
                         }),
                     });
-
                     if (!startResponse.ok) {
-                        throw new Error(`发起任务失败: ${startResponse.status}`);
+                         const errorData = await startResponse.json();
+                         throw new Error(`后端函数出错: ${errorData.error || '未知错误'}`);
+                    }
+                     const result = await startResponse.json();
+
+                    if (!result.output) {
+                        throw new Error('后端未能成功返回视频URL');
                     }
 
-                    const prediction = await startResponse.json();
-                    const predictionStatusUrl = prediction.urls.get;
-
                     // 2. 轮询获取结果
-                    const videoResultUrl = await pollForResult(predictionStatusUrl);
-
+                    const videoResultUrl = result.output;
                     // 3. 处理最终结果 (这部分是您的旧代码，可以复用)
                     const newVideo = { id: Date.now(), name: `AI视频-${Date.now()}.mp4`, src: videoResultUrl, thumbnail: selectedImageDataUrl };
                     videoDB.push(newVideo);
@@ -1717,8 +1707,7 @@
                 errorMessage.textContent = '';
                 try {
                     const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-                    const apiKey = "AIzaSyCOiaWZzimDTiPAyHVr6rF1pJqCzF4N3tI"; 
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    const apiUrl =`/api/gemini`;
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     if (!response.ok) throw new Error(`Gemini API Error: ${response.status}`);
                     const result = await response.json();
@@ -1753,8 +1742,8 @@
                 const fullPrompt = `${englishPrompt}, ${uniqueId} --no ${negativePrompt}`;
                 try {
                     const payload = { instances: [{ prompt: fullPrompt }], parameters: { sampleCount: 4 } };
-                    const apiKey = "AIzaSyCOiaWZzimDTiPAyHVr6rF1pJqCzF4N3tI";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+
+                    const apiUrl =  `/api/gemini-image`;
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     if (!response.ok) {
                         const errorText = await response.text();
