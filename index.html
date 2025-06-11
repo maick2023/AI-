@@ -1707,7 +1707,7 @@
                 errorMessage.textContent = '';
                 try {
                     const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-                    const apiUrl =`/api/gemini-image`;
+                    const apiUrl =`/api/gemini`;
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     if (!response.ok) throw new Error(`Gemini API Error: ${response.status}`);
                     const result = await response.json();
@@ -1743,7 +1743,7 @@
                 try {
                     const payload = { instances: [{ prompt: fullPrompt }], parameters: { sampleCount: 4 } };
 
-                    const apiUrl = `/api/gemini`;
+                    const apiUrl =  `/api/gemini-image`;
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     if (!response.ok) {
                         const errorText = await response.text();
