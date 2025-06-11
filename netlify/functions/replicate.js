@@ -1,7 +1,7 @@
 // /netlify/functions/replicate.js
 const Replicate = require("replicate");
 
-exports.handler = async (event) => {
+exports.handler = async (event, context) => {
   // 设置 CORS 头部
   const headers = {
     'Content-Type': 'application/json',
@@ -29,13 +29,17 @@ exports.handler = async (event) => {
 
   try {
     // 检查环境变量
-    if (!process.env.REPLICATE_API_TOKEN) {
+    const REPLICATE_API_TOKEN = process.env.REPLICATE_API_TOKEN;
+    if (!REPLICATE_API_TOKEN) {
+      console.error('REPLICATE_API_TOKEN 环境变量未设置');
       return {
         statusCode: 500,
         headers,
         body: JSON.stringify({ error: 'REPLICATE_API_TOKEN 环境变量未设置' })
       };
     }
+
+    console.log('API Token exists:', REPLICATE_API_TOKEN.substring(0, 5) + '...');
 
     const { image } = JSON.parse(event.body);
     if (!image) {
@@ -49,7 +53,7 @@ exports.handler = async (event) => {
     console.log("开始调用 Replicate API...");
     
     const replicate = new Replicate({ 
-      auth: process.env.REPLICATE_API_TOKEN 
+      auth: REPLICATE_API_TOKEN 
     });
 
     const output = await replicate.run(
@@ -57,7 +61,6 @@ exports.handler = async (event) => {
       { 
         input: { 
           image: image,
-          // 可以添加其他参数
           motion_bucket_id: 127,
           fps: 6,
           noise_aug_strength: 0.1

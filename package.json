@@ -1,7 +1,6 @@
 {
-  "name": "ai-creative-workshop-netlify",
+  "name": "ai-creative-workshop",
   "version": "1.0.0",
-  "description": "Backend functions for the AI workshop",
   "dependencies": {
     "replicate": "^0.25.1"
   }
