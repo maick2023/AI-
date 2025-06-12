@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI创意工坊</title>
-    <!-- Font Awesome for original site icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Tailwind CSS for the prompt generator -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for the prompt generator -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* Original Site Styles */
@@ -413,47 +410,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Styles for Video Generator */
-        .video-gen-container {
-             @apply grid grid-cols-1 lg:grid-cols-3 gap-8;
-        }
-        .video-gen-main {
-             @apply lg:col-span-2 bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700 flex flex-col;
-        }
-         .video-gen-settings {
-             @apply bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700;
-        }
-        .image-upload-box {
-            @apply w-full aspect-video bg-gray-800 border-2 border-dashed border-gray-600 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500 transition-colors;
-        }
-         .image-upload-box img {
-            @apply w-full h-full object-contain;
-         }
-        .setting-group-title {
-             @apply text-lg font-semibold text-gray-300 mb-3 border-b border-gray-700 pb-2;
-        }
-        .setting-button {
-            @apply w-full bg-gray-700 text-gray-300 p-2 rounded-lg transition-colors hover:bg-gray-600;
-        }
-        .setting-button.active {
-            @apply bg-indigo-600 text-white;
-        }
-        .toggle-switch {
-            @apply relative inline-flex items-center cursor-pointer;
-        }
-        .toggle-switch input { @apply sr-only peer; }
-        .toggle-switch-bg {
-            @apply w-11 h-6 bg-gray-600 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600;
-        }
-        .progress-bar-container {
-            @apply w-full bg-gray-700 rounded-full h-10 overflow-hidden relative flex items-center justify-center;
-        }
-        .progress-bar {
-            @apply bg-indigo-600 h-full rounded-full transition-all duration-500 ease-linear absolute top-0 left-0;
-        }
-        .progress-text {
-            @apply relative text-sm font-bold text-white z-10;
-        }
         .music-card {
             display: flex;
             align-items: center;
@@ -538,7 +494,6 @@
     </style>
 </head>
 <body>
-    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="logo" onclick="showPage('home')">
@@ -547,7 +502,6 @@
             </a>
             <ul class="nav-links">
                 <li><a onclick="showPage('prompt-generator')"><i class="fas fa-magic"></i> AI绘画</a></li>
-                <li><a onclick="showPage('video-generator')"><i class="fas fa-video"></i> AI视频</a></li>
                 <li><a onclick="showPage('gallery')"><i class="fas fa-images"></i> 作品图库</a></li>
                 <li><a onclick="showPage('videos')"><i class="fas fa-film"></i> 视频集库</a></li>
                 <li><a onclick="showPage('music')"><i class="fas fa-music"></i> 音乐库</a></li>
@@ -557,9 +511,7 @@
         </div>
     </nav>
 
-    <!-- 主内容区 -->
     <div class="main-content">
-        <!-- 首页 -->
         <div id="home" class="page active">
             <div class="page-title">
                 <h1>AI创意工坊</h1>
@@ -575,16 +527,6 @@
                         <h3>AI绘画</h3>
                         <p>使用专业提示词生成器创作AI艺术品</p>
                         <div class="btn">开始创作</div>
-                    </div>
-                </div>
-                <div class="card image-card" onclick="showPage('video-generator')">
-                    <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?q=80&w=2071" alt="AI视频">
-                    </div>
-                    <div class="card-info">
-                        <h3>AI视频</h3>
-                        <p>将您的图片转化为生动的动态视频</p>
-                        <div class="btn">进入视频创作</div>
                     </div>
                 </div>
                 <div class="card image-card" onclick="showPage('gallery')">
@@ -640,89 +582,8 @@
             </div>
         </div>
 
-        <!-- AI视频创作页面 -->
-        <div id="video-generator" class="page">
-            <div class="page-title">
-                <h1>AI视频创作中心</h1>
-                <p>选择或上传一张图片，结合描述，为其注入生命的动态</p>
-            </div>
-            <div class="video-gen-container">
-                <main class="video-gen-main">
-                    <div>
-                        <h3 class="pg-category-title mb-3">图像上传</h3>
-                         <div class="image-upload-box" id="video-gen-upload-box">
-                            <div id="video-gen-upload-placeholder" class="p-4">
-                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-500"></i>
-                                <p class="mt-2 text-gray-400">点击或拖动上传图片</p>
-                                <p class="text-xs text-gray-500">没有合适的图片？<span class="text-indigo-400 hover:underline" id="video-gen-load-gallery">从图库选择</span></p>
-                            </div>
-                            <img id="video-gen-preview" class="hidden" src="" alt="Image preview"/>
-                        </div>
-                        <input type="file" id="video-gen-image-upload" class="hidden" accept="image/*">
-                    </div>
-                    <div class="mt-6">
-                        <h3 class="pg-category-title mb-3">创意描述 (选填)</h3>
-                        <textarea id="video-gen-prompt" rows="4" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-gray-300 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="结合图片，描述您想生成的画面和动作。例如：海浪拍打着沙滩，粉色的月亮在天空中缓缓升起。"></textarea>
-                    </div>
-                </main>
-                <aside class="video-gen-settings space-y-6">
-                    <div>
-                        <h3 class="setting-group-title">视频模型</h3>
-                        <button class="setting-button active w-full flex justify-between items-center">
-                            <span>Stable Video Diffusion</span>
-                            <i class="fas fa-cog text-gray-400"></i>
-                        </button>
-                    </div>
-                     <div>
-                        <h3 class="setting-group-title">基础设置</h3>
-                        <div class="space-y-3">
-                            <p class="text-sm text-gray-400">生成时长</p>
-                            <div class="grid grid-cols-2 gap-2" id="video-duration-buttons">
-                                <button class="setting-button" data-duration="5">5s</button>
-                                <button class="setting-button active" data-duration="10">10s</button>
-                            </div>
-                             <p class="text-sm text-gray-400 mt-2">视频比例</p>
-                             <button class="setting-button active flex justify-between items-center">
-                                <span><i class="fas fa-arrows-alt-h mr-2"></i>自动匹配</span>
-                                <i class="fas fa-sliders-h text-gray-400"></i>
-                             </button>
-                        </div>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center">
-                            <label for="inspiration-mode" class="text-sm text-gray-300">灵感模式</label>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="inspiration-mode" class="peer" checked>
-                                <div class="toggle-switch-bg"></div>
-                            </label>
-                        </div>
-                         <div class="flex justify-between items-center">
-                            <label for="sound-effects" class="text-sm text-gray-300">视频音效</label>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="sound-effects" class="peer">
-                                <div class="toggle-switch-bg"></div>
-                            </label>
-                        </div>
-                    </div>
-                    <div id="video-gen-button-container">
-                        <button id="video-generate-btn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-lg shadow-lg hover:shadow-indigo-500/50 disabled:opacity-50" disabled>
-                            <i class="fas fa-film mr-2"></i>
-                            生成视频
-                        </button>
-                    </div>
-                </aside>
-            </div>
-            <div id="video-gen-gallery-container" class="pg-section-container mt-8 hidden">
-                 <h2 class="text-2xl font-bold text-indigo-400">视频成果</h2>
-                 <div id="video-output-gallery" class="mt-4 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Generated videos will appear here -->
-                 </div>
-            </div>
-        </div>
-        
         <div id="prompt-generator" class="page">
              <div class="space-y-8">
-                <!-- Builder Section -->
                 <div id="pg-builder-container" class="pg-section-container">
                     <div class="space-y-6">
                         <div>
@@ -796,7 +657,6 @@
                     </div>
                 </div>
 
-                <!-- Prompt Input Section -->
                 <div class="pg-section-container">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-bold text-indigo-400">最终指令 (可编辑)</h2>
@@ -818,7 +678,6 @@
                     </div>
                 </div>
 
-                <!-- Gallery Section -->
                 <div class="pg-section-container">
                     <h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2>
                     <button id="pg-generate-button" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50">
@@ -838,7 +697,6 @@
             </div>
         </div>
         
-        <!-- 作品图库页面 -->
         <div id="gallery" class="page">
             <div class="page-title">
                 <h1>作品图库</h1>
@@ -859,8 +717,7 @@
             </div>
             
             <div class="content-grid" id="gallery-grid">
-                <!-- 图片将通过JavaScript动态添加 -->
-            </div>
+                </div>
         </div>
 
         <div id="videos" class="page">
@@ -881,8 +738,7 @@
                 <div id="video-upload-status" style="margin-top: 15px; color: var(--primary);"></div>
             </div>
              <div class="content-grid" id="videos-grid">
-                <!-- Videos will be dynamically added here -->
-            </div>
+                </div>
         </div>
         <div id="games" class="page">
              <div class="page-title">
@@ -890,8 +746,7 @@
                 <p>体验我们集成的小游戏</p>
             </div>
              <div class="content-grid" id="games-grid">
-                <!-- Games will be dynamically added here -->
-            </div>
+                </div>
         </div>
          <div id="music" class="page">
             <div class="page-title">
@@ -913,8 +768,7 @@
             </div>
             
             <div id="music-grid">
-                <!-- Music will be dynamically added here -->
-            </div>
+                </div>
         </div>
         <div id="chat" class="page">
             <div class="page-title">
@@ -954,8 +808,7 @@
             <button class="close-modal" onclick="document.getElementById('gallery-selection-modal').style.display='none'">&times;</button>
             <h2 class="text-2xl font-bold text-indigo-400 mb-4">从图库中选择一张图片</h2>
             <div id="gallery-modal-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto">
-                <!-- Gallery images will be inserted here -->
-            </div>
+                </div>
         </div>
     </div>
     
@@ -1000,7 +853,6 @@
         
         document.addEventListener('DOMContentLoaded', function() {
             initImageGallery();
-            initVideoGenerator();
             initPromptGenerator(); 
             initVideoGallery();
             initMusicGallery();
@@ -1048,8 +900,8 @@
                 const imageCard = document.createElement('div');
                 imageCard.className = 'card image-card';
                 imageCard.innerHTML = `
-                    <div class="card-img" onclick="previewImage('${image.src}', '${image.name}')"> <img src="${image.src}" alt="${image.name}"> </div>
-                    <div class="card-info"> <h3>${image.name.slice(0, 20)}...</h3> <p>${image.description}</p> </div>
+                    <div class="card-img" onclick="previewImage('<span class="math-inline">\{image\.src\}', '</span>{image.name}')"> <img src="<span class="math-inline">\{image\.src\}" alt\="</span>{image.name}"> </div>
+                    <div class="card-info"> <h3><span class="math-inline">\{image\.name\.slice\(0, 20\)\}\.\.\.</h3\> <p\></span>{image.description}</p> </div>
                     <div class="delete-btn" onclick="deleteImage(${image.id}, event)"> <i class="fas fa-trash"></i> </div>
                 `;
                 galleryGrid.appendChild(imageCard);
@@ -1076,7 +928,7 @@
             }
         }
         
-        // --- Video Gallery & Generation Logic ---
+        // --- Video Gallery Logic ---
         function initVideoGallery() {
             const videoUploadButton = document.getElementById('video-upload-button');
             const videoUpload = document.getElementById('video-upload');
@@ -1096,7 +948,7 @@
                     }
                     const newVideo = { id: Date.now(), name: file.name, src: URL.createObjectURL(file), thumbnail: 'https://images.unsplash.com/photo-1574717024453-354056aafa98?q=80&w=1974' };
                     videoDB.push(newVideo);
-                    localStorage.setItem('videoDB', JSON.stringify(videoDB));
+                    localStorage.setItem('videoDB', JSON.stringify(videoDB)); // Note: This stores a blob URL which is session-specific.
                     videoUploadStatus.textContent = `上传成功：${file.name}`;
                     videoUploadStatus.style.color = 'var(--primary)';
                     renderVideoGallery();
@@ -1109,7 +961,7 @@
             const videosGrid = document.getElementById('videos-grid');
             videosGrid.innerHTML = '';
             if (videoDB.length === 0) {
-                videosGrid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">视频集库为空，请先在AI视频页面生成视频。</p>';
+                videosGrid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">视频集库为空，快去创作或上传吧。</p>';
                 return;
             }
             videoDB.forEach(video => {
@@ -1118,11 +970,11 @@
                 videoCard.innerHTML = `
                     <div class="card-img">
                         <video loop muted onmouseover="this.play()" onmouseout="this.pause(); this.currentTime=0;" class="w-full h-full object-cover">
-                            <source src="${video.src}" type="video/mp4">
-                        </video>
-                    </div>
-                    <div class="card-info">
-                        <h3>${video.name}</h3>
+                            <source src="<span class="math-inline">\{video\.src\}" type\="video/mp4"\>
+</video\>
+</div\>
+<div class\="card\-info"\>
+<h3\></span>{video.name}</h3>
                         <p>AI生成的视频</p>
                     </div>
                     <div class="delete-btn" onclick="deleteVideo(${video.id}, event)"> <i class="fas fa-trash"></i> </div>
@@ -1138,195 +990,6 @@
                 localStorage.setItem('videoDB', JSON.stringify(videoDB));
                 renderVideoGallery();
             }
-        }
-        
-        function initVideoGenerator() {
-            const uploadBox = document.getElementById('video-gen-upload-box');
-            const fileInput = document.getElementById('video-gen-image-upload');
-            const previewImg = document.getElementById('video-gen-preview');
-            const placeholder = document.getElementById('video-gen-upload-placeholder');
-            let generateBtn = document.getElementById('video-generate-btn');
-            const loadGalleryLink = document.getElementById('video-gen-load-gallery');
-            const gallerySelectionModal = document.getElementById('gallery-selection-modal');
-            const galleryModalGrid = document.getElementById('gallery-modal-grid');
-            const durationButtonsContainer = document.getElementById('video-duration-buttons');
-            const buttonContainer = document.getElementById('video-gen-button-container');
-            let selectedImageDataUrl = null;
-            let selectedDuration = 10; // 这个参数在Replicate中不直接用，但我们可以保留UI
-
-            // --- 以下是新代码的核心 ---
-
-            // 轮询检查任务状态的辅助函数
-            function sleep(ms) {
-                return new Promise(resolve => setTimeout(resolve, ms));
-            }
-
-            async function pollForResult(predictionUrl) {
-                const statusElement = document.getElementById('progress-text');
-                let retries = 0;
-                while (retries < 100) { // 最多轮询100次
-                    const response = await fetch(predictionUrl, {
-                        method: 'GET',
-                        headers: {
-                            'Authorization': `Token ${REPLICATE_API_KEY}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`轮询任务状态失败: ${response.status}`);
-                    }
-
-                    const result = await response.json();
-
-                    if (result.status === 'succeeded') {
-                        statusElement.textContent = "视频生成成功！";
-                        return result.output; // 返回视频URL
-                    } else if (result.status === 'failed' || result.status === 'canceled') {
-                        throw new Error(`视频生成失败: ${result.error || '未知错误'}`);
-                    } else {
-                        statusElement.textContent = `AI视频生成中... 状态: ${result.status}`;
-                        await sleep(2000); // 等待2秒再查询
-                    }
-                    retries++;
-                }
-                throw new Error("任务超时，请重试。");
-            }
-
-            async function generateVideo() {
-                if (!selectedImageDataUrl) {
-                    alert("请先上传一张图片！");
-                    return;
-                }
-
-                showProgress(60); // 模拟一个30秒的进度条，实际时间由API决定
-
-                try {
-                    // 1. 发起生成请求
-                    const startResponse = await fetch("/api/replicate", { // 注意：地址改为了 /api/replicate
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                         body: JSON.stringify({
-                              image: selectedImageDataUrl
-                        }),
-                    });
-                    if (!startResponse.ok) {
-                         const errorData = await startResponse.json();
-                         throw new Error(`后端函数出错: ${errorData.error || '未知错误'}`);
-                    }
-                     const result = await startResponse.json();
-
-                    if (!result.output) {
-                        throw new Error('后端未能成功返回视频URL');
-                    }
-
-                    // 2. 轮询获取结果
-                    const videoResultUrl = result.output;
-                    // 3. 处理最终结果 (这部分是您的旧代码，可以复用)
-                    const newVideo = { id: Date.now(), name: `AI视频-${Date.now()}.mp4`, src: videoResultUrl, thumbnail: selectedImageDataUrl };
-                    videoDB.push(newVideo);
-                    localStorage.setItem('videoDB', JSON.stringify(videoDB));
-                    alert('视频生成成功！已保存至视频集库。');
-                    renderVideoOutput(newVideo);
-                    renderVideoGallery();
-
-                } catch (err) {
-                    alert(`视频生成出错: ${err.message}`);
-                    console.error(err);
-                } finally {
-                    hideProgress(); // 无论成功失败，都恢复按钮
-                }
-            }
-
-            // --- 以下是您原有的UI逻辑，无需大改 ---
-            
-            uploadBox.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', handleFileSelect);
-            loadGalleryLink.addEventListener('click', (e) => {
-                e.stopPropagation();
-                galleryModalGrid.innerHTML = '';
-                if (imageDB.length === 0) {
-                    galleryModalGrid.innerHTML = '<p class="col-span-full text-center">您的作品图库是空的。</p>';
-                } else {
-                    imageDB.forEach(image => {
-                        const img = document.createElement('img');
-                        img.src = image.src;
-                        img.className = 'w-full h-full object-cover rounded-md cursor-pointer hover:opacity-70 transition-opacity';
-                        img.onclick = () => {
-                            selectImageFromGallery(image.src);
-                        };
-                        galleryModalGrid.appendChild(img);
-                    });
-                }
-                gallerySelectionModal.style.display = 'flex';
-            });
-            durationButtonsContainer.addEventListener('click', (e) => {
-                if(e.target.tagName === 'BUTTON') {
-                    durationButtonsContainer.querySelector('.active').classList.remove('active');
-                    e.target.classList.add('active');
-                    selectedDuration = parseInt(e.target.dataset.duration);
-                }
-            });
-            function selectImageFromGallery(src) {
-                selectedImageDataUrl = src;
-                previewImg.src = src;
-                previewImg.classList.remove('hidden');
-                placeholder.classList.add('hidden');
-                document.getElementById('video-generate-btn').disabled = false;
-                gallerySelectionModal.style.display = 'none';
-            }
-
-            function handleFileSelect(event) {
-                const file = event.target.files[0];
-                if (file && file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                       selectImageFromGallery(e.target.result);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-
-            function showProgress(duration) {
-                buttonContainer.innerHTML = `
-                    <div class="progress-bar-container">
-                        <div id="video-progress-bar" class="progress-bar" style="width: 0%"></div>
-                        <span id="progress-text" class="progress-text">正在连接API... 0%</span>
-                    </div>
-                `;
-            }
-
-            function hideProgress() {
-                buttonContainer.innerHTML = `
-                    <button id="video-generate-btn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-lg shadow-lg hover:shadow-indigo-500/50 disabled:opacity-50" disabled>
-                        <i class="fas fa-film mr-2"></i>
-                        生成视频
-                    </button>
-                `;
-                generateBtn = document.getElementById('video-generate-btn');
-                generateBtn.addEventListener('click', generateVideo);
-                generateBtn.disabled = (selectedImageDataUrl === null);
-            }
-            
-            generateBtn.addEventListener('click', generateVideo);
-        }
-
-        function renderVideoOutput(video) {
-            const galleryContainer = document.getElementById('video-gen-gallery-container');
-            const videoGallery = document.getElementById('video-output-gallery');
-            galleryContainer.classList.remove('hidden');
-
-            const videoCard = document.createElement('div');
-            videoCard.className = 'relative group w-full aspect-video rounded-lg overflow-hidden';
-            videoCard.innerHTML = `
-                <video autoplay loop muted playsinline class="w-full h-full object-cover" src="${video.src}"></video>
-                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <p class="text-white text-lg font-bold">视频已生成</p>
-                </div>
-            `;
-            videoGallery.prepend(videoCard);
         }
         
         function initMusicGallery() {
@@ -1368,7 +1031,7 @@
             musicDB.forEach(music => {
                 const musicCard = document.createElement('div');
                 musicCard.className = 'card';
-                musicCard.innerHTML = `<div class="music-card"><div class="delete-btn" onclick="deleteMusic(${music.id}, event)"><i class="fas fa-trash"></i></div><div class="album-cover" onclick="playMusic('${music.src}', '${music.name}')"><img src="${music.thumbnail}" alt="${music.name}"></div><div class="music-info"><h3>${music.name}</h3><div class="artist">${music.artist}</div></div><div class="play-btn" onclick="playMusic('${music.src}', '${music.name}')"><i class="fas fa-play"></i></div></div>`;
+                musicCard.innerHTML = `<div class="music-card"><div class="delete-btn" onclick="deleteMusic(<span class="math-inline">\{music\.id\}, event\)"\><i class\="fas fa\-trash"\></i\></div\><div class\="album\-cover" onclick\="playMusic\('</span>{music.src}', '<span class="math-inline">\{music\.name\}'\)"\><img src\="</span>{music.thumbnail}" alt="<span class="math-inline">\{music\.name\}"\></div\><div class\="music\-info"\><h3\></span>{music.name}</h3><div class="artist"><span class="math-inline">\{music\.artist\}</div\></div\><div class\="play\-btn" onclick\="playMusic\('</span>{music.src}', '${music.name}')"><i class="fas fa-play"></i></div></div>`;
                 musicGrid.appendChild(musicCard);
             });
         }
@@ -1406,7 +1069,7 @@
              gamesDB.forEach(game => {
                 const gameCard = document.createElement('div');
                 gameCard.className = 'card';
-                gameCard.innerHTML = `<div style="text-align: center; padding: 30px; display: flex; flex-direction: column; align-items: center; height: 100%;"><div style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; font-size: 2.5rem; color: white;"><i class="fas ${game.icon}"></i></div><h3 style="font-size: 1.7rem; margin-bottom: 15px; color: var(--text-light);">${game.name}</h3><p style="color: var(--text-gray); margin-bottom: 25px; flex-grow: 1;">${game.description}</p><a href="${game.link}" target="_blank" class="btn"><i class="fas fa-play"></i> 开始游戏</a></div>`;
+                gameCard.innerHTML = `<div style="text-align: center; padding: 30px; display: flex; flex-direction: column; align-items: center; height: 100%;"><div style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; font-size: 2.5rem; color: white;"><i class="fas <span class="math-inline">\{game\.icon\}"\></i\></div\><h3 style\="font\-size\: 1\.7rem; margin\-bottom\: 15px; color\: var\(\-\-text\-light\);"\></span>{game.name}</h3><p style="color: var(--text-gray); margin-bottom: 25px; flex-grow: 1;"><span class="math-inline">\{game\.description\}</p\><a href\="</span>{game.link}" target="_blank" class="btn"><i class="fas fa-play"></i> 开始游戏</a></div>`;
                 gamesGrid.appendChild(gameCard);
              });
         }
@@ -1415,7 +1078,7 @@
             const messageContainer = document.getElementById(targetId);
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', `${sender}-message`);
-            messageElement.style.cssText = `background: ${sender === 'user' ? 'rgba(108, 99, 255, 0.25)' : 'rgba(42, 42, 60, 0.9)'}; align-self: ${sender === 'user' ? 'flex-end' : 'flex-start'}; border-bottom-${sender === 'user' ? 'right' : 'left'}-radius: 5px; padding: 15px; margin-bottom: 15px; border-radius: 20px; max-width: 80%;`;
+            messageElement.style.cssText = `background: ${sender === 'user' ? 'rgba(108, 99, 255, 0.25)' : 'rgba(42, 42, 60, 0.9)'}; align-self: <span class="math-inline">\{sender \=\=\= 'user' ? 'flex\-end' \: 'flex\-start'\}; border\-bottom\-</span>{sender === 'user' ? 'right' : 'left'}-radius: 5px; padding: 15px; margin-bottom: 15px; border-radius: 20px; max-width: 80%;`;
             messageElement.innerHTML = text; // Use innerHTML to render the spinner
             messageContainer.appendChild(messageElement);
             messageContainer.scrollTop = messageContainer.scrollHeight;
@@ -1458,14 +1121,14 @@
                 const loadingMsg = addMessage("<div class='pg-spinner-sm'></div>", 'ai');
                 
                 try {
-                    const apiKey = localStorage.getItem('gemini-api-key');
-                    if (!apiKey) throw new Error("API密钥未设置。");
-                    
                     const payload = { contents: chatHistory };
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    const apiUrl = `/api/gemini`; // Pointing to our backend function for chat
                     const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     
-                    if (!response.ok) throw new Error(`API请求失败: ${response.status}`);
+                    if (!response.ok) {
+                        const errorResult = await response.json();
+                        throw new Error(errorResult.error?.message || `API请求失败: ${response.status}`);
+                    }
                     
                     const result = await response.json();
                     loadingMsg.remove();
@@ -1624,9 +1287,30 @@
                 placeholderText.classList.remove('hidden');
             });
             
+            async function callNewTextAPI(prompt, button) {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<div class="pg-spinner-sm"></div>';
+                button.disabled = true;
+                errorMessage.textContent = '';
+                try {
+                    // TODO: 在这里实现调用新文本API的逻辑
+                    // 1. 定义新API的 aipUrl 和 payload
+                    // 2. 使用 fetch 调用
+                    // 3. 处理返回结果
+                    alert('此功能正在等待接入新的文本API。');
+                    return null; // 暂时返回null
+                } catch (error) {
+                    showError(error.message);
+                    return null;
+                } finally {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            }
+            
             inspireBtn.addEventListener('click', async () => {
                 const prompt = "Generate a creative, highly detailed, and visually stunning English prompt for an AI image generator. The subject can be anything, not just a beautiful woman. The prompt should be a single, continuous string of keywords and phrases, describing the subject, a unique and interesting scene, the atmosphere, and specific lighting and camera details. Do not use any line breaks.";
-                const inspiration = await callGemini(prompt, inspireBtn);
+                const inspiration = await callNewTextAPI(prompt, inspireBtn); // 改为调用新函数
                 if (inspiration) {
                     finalPromptInput.value = inspiration;
                     pgUpdateOutput(false); 
@@ -1638,7 +1322,7 @@
                 if (!currentPrompt) return;
 
                 const prompt = `Take the following AI image generator prompt and make it more detailed, vivid, and artistic. Add more specific details about the subject's expression, the background, the atmosphere, and the lighting. Return only the enhanced prompt as a single, continuous string of keywords and phrases. Do not use any line breaks. The prompt to enhance is: "${currentPrompt}"`;
-                const enrichment = await callGemini(prompt, enrichBtn);
+                const enrichment = await callNewTextAPI(prompt, enrichBtn); // 改为调用新函数
                 if (enrichment) {
                     finalPromptInput.value = enrichment;
                     pgUpdateOutput(false);
@@ -1700,65 +1384,25 @@
                 generateBtn.disabled = finalPromptInput.value.trim() === '';
             }
             
-            async function callGemini(prompt, button) {
-                const originalText = button.innerHTML;
-                button.innerHTML = '<div class="pg-spinner-sm"></div>';
-                button.disabled = true;
-                errorMessage.textContent = '';
-                try {
-                    const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-                    const apiUrl =`/api/gemini`;
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) throw new Error(`Gemini API Error: ${response.status}`);
-                    const result = await response.json();
-                    if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
-                        return result.candidates[0].content.parts[0].text.trim();
-                    } else {
-                        console.error("Unexpected Gemini API response:", result);
-                        throw new Error("从Gemini获取灵感失败，请检查控制台。");
-                    }
-                } catch (error) {
-                    showError(error.message);
-                    return null;
-                } finally {
-                    button.innerHTML = originalText;
-                    button.disabled = false;
-                }
-            }
-
             generateBtn.addEventListener('click', async () => {
                 showLoading(true);
                 let englishPrompt = finalPromptInput.value.trim();
                 const negativePrompt = document.getElementById('pg-negative-prompt').value;
+
                 if (!englishPrompt) {
                     showError('指令输入框不能为空！');
                     showLoading(false);
                     return;
                 }
-                if (!englishPrompt.includes('1girl') && !englishPrompt.includes('a man') && !englishPrompt.includes('a boy')) { 
-                    englishPrompt = `${styleKeywords['default']}, ${englishPrompt}`;
-                }
-                const uniqueId = `id-${Date.now()}`;
-                const fullPrompt = `${englishPrompt}, ${uniqueId} --no ${negativePrompt}`;
-                try {
-                    const payload = { instances: [{ prompt: fullPrompt }], parameters: { sampleCount: 4 } };
 
-                    const apiUrl =  `/api/gemini-image`;
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        let errorMsg = `图片生成失败 (状态码: ${response.status})。`;
-                         try { errorMsg = JSON.parse(errorText).error?.message || errorMsg; } catch (e) { if(errorText) errorMsg = errorText; }
-                        throw new Error(errorMsg);
-                    }
-                    const result = await response.json();
-                    if (result.predictions && result.predictions.length > 0) {
-                        pgDisplayGallery(result.predictions);
-                    } else {
-                        console.error('Unexpected API response:', result);
-                        if (result.predictions?.[0]?.safetyRatings) { throw new Error('图片因安全策略被拦截。请调整提示词。'); }
-                        throw new Error('API返回数据格式异常，无法获取图片。');
-                    }
+                try {
+                    // TODO: 在这里实现调用新图片API的逻辑
+                    // 1. 根据新API的要求，准备 payload
+                    // 2. 定义新API的后端函数地址，例如 const apiUrl = `/api/new-image-api`;
+                    // 3. 使用 fetch 调用
+                    // 4. 处理返回的图片结果
+                    alert('AI绘画功能正在等待接入新的API。');
+
                 } catch (error) {
                     console.error('Image generation error:', error);
                     showError(error.message || '未知错误，请检查控制台日志。');
@@ -1786,7 +1430,7 @@
                 gallery.classList.remove('hidden');
                 placeholderText.classList.add('hidden');
                 predictions.forEach((prediction, index) => {
-                    if (prediction.bytesBase64Encoded) {
+                    if (prediction.bytesBase64Encoded) { // Assuming the new API also returns base64
                         const imgSrc = `data:image/png;base64,${prediction.bytesBase64Encoded}`;
                         const container = document.createElement('div');
                         container.className = 'relative group w-full h-full';
@@ -1796,7 +1440,7 @@
                         img.addEventListener('click', () => { lightboxImage.src = imgSrc; lightbox.style.display = 'flex'; });
                         const downloadLink = document.createElement('a');
                         downloadLink.href = imgSrc;
-                        downloadLink.download = `ai-creation-${Date.now()}-${index}.png`;
+                        downloadLink.download = `ai-creation-<span class="math-inline">\{Date\.now\(\)\}\-</span>{index}.png`;
                         downloadLink.className = 'absolute bottom-2 right-2 bg-black/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80';
                         downloadLink.title = '下载图片';
                         downloadLink.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
