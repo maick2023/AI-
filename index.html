@@ -8,498 +8,94 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Original Site Styles */
         :root {
-            --primary: #6C63FF;
-            --secondary: #4A44B6;
-            --accent: #FF6B6B;
-            --accent-light: #FF8E8E;
-            --dark: #1a1a2e;
-            --darker: #0d0d1a;
-            --light: #F5F5F7;
-            --text-light: #e0e0ff;
-            --text-gray: #a0a0c0;
-            --success: #4cc9f0;
-            --danger: #f94144;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
-            color: var(--text-light);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        .navbar {
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(108, 99, 255, 0.2);
-            padding: 0 20px;
-        }
-        
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--light);
-            text-decoration: none;
-        }
-        
-        .logo i {
-            color: var(--primary);
-            margin-right: 12px;
-            font-size: 2rem;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 25px;
-        }
-        
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 8px 0;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-        
-        .nav-links a i {
-            margin-right: 8px;
-            font-size: 1.2rem;
-        }
-        
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: var(--primary);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        .main-content {
-            max-width: 1200px;
-            margin: 90px auto 40px;
-            padding: 0 20px;
-            min-height: calc(100vh - 150px);
-        }
-        
-        .page-title {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-            padding-top: 20px;
-        }
-        
-        .page-title h1 {
-            font-size: 2.8rem;
-            display: inline-block;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-        }
-        
-        .page-title p {
-            color: var(--text-gray);
-            max-width: 700px;
-            margin: 0 auto;
-            font-size: 1.2rem;
-        }
-        
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-        
-        .card {
-            background: rgba(42, 42, 60, 0.7);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-            position: relative;
-        }
-        
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(108, 99, 255, 0.35);
-        }
-        
-        .image-card .card-img {
-            height: 250px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-        }
-        
-        .image-card .card-img img, .video-card .card-img video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .image-card:hover .card-img img {
-            transform: scale(1.1);
-        }
-        
-        .card-info {
-            padding: 20px;
-        }
-        
-        .image-card .card-info h3 {
-            margin-bottom: 8px;
-            font-size: 1.4rem;
-            color: var(--text-light);
-        }
-        
-        .image-card .card-info p {
-            color: var(--text-gray);
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-        }
-        
-        .delete-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            width: 36px;
-            height: 36px;
-            background: rgba(249, 65, 68, 0.8);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 10;
-            opacity: 0;
-        }
-        
-        .card:hover .delete-btn {
-            opacity: 1;
-        }
-        
-        .delete-btn:hover {
-            background: var(--danger);
-            transform: scale(1.1);
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 15px rgba(108, 99, 255, 0.3);
-            cursor: pointer;
-            border: none;
-        }
-        
-        .btn i {
-            margin-right: 10px;
-        }
-        
-        .btn:hover {
-            background: var(--secondary);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
-        }
-        
-        .upload-section {
-            background: rgba(42, 42, 60, 0.7);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 40px;
-            border: 2px dashed rgba(108, 99, 255, 0.3);
-            text-align: center;
-        }
-        
-        .upload-icon {
-            font-size: 3.5rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-        
-        .upload-text {
-            margin-bottom: 25px;
-            color: var(--text-gray);
-        }
-        
-        .file-input {
-            display: none;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 3000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background: var(--dark);
-            border-radius: 20px;
-            width: 90%;
-            max-width: 800px;
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            position: relative;
-            text-align: center;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: var(--text-gray);
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 10;
-        }
-        
-        .image-preview {
-            max-width: 90%;
-            max-height: 80vh;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        
-        footer {
-            background: rgba(26, 26, 46, 0.95);
-            padding: 40px 0 20px;
-            text-align: center;
-            border-top: 1px solid rgba(108, 99, 255, 0.2);
-        }
-        
-        .copyright {
-            color: var(--text-gray);
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 0.95rem;
-        }
-        
-        .page {
-            display: none;
-        }
-        
-        .page.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Styles for Prompt Generator */
-        #prompt-generator {
-            font-family: 'Inter', 'Noto Sans SC', sans-serif;
-            color: #d1d5db;
-        }
-        .pg-section-container {
-            @apply bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700;
-        }
-        .pg-section-title {
-            @apply text-xl font-bold text-indigo-400 border-b-2 border-indigo-500/30 pb-2 mb-4;
-        }
-        .pg-category-title {
-            @apply font-semibold text-gray-300 mb-3 text-base;
-        }
-        .pg-prompt-tag {
-            @apply text-sm font-medium mr-2 mb-2 px-3 py-1.5 rounded-lg cursor-pointer transition-all duration-200 shadow;
-        }
-        .pg-prompt-tag:not(.active) {
-            @apply hover:scale-105 hover:shadow-lg;
-        }
-        .pg-prompt-tag.active {
-            @apply ring-2 ring-offset-2 ring-offset-gray-900;
-        }
-        #pg-generate-button:disabled {
-            @apply bg-gray-500 cursor-not-allowed hover:bg-gray-500 shadow-none;
-        }
-        #pg-lightbox {
-            @apply hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50;
-        }
-        #pg-lightbox img {
-            @apply max-w-[90vw] max-h-[90vh] rounded-lg;
-        }
-        .pg-gemini-button {
-            @apply text-sm text-indigo-400 hover:text-indigo-300 font-semibold flex items-center disabled:opacity-50 disabled:cursor-not-allowed;
-        }
-        .pg-loader, .pg-spinner-sm {
-            border-radius: 50%;
-            animation: pg-spin 1s linear infinite;
-        }
-        .pg-loader {
-            border: 4px solid #4b5563;
-            border-top: 4px solid #818cf8;
-            width: 50px;
-            height: 50px;
-        }
-        .pg-spinner-sm {
-            border: 2px solid #4b5563;
-            border-top: 2px solid #818cf8;
-            width: 16px;
-            height: 16px;
-        }
-        @keyframes pg-spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .music-card {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            position: relative;
-        }
-        
-        .music-card .album-cover {
-            width: 80px;
-            height: 80px;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-right: 20px;
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-        
-        .music-card .album-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .music-card .music-info {
-            flex-grow: 1;
-        }
-        
-        .music-card .music-info h3 {
-            font-size: 1.4rem;
-            margin-bottom: 5px;
-            color: var(--text-light);
-        }
-        
-        .music-card .music-info .artist {
-            color: var(--text-gray);
-            margin-bottom: 10px;
-        }
-        
-        .music-card .music-info .duration {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
-        
-        .music-card .play-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .music-card .play-btn:hover {
-            background: var(--secondary);
-            transform: scale(1.1);
-        }
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 14px 20px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(108, 99, 255, 0.3);
-            border-radius: 10px;
-            color: var(--text-light);
-            font-size: 1rem;
-        }
+            --primary: #6C63FF; --secondary: #4A44B6; --accent: #FF6B6B; --accent-light: #FF8E8E;
+            --dark: #1a1a2e; --darker: #0d0d1a; --light: #F5F5F7; --text-light: #e0e0ff;
+            --text-gray: #a0a0c0; --success: #4cc9f0; --danger: #f94144;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%); color: var(--text-light); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
+        .navbar { background: rgba(26, 26, 46, 0.95); backdrop-filter: blur(10px); position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); border-bottom: 1px solid rgba(108, 99, 255, 0.2); padding: 0 20px; }
+        .nav-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 15px 0; }
+        .logo { display: flex; align-items: center; font-size: 1.8rem; font-weight: 700; color: var(--light); text-decoration: none; }
+        .logo i { color: var(--primary); margin-right: 12px; font-size: 2rem; }
+        .nav-links { display: flex; list-style: none; }
+        .nav-links li { margin-left: 25px; }
+        .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 500; font-size: 1.1rem; transition: all 0.3s ease; position: relative; padding: 8px 0; display: flex; align-items: center; cursor: pointer; }
+        .nav-links a i { margin-right: 8px; font-size: 1.2rem; }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 3px; background: var(--primary); transition: width 0.3s ease; }
+        .nav-links a:hover::after { width: 100%; }
+        .main-content { max-width: 1200px; margin: 90px auto 40px; padding: 0 20px; min-height: calc(100vh - 150px); }
+        .page-title { text-align: center; margin-bottom: 40px; position: relative; padding-top: 20px; }
+        .page-title h1 { font-size: 2.8rem; display: inline-block; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 15px; }
+        .page-title p { color: var(--text-gray); max-width: 700px; margin: 0 auto; font-size: 1.2rem; }
+        .content-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-bottom: 50px; }
+        .card { background: rgba(42, 42, 60, 0.7); border-radius: 16px; overflow: hidden; transition: all 0.4s ease; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25); position: relative; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(108, 99, 255, 0.35); }
+        .card-media-container { height: 250px; overflow: hidden; position: relative; cursor: pointer; }
+        .card-media-container img, .card-media-container video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .card:hover .card-media-container img, .card:hover .card-media-container video { transform: scale(1.1); }
+        .card-info { padding: 20px; }
+        .card-info h3 { margin-bottom: 8px; font-size: 1.4rem; color: var(--text-light); word-break: break-all;}
+        .card-info p { color: var(--text-gray); font-size: 0.95rem; margin-bottom: 15px; }
+        .card-actions { position: absolute; top: 15px; right: 15px; display: flex; gap: 10px; z-index: 10; opacity: 0; transition: opacity 0.3s ease; }
+        .card:hover .card-actions { opacity: 1; }
+        .action-btn { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; transition: all 0.3s ease; text-decoration: none; }
+        .action-btn:hover { transform: scale(1.1); }
+        .delete-btn { background: rgba(249, 65, 68, 0.8); }
+        .delete-btn:hover { background: var(--danger); }
+        .download-btn { background: rgba(76, 201, 240, 0.8); }
+        .download-btn:hover { background: var(--success); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; background: var(--primary); color: white; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 6px 15px rgba(108, 99, 255, 0.3); cursor: pointer; border: none; }
+        .btn i { margin-right: 10px; }
+        .btn:hover { background: var(--secondary); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4); }
+        .upload-section { background: rgba(42, 42, 60, 0.7); border-radius: 16px; padding: 30px; margin-bottom: 40px; border: 2px dashed rgba(108, 99, 255, 0.3); text-align: center; }
+        .upload-icon { font-size: 3.5rem; color: var(--primary); margin-bottom: 20px; }
+        .upload-text { margin-bottom: 25px; color: var(--text-gray); }
+        .file-input { display: none; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 3000; align-items: center; justify-content: center; }
+        .modal-content { background: var(--dark); border-radius: 20px; width: 90%; max-width: 800px; padding: 30px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); position: relative; text-align: center; }
+        .close-modal { position: absolute; top: 20px; right: 20px; background: none; border: none; color: var(--text-gray); font-size: 1.5rem; cursor: pointer; z-index: 10; }
+        .image-preview { max-width: 90%; max-height: 80vh; border-radius: 10px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+        footer { background: rgba(26, 26, 46, 0.95); padding: 40px 0 20px; text-align: center; border-top: 1px solid rgba(108, 99, 255, 0.2); }
+        .copyright { color: var(--text-gray); padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.95rem; }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #prompt-generator { font-family: 'Inter', 'Noto Sans SC', sans-serif; color: #d1d5db; }
+        .pg-section-container { @apply bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700; }
+        .pg-section-title { @apply text-xl font-bold text-indigo-400 border-b-2 border-indigo-500/30 pb-2 mb-4; }
+        .pg-category-title { @apply font-semibold text-gray-300 mb-3 text-base; }
+        .pg-prompt-tag { @apply text-sm font-medium mr-2 mb-2 px-3 py-1.5 rounded-lg cursor-pointer transition-all duration-200 shadow; }
+        .pg-prompt-tag:not(.active) { @apply hover:scale-105 hover:shadow-lg; }
+        .pg-prompt-tag.active { @apply ring-2 ring-offset-2 ring-offset-gray-900; }
+        #pg-generate-button:disabled { @apply bg-gray-500 cursor-not-allowed hover:bg-gray-500 shadow-none; }
+        #pg-lightbox { @apply hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50; }
+        #pg-lightbox img { @apply max-w-[90vw] max-h-[90vh] rounded-lg; }
+        .pg-gemini-button { @apply text-sm text-indigo-400 hover:text-indigo-300 font-semibold flex items-center disabled:opacity-50 disabled:cursor-not-allowed; }
+        .pg-loader, .pg-spinner-sm { border-radius: 50%; animation: pg-spin 1s linear infinite; }
+        .pg-loader { border: 4px solid #4b5563; border-top: 4px solid #818cf8; width: 50px; height: 50px; }
+        .pg-spinner-sm { border: 2px solid #4b5563; border-top: 2px solid #818cf8; width: 16px; height: 16px; }
+        @keyframes pg-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .music-card { display: flex; align-items: center; padding: 20px; position: relative; }
+        .music-card .album-cover { width: 80px; height: 80px; border-radius: 10px; overflow: hidden; margin-right: 20px; flex-shrink: 0; cursor: pointer; }
+        .music-card .album-cover img { width: 100%; height: 100%; object-fit: cover; }
+        .music-card .music-info { flex-grow: 1; }
+        .music-card h3 { font-size: 1.4rem; margin-bottom: 5px; color: var(--text-light); }
+        .music-card .artist { color: var(--text-gray); margin-bottom: 10px; }
+        .music-card .duration { color: var(--text-gray); font-size: 0.9rem; }
+        .music-card .play-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s ease; }
+        .music-card .play-btn:hover { background: var(--secondary); transform: scale(1.1); }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-light); font-weight: 500; }
+        .form-control { width: 100%; padding: 14px 20px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(108, 99, 255, 0.3); border-radius: 10px; color: var(--text-light); font-size: 1rem; }
     </style>
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo" onclick="showPage('home')">
-                <i class="fas fa-robot"></i>
-                <span>AI创意工坊</span>
-            </a>
+            <a href="#" class="logo" onclick="showPage('home')"><i class="fas fa-robot"></i><span>AI创意工坊</span></a>
             <ul class="nav-links">
                 <li><a onclick="showPage('prompt-generator')"><i class="fas fa-magic"></i> AI绘画</a></li>
                 <li><a onclick="showPage('gallery')"><i class="fas fa-images"></i> 作品图库</a></li>
@@ -515,182 +111,50 @@
         <div id="home" class="page active">
             <div class="page-title">
                 <h1>AI创意工坊</h1>
-                <p>一个集成了AI绘画、AI视频、作品管理与展示的创意空间</p>
+                <p>一个集成了AI绘画、作品管理与展示的创意空间</p>
             </div>
-            
             <div class="content-grid">
-                 <div class="card image-card" onclick="showPage('prompt-generator')">
-                    <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0?q=80&w=1974" alt="AI绘画">
-                    </div>
-                    <div class="card-info">
-                        <h3>AI绘画</h3>
-                        <p>使用专业提示词生成器创作AI艺术品</p>
-                        <div class="btn">开始创作</div>
-                    </div>
-                </div>
-                <div class="card image-card" onclick="showPage('gallery')">
-                    <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=1974" alt="作品图库">
-                    </div>
-                    <div class="card-info">
-                        <h3>作品图库</h3>
-                        <p>展示您所有的AI生成图片作品</p>
-                        <div class="btn btn-outline">浏览图库</div>
-                    </div>
-                </div>
-                 <div class="card image-card" onclick="showPage('videos')">
-                    <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1574717024453-354056aafa98?q=80&w=1974" alt="视频集库">
-                    </div>
-                    <div class="card-info">
-                        <h3>视频集库</h3>
-                        <p>欣赏所有生成的AI视频作品</p>
-                        <div class="btn btn-outline">浏览视频</div>
-                    </div>
-                </div>
-                 <div class="card image-card" onclick="showPage('music')">
-                     <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070" alt="音乐库">
-                    </div>
-                    <div class="card-info">
-                        <h3>音乐库</h3>
-                        <p>聆听和管理您的音乐收藏</p>
-                        <div class="btn btn-outline">进入音乐库</div>
-                    </div>
-                </div>
-                 <div class="card image-card" onclick="showPage('games')">
-                     <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726a?q=80&w=2070" alt="游戏中心">
-                    </div>
-                    <div class="card-info">
-                        <h3>游戏中心</h3>
-                        <p>体验我们集成的小游戏</p>
-                        <div class="btn btn-outline">进入游戏</div>
-                    </div>
-                </div>
-                 <div class="card image-card" onclick="showPage('chat')">
-                     <div class="card-img">
-                        <img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071" alt="AI对话">
-                    </div>
-                    <div class="card-info">
-                        <h3>AI对话</h3>
-                        <p>与您的私人AI助手进行交流</p>
-                        <div class="btn btn-outline">开始对话</div>
-                    </div>
-                </div>
+                <div class="card" onclick="showPage('prompt-generator')"><div class="card-media-container"><img src="https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0?q=80&w=1974" alt="AI绘画"></div><div class="card-info"><h3>AI绘画</h3><p>使用专业提示词生成器创作AI艺术品</p><div class="btn">开始创作</div></div></div>
+                <div class="card" onclick="showPage('gallery')"><div class="card-media-container"><img src="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=1974" alt="作品图库"></div><div class="card-info"><h3>作品图库</h3><p>展示您所有的AI生成图片作品</p><div class="btn btn-outline">浏览图库</div></div></div>
+                <div class="card" onclick="showPage('videos')"><div class="card-media-container"><img src="https://images.unsplash.com/photo-1574717024453-354056aafa98?q=80&w=1974" alt="视频集库"></div><div class="card-info"><h3>视频集库</h3><p>欣赏所有生成的AI视频作品</p><div class="btn btn-outline">浏览视频</div></div></div>
+                <div class="card" onclick="showPage('music')"><div class="card-media-container"><img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070" alt="音乐库"></div><div class="card-info"><h3>音乐库</h3><p>聆听和管理您的音乐收藏</p><div class="btn btn-outline">进入音乐库</div></div></div>
+                <div class="card" onclick="showPage('games')"><div class="card-media-container"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726a?q=80&w=2070" alt="游戏中心"></div><div class="card-info"><h3>游戏中心</h3><p>体验我们集成的小游戏</p><div class="btn btn-outline">进入游戏</div></div></div>
+                <div class="card" onclick="showPage('chat')"><div class="card-media-container"><img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071" alt="AI对话"></div><div class="card-info"><h3>AI对话</h3><p>与您的私人AI助手进行交流</p><div class="btn btn-outline">开始对话</div></div></div>
             </div>
         </div>
 
         <div id="prompt-generator" class="page">
-             <div class="space-y-8">
+            <div class="space-y-8">
                 <div id="pg-builder-container" class="pg-section-container">
                     <div class="space-y-6">
-                        <div>
-                            <div class="pg-section-title">1. 画质与风格</div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                                <div>
-                                    <div class="pg-category-title">艺术风格 (单选)</div>
-                                    <div class="flex flex-wrap" data-group="style"></div>
-                                </div>
-                                <div>
-                                     <div class="pg-category-title">图像质量</div>
-                                     <div class="flex flex-wrap" data-group="quality"></div>
-                                </div>
-                            </div>
-                        </div>
-                         <div>
-                            <div class="pg-section-title">2. 人物与气质</div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4">
-                                 <div>
-                                     <div class="pg-category-title">气质类型</div>
-                                     <div class="flex flex-wrap" data-group="temperament"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">面部特征</div>
-                                    <div class="flex flex-wrap" data-group="face"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">发型</div>
-                                    <div class="flex flex-wrap" data-group="hair"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">穿着服饰</div>
-                                    <div class="flex flex-wrap" data-group="clothing"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="pg-section-title">3. 场景与光影</div>
-                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                                <div>
-                                    <div class="pg-category-title">地点/背景</div>
-                                    <div class="flex flex-wrap" data-group="scene"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">环境光与氛围</div>
-                                    <div class="flex flex-wrap" data-group="lighting"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="pg-section-title">4. 镜头语言</div>
-                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4">
-                                <div>
-                                    <div class="pg-category-title">景别与构图</div>
-                                    <div class="flex flex-wrap" data-group="composition"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">视角与透视</div>
-                                    <div class="flex flex-wrap" data-group="angle"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">相机与景深</div>
-                                    <div class="flex flex-wrap" data-group="camera"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">色彩与动感</div>
-                                    <div class="flex flex-wrap" data-group="color_motion"></div>
-                                </div>
-                            </div>
-                        </div>
+                        <div><div class="pg-section-title">1. 画质与风格</div><div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4"><div><div class="pg-category-title">艺术风格 (单选)</div><div class="flex flex-wrap" data-group="style"></div></div><div><div class="pg-category-title">图像质量</div><div class="flex flex-wrap" data-group="quality"></div></div></div></div>
+                        <div><div class="pg-section-title">2. 人物与气质</div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4"><div><div class="pg-category-title">气质类型</div><div class="flex flex-wrap" data-group="temperament"></div></div><div><div class="pg-category-title">面部特征</div><div class="flex flex-wrap" data-group="face"></div></div><div><div class="pg-category-title">发型</div><div class="flex flex-wrap" data-group="hair"></div></div><div><div class="pg-category-title">穿着服饰</div><div class="flex flex-wrap" data-group="clothing"></div></div></div></div>
+                        <div><div class="pg-section-title">3. 场景与光影</div><div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4"><div><div class="pg-category-title">地点/背景</div><div class="flex flex-wrap" data-group="scene"></div></div><div><div class="pg-category-title">环境光与氛围</div><div class="flex flex-wrap" data-group="lighting"></div></div></div></div>
+                        <div><div class="pg-section-title">4. 镜头语言</div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4"><div><div class="pg-category-title">景别与构图</div><div class="flex flex-wrap" data-group="composition"></div></div><div><div class="pg-category-title">视角与透视</div><div class="flex flex-wrap" data-group="angle"></div></div><div><div class="pg-category-title">相机与景深</div><div class="flex flex-wrap" data-group="camera"></div></div><div><div class="pg-category-title">色彩与动感</div><div class="flex flex-wrap" data-group="color_motion"></div></div></div></div>
                     </div>
                 </div>
-
                 <div class="pg-section-container">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-bold text-indigo-400">最终指令 (可编辑)</h2>
                         <div class="flex items-center space-x-4">
-                             <button id="pg-inspire-button" class="pg-gemini-button">✨ 随机灵感</button>
-                             <button id="pg-enrich-button" class="pg-gemini-button" title="使用Gemini丰富细节">✨ 丰富</button>
-                             <button id="pg-clear-button" class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button>
+                            <button id="pg-inspire-button" class="pg-gemini-button">✨ 随机灵感</button>
+                            <button id="pg-enrich-button" class="pg-gemini-button" title="使用AI丰富细节">✨ 丰富</button>
+                            <button id="pg-clear-button" class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button>
                         </div>
                     </div>
                     <div class="relative">
-                         <textarea id="pg-final-prompt-input" rows="6" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="可直接在此输入，或通过上方引导模式构建..."></textarea>
-                         <button id="pg-copy-button-en" class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="复制英文指令">
-                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                         </button>
+                        <textarea id="pg-final-prompt-input" rows="6" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="可直接在此输入，或通过上方引导模式构建..."></textarea>
+                        <button id="pg-copy-button-en" class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="复制英文指令"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
                     </div>
-                     <div class="mt-4">
-                        <h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3>
-                        <input id="pg-negative-prompt" type="text" class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono" value="ng_deepnegative_v1_75t, (worst quality, low quality:1.4), (bad anatomy), (inaccurate limb:1.2), bad hands, extra fingers, (realistic, 3d:1.3), man, boy, blurry, simple background, text, watermark">
-                    </div>
+                    <div class="mt-4"><h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3><input id="pg-negative-prompt" type="text" class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono" value="ng_deepnegative_v1_75t, (worst quality, low quality:1.4), (bad anatomy), (inaccurate limb:1.2), bad hands, extra fingers, (realistic, 3d:1.3), man, boy, blurry, simple background, text, watermark"></div>
                 </div>
-
                 <div class="pg-section-container">
                     <h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2>
-                    <button id="pg-generate-button" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50">
-                        <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        生成杰作 (一次4张)
-                    </button>
+                    <button id="pg-generate-button" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50"><svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>生成杰作 (一次4张)</button>
                     <div id="pg-gallery-container" class="mt-4 w-full aspect-video bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-700 min-h-[300px]">
-                        <div id="pg-placeholder-text" class="text-gray-500 text-center">
-                           <p class="text-lg">艺术品，即将诞生</p>
-                           <p class="text-sm">请开始你的创作</p>
-                        </div>
-                         <div id="pg-loader" class="pg-loader hidden"></div>
-                         <div id="pg-image-gallery" class="w-full h-full grid grid-cols-2 md:grid-cols-4 gap-2 p-2 hidden"></div>
+                        <div id="pg-placeholder-text" class="text-gray-500 text-center"><p class="text-lg">艺术品，即将诞生</p><p class="text-sm">请开始你的创作</p></div>
+                        <div id="pg-loader" class="pg-loader hidden"></div>
+                        <div id="pg-image-gallery" class="w-full h-full grid grid-cols-2 md:grid-cols-4 gap-2 p-2 hidden"></div>
                     </div>
                     <div id="pg-error-message" class="mt-2 text-red-400 text-sm text-center font-semibold"></div>
                 </div>
@@ -698,325 +162,312 @@
         </div>
         
         <div id="gallery" class="page">
-            <div class="page-title">
-                <h1>作品图库</h1>
-                <p>管理并展示您所有的AI生成图片作品</p>
-            </div>
-            
+            <div class="page-title"><h1>作品图库</h1><p>管理并展示您所有的AI生成图片作品</p></div>
             <div class="upload-section">
-                <div class="upload-icon">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                </div>
-                <h2>上传新图片</h2>
-                <p class="upload-text">支持JPG、PNG格式，最大10MB</p>
-                <input type="file" id="image-upload" class="file-input" accept="image/*">
-                <button class="btn" id="image-upload-button">
-                    <i class="fas fa-upload"></i> 选择图片
-                </button>
+                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <h2>上传新图片</h2><p class="upload-text">支持JPG、PNG格式，最大10MB</p>
+                <input type="file" id="image-upload" class="file-input" accept="image/*" multiple>
+                <button class="btn" id="image-upload-button"><i class="fas fa-upload"></i> 选择图片</button>
                 <div id="upload-status" style="margin-top: 15px; color: var(--primary);"></div>
             </div>
-            
-            <div class="content-grid" id="gallery-grid">
-                </div>
+            <div class="content-grid" id="gallery-grid"></div>
         </div>
 
         <div id="videos" class="page">
-             <div class="page-title">
-                <h1>视频集库</h1>
-                <p>管理并展示您所有的AI生成视频作品</p>
-            </div>
+            <div class="page-title"><h1>视频集库</h1><p>管理并展示您所有的AI生成视频作品</p></div>
             <div class="upload-section">
-                <div class="upload-icon">
-                    <i class="fas fa-video"></i>
-                </div>
-                <h2>上传新视频</h2>
-                <p class="upload-text">支持MP4格式，最大50MB</p>
-                <input type="file" id="video-upload" class="file-input" accept="video/*">
-                <button class="btn" id="video-upload-button">
-                    <i class="fas fa-upload"></i> 选择视频
-                </button>
+                <div class="upload-icon"><i class="fas fa-video"></i></div>
+                <h2>上传新视频</h2><p class="upload-text">支持MP4格式，最大50MB</p>
+                <input type="file" id="video-upload" class="file-input" accept="video/*" multiple>
+                <button class="btn" id="video-upload-button"><i class="fas fa-upload"></i> 选择视频</button>
                 <div id="video-upload-status" style="margin-top: 15px; color: var(--primary);"></div>
             </div>
-             <div class="content-grid" id="videos-grid">
-                </div>
+             <div class="content-grid" id="videos-grid"></div>
         </div>
+
         <div id="games" class="page">
-             <div class="page-title">
-                <h1>游戏中心</h1>
-                <p>体验我们集成的小游戏</p>
-            </div>
-             <div class="content-grid" id="games-grid">
-                </div>
+            <div class="page-title"><h1>游戏中心</h1><p>体验我们集成的小游戏</p></div>
+            <div class="content-grid" id="games-grid"></div>
         </div>
-         <div id="music" class="page">
-            <div class="page-title">
-                <h1>音乐库</h1>
-                <p>管理并展示您所有的音乐作品</p>
-            </div>
-            
+
+        <div id="music" class="page">
+            <div class="page-title"><h1>音乐库</h1><p>管理并展示您所有的音乐作品</p></div>
             <div class="upload-section">
-                <div class="upload-icon">
-                    <i class="fas fa-music"></i>
-                </div>
-                <h2>上传新音乐</h2>
-                <p class="upload-text">支持MP3格式，最大20MB</p>
-                <input type="file" id="music-upload" class="file-input" accept="audio/*">
-                <button class="btn" id="music-upload-button">
-                    <i class="fas fa-upload"></i> 选择音乐
-                </button>
+                <div class="upload-icon"><i class="fas fa-music"></i></div>
+                <h2>上传新音乐</h2><p class="upload-text">支持MP3格式，最大20MB</p>
+                <input type="file" id="music-upload" class="file-input" accept="audio/*" multiple>
+                <button class="btn" id="music-upload-button"><i class="fas fa-upload"></i> 选择音乐</button>
                 <div id="music-upload-status" style="margin-top: 15px; color: var(--primary);"></div>
             </div>
-            
-            <div id="music-grid">
-                </div>
+            <div id="music-grid"></div>
         </div>
+
         <div id="chat" class="page">
-            <div class="page-title">
-                <h1>AI对话助手</h1>
-                <p>与Gemini AI进行实时对话，获取创意灵感</p>
-            </div>
+            <div class="page-title"><h1>AI对话助手</h1><p>与您的私人AI助手进行实时对话</p></div>
             <div class="chat-container" style="max-width: 800px; margin: auto;">
-                 <div class="chat-header" style="background: linear-gradient(90deg, var(--primary), var(--secondary)); padding: 15px; text-align: center; position: relative;">
-                    <h3 style="font-size: 1.5rem; display: flex; align-items: center; justify-content: center;"><i class="fas fa-robot" style="margin-right: 10px;"></i> Gemini AI助手</h3>
+                <div class="chat-header" style="background: linear-gradient(90deg, var(--primary), var(--secondary)); padding: 15px; text-align: center; position: relative;">
+                    <h3 style="font-size: 1.5rem; display: flex; align-items: center; justify-content: center;"><i class="fas fa-robot" style="margin-right: 10px;"></i> AI助手</h3>
                     <button id="api-settings-btn" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); background: rgba(255,255,255,0.1); border:none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer;"><i class="fas fa-cog"></i></button>
                 </div>
-                <div class="chat-messages" id="chat-messages" style="height: 400px; padding: 20px; overflow-y: auto; background: rgba(26, 26, 46, 0.5);">
-                </div>
+                <div class="chat-messages" id="chat-messages" style="height: 400px; padding: 20px; overflow-y: auto; background: rgba(26, 26, 46, 0.5);"></div>
                 <div class="chat-input" style="display: flex; padding: 15px; background: rgba(26, 26, 46, 0.9);">
                     <input type="text" id="chat-input" placeholder="请先设置API密钥..." style="flex: 1; padding: 15px; border: none; border-radius: 50px 0 0 50px; background: rgba(255, 255, 255, 0.08); color: white; font-size: 1rem; outline: none;" disabled>
-                    <button id="send-btn" style="background: var(--primary); color: white; border: none; padding: 0 30px; border-radius: 0 50px 50px 0; cursor: pointer; font-size: 1rem;" disabled>
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
+                    <button id="send-btn" style="background: var(--primary); color: white; border: none; padding: 0 30px; border-radius: 0 50px 50px 0; cursor: pointer; font-size: 1rem;" disabled><i class="fas fa-paper-plane"></i></button>
                 </div>
             </div>
         </div>
     </div>
     
-    <div id="pg-lightbox">
-        <img id="pg-lightbox-image" src="" alt="Enlarged image"/>
-    </div>
-    
-    <div id="image-preview-modal" class="modal">
-        <div class="modal-content" style="background: transparent; box-shadow: none;">
-            <button class="close-modal" onclick="closePreviewModal()">&times;</button>
-            <img id="preview-image" class="image-preview" src="" alt="预览图片">
-        </div>
-    </div>
+    <div id="pg-lightbox"><img id="pg-lightbox-image" src="" alt="Enlarged image"/></div>
+    <div id="image-preview-modal" class="modal"><div class="modal-content" style="background: transparent; box-shadow: none;"><button class="close-modal" onclick="closePreviewModal()">&times;</button><img id="preview-image" class="image-preview" src="" alt="预览图片"></div></div>
+    <div id="music-player-modal" class="modal"><div class="modal-content"><button class="close-modal" onclick="closeMusicPlayer()">&times;</button><h2 id="music-title" class="text-2xl font-bold text-indigo-400 mb-4"></h2><audio id="audio-player" controls class="w-full"></audio></div></div>
+    <div id="api-modal" class="modal"><div class="modal-content"><button class="close-modal" onclick="document.getElementById('api-modal').style.display='none'">&times;</button><h2 style="margin-bottom: 25px; color: var(--primary);">设置AI对话API密钥</h2><div class="form-group" style="text-align: left;"><label for="api-key" style="display: block; margin-bottom: 8px;">API密钥</label><input type="password" id="api-key" class="form-control" placeholder="在此输入您的API密钥"></div><button class="btn" style="width:100%; margin-top: 20px;" onclick="saveApiKey()"><i class="fas fa-save"></i> 保存API密钥</button></div></div>
 
-    <div id="gallery-selection-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="document.getElementById('gallery-selection-modal').style.display='none'">&times;</button>
-            <h2 class="text-2xl font-bold text-indigo-400 mb-4">从图库中选择一张图片</h2>
-            <div id="gallery-modal-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto">
-                </div>
-        </div>
-    </div>
-    
-     <div id="music-player-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeMusicPlayer()">&times;</button>
-            <h2 id="music-title" class="text-2xl font-bold text-indigo-400 mb-4"></h2>
-            <audio id="audio-player" controls class="w-full"></audio>
-        </div>
-    </div>
-
-    <div id="api-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" onclick="document.getElementById('api-modal').style.display='none'">&times;</button>
-            <h2 style="margin-bottom: 25px; color: var(--primary);">设置Gemini API密钥</h2>
-            <div class="form-group" style="text-align: left;">
-                <label for="api-key" style="display: block; margin-bottom: 8px;">Gemini API密钥</label>
-                <input type="password" id="api-key" class="form-control" placeholder="在此输入您的Gemini API密钥">
-            </div>
-            <button class="btn" style="width:100%; margin-top: 20px;" onclick="saveApiKey()">
-                <i class="fas fa-save"></i> 保存API密钥
-            </button>
-        </div>
-    </div>
-
-    <footer>
-        <div class="copyright">
-            <p>&copy; 2023 AI创意工坊 | 使用localStorage存储所有内容</p>
-        </div>
-    </footer>
+    <footer><div class="copyright"><p>&copy; 2024 AI创意工坊 | 使用localStorage存储所有内容</p></div></footer>
 
     <script>
+        // --- Database Setup ---
         let imageDB = JSON.parse(localStorage.getItem('imageDB')) || [];
         let videoDB = JSON.parse(localStorage.getItem('videoDB')) || []; 
         let musicDB = JSON.parse(localStorage.getItem('musicDB')) || [];
 
+        // --- Page Navigation ---
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0, 0);
         }
         
+        // --- App Initialization ---
         document.addEventListener('DOMContentLoaded', function() {
             initImageGallery();
-            initPromptGenerator(); 
             initVideoGallery();
+            initPromptGenerator(); 
             initMusicGallery();
             initChat();
             initGames();
         });
 
-        // --- Image Gallery Logic ---
-        const galleryGrid = document.getElementById('gallery-grid');
-        const imageUpload = document.getElementById('image-upload');
-        const imageUploadButton = document.getElementById('image-upload-button');
-        const uploadStatus = document.getElementById('upload-status');
-        
-        function initImageGallery() {
-            imageUploadButton.addEventListener('click', () => imageUpload.click());
-
-            imageUpload.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (!file || !file.type.match('image.*') || file.size > 10 * 1024 * 1024) {
-                    uploadStatus.textContent = '错误：请选择小于10MB的图片文件';
-                    uploadStatus.style.color = 'var(--accent)';
-                    return;
-                }
+        // --- Generic File Reader ---
+        function readFileAsDataURL(file) {
+            return new Promise((resolve, reject) => {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    const newImage = { id: Date.now(), name: file.name, src: e.target.result, description: "本地上传的作品" };
-                    imageDB.push(newImage);
-                    localStorage.setItem('imageDB', JSON.stringify(imageDB));
-                    uploadStatus.textContent = `上传成功：${file.name}`;
-                    uploadStatus.style.color = 'var(--primary)';
-                    renderImageGallery();
-                };
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = (error) => reject(error);
                 reader.readAsDataURL(file);
+            });
+        }
+
+        // --- Image Gallery ---
+        function initImageGallery() {
+            const grid = document.getElementById('gallery-grid');
+            const uploader = document.getElementById('image-upload');
+            const uploadBtn = document.getElementById('image-upload-button');
+            const statusEl = document.getElementById('upload-status');
+            
+            uploadBtn.addEventListener('click', () => uploader.click());
+
+            uploader.addEventListener('change', async (e) => {
+                const files = e.target.files;
+                if (!files.length) return;
+                
+                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
+                statusEl.style.color = 'var(--primary)';
+                
+                for (const file of files) {
+                    if (!file.type.match('image.*') || file.size > 10 * 1024 * 1024) {
+                        alert(`文件 "${file.name}" 不合格（必须是小于10MB的图片），已跳过。`);
+                        continue;
+                    }
+                    try {
+                        const fileSrc = await readFileAsDataURL(file);
+                        const newImage = { id: Date.now() + Math.random(), name: file.name, src: fileSrc, description: "本地上传的作品" };
+                        imageDB.unshift(newImage);
+                    } catch (error) {
+                         alert(`读取文件 "${file.name}" 失败，请重试。`);
+                    }
+                }
+                
+                localStorage.setItem('imageDB', JSON.stringify(imageDB));
+                statusEl.textContent = `上传完成！`;
+                renderImageGallery();
+                uploader.value = '';
             });
             renderImageGallery();
         }
         
         function renderImageGallery() {
-            galleryGrid.innerHTML = '';
-            if (imageDB.length === 0) {
-                galleryGrid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">图库为空，快去创作或上传吧！</p>';
+            const grid = document.getElementById('gallery-grid');
+            grid.innerHTML = '';
+            if (!imageDB.length) {
+                grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">图库为空，快去创作或上传吧！</p>';
                 return;
             }
             imageDB.forEach(image => {
-                const imageCard = document.createElement('div');
-                imageCard.className = 'card image-card';
-                imageCard.innerHTML = `
-                    <div class="card-img" onclick="previewImage('<span class="math-inline">\{image\.src\}', '</span>{image.name}')"> <img src="<span class="math-inline">\{image\.src\}" alt\="</span>{image.name}"> </div>
-                    <div class="card-info"> <h3><span class="math-inline">\{image\.name\.slice\(0, 20\)\}\.\.\.</h3\> <p\></span>{image.description}</p> </div>
-                    <div class="delete-btn" onclick="deleteImage(${image.id}, event)"> <i class="fas fa-trash"></i> </div>
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-media-container" onclick="previewImage('${image.src}')">
+                        <img src="${image.src}" alt="${image.name}">
+                    </div>
+                    <div class="card-info">
+                        <h3>${image.name.length > 20 ? image.name.slice(0, 20) + '...' : image.name}</h3>
+                        <p>${image.description}</p>
+                    </div>
+                    <div class="card-actions">
+                         <a href="${image.src}" download="${image.name}" class="action-btn download-btn" title="下载图片">
+                            <i class="fas fa-download"></i>
+                         </a>
+                         <div class="action-btn delete-btn" onclick="deleteItem('image', ${image.id}, event)" title="删除图片">
+                            <i class="fas fa-trash"></i>
+                         </div>
+                    </div>
                 `;
-                galleryGrid.appendChild(imageCard);
+                grid.appendChild(card);
             });
         }
-        
-        function previewImage(src, title) {
-            const previewImg = document.getElementById('preview-image');
-            previewImg.src = src;
-            previewImg.alt = title;
+
+        function previewImage(src) {
+            document.getElementById('preview-image').src = src;
             document.getElementById('image-preview-modal').style.display = 'flex';
         }
-        
         function closePreviewModal() {
             document.getElementById('image-preview-modal').style.display = 'none';
         }
-        
-        function deleteImage(id, event) {
-            event.stopPropagation();
-            if (confirm('确定要删除这张图片吗？')) {
-                imageDB = imageDB.filter(image => image.id !== id);
-                localStorage.setItem('imageDB', JSON.stringify(imageDB));
-                renderImageGallery();
-            }
-        }
-        
-        // --- Video Gallery Logic ---
-        function initVideoGallery() {
-            const videoUploadButton = document.getElementById('video-upload-button');
-            const videoUpload = document.getElementById('video-upload');
-            const videoUploadStatus = document.getElementById('video-upload-status');
-            
-            if (videoUploadButton) {
-                videoUploadButton.addEventListener('click', () => videoUpload.click());
-            }
 
-            if (videoUpload) {
-                videoUpload.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (!file || !file.type.match('video.*') || file.size > 50 * 1024 * 1024) {
-                         videoUploadStatus.textContent = '错误：请选择小于50MB的视频文件';
-                         videoUploadStatus.style.color = 'var(--accent)';
-                        return;
+        // --- Video Gallery ---
+        function initVideoGallery() {
+            const grid = document.getElementById('videos-grid');
+            const uploader = document.getElementById('video-upload');
+            const uploadBtn = document.getElementById('video-upload-button');
+            const statusEl = document.getElementById('video-upload-status');
+            
+            uploadBtn.addEventListener('click', () => uploader.click());
+
+            uploader.addEventListener('change', async (e) => {
+                const files = e.target.files;
+                if (!files.length) return;
+                
+                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
+                statusEl.style.color = 'var(--primary)';
+                
+                for (const file of files) {
+                    if (!file.type.match('video.*') || file.size > 50 * 1024 * 1024) {
+                        alert(`文件 "${file.name}" 不合格（必须是小于50MB的视频），已跳过。`);
+                        continue;
                     }
-                    const newVideo = { id: Date.now(), name: file.name, src: URL.createObjectURL(file), thumbnail: 'https://images.unsplash.com/photo-1574717024453-354056aafa98?q=80&w=1974' };
-                    videoDB.push(newVideo);
-                    localStorage.setItem('videoDB', JSON.stringify(videoDB)); // Note: This stores a blob URL which is session-specific.
-                    videoUploadStatus.textContent = `上传成功：${file.name}`;
-                    videoUploadStatus.style.color = 'var(--primary)';
-                    renderVideoGallery();
-                });
-            }
+                    try {
+                        const fileSrc = await readFileAsDataURL(file);
+                        const newVideo = { id: Date.now() + Math.random(), name: file.name, src: fileSrc, description: "本地上传的视频", type: file.type };
+                        videoDB.unshift(newVideo);
+                    } catch (error) {
+                        alert(`读取文件 "${file.name}" 失败，请重试。`);
+                    }
+                }
+                
+                localStorage.setItem('videoDB', JSON.stringify(videoDB));
+                statusEl.textContent = `上传完成！`;
+                renderVideoGallery();
+                uploader.value = '';
+            });
             renderVideoGallery();
         }
 
         function renderVideoGallery() {
-            const videosGrid = document.getElementById('videos-grid');
-            videosGrid.innerHTML = '';
-            if (videoDB.length === 0) {
-                videosGrid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">视频集库为空，快去创作或上传吧。</p>';
+            const grid = document.getElementById('videos-grid');
+            grid.innerHTML = '';
+            if (!videoDB.length) {
+                grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">视频集库为空，快去上传吧。</p>';
                 return;
             }
             videoDB.forEach(video => {
-                const videoCard = document.createElement('div');
-                videoCard.className = 'card image-card'; 
-                videoCard.innerHTML = `
-                    <div class="card-img">
-                        <video loop muted onmouseover="this.play()" onmouseout="this.pause(); this.currentTime=0;" class="w-full h-full object-cover">
-                            <source src="<span class="math-inline">\{video\.src\}" type\="video/mp4"\>
-</video\>
-</div\>
-<div class\="card\-info"\>
-<h3\></span>{video.name}</h3>
-                        <p>AI生成的视频</p>
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-media-container">
+                        <video loop muted controls class="w-full h-full object-cover">
+                            <source src="${video.src}" type="${video.type || 'video/mp4'}">
+                        </video>
                     </div>
-                    <div class="delete-btn" onclick="deleteVideo(${video.id}, event)"> <i class="fas fa-trash"></i> </div>
+                    <div class="card-info">
+                        <h3>${video.name.length > 20 ? video.name.slice(0, 20) + '...' : video.name}</h3>
+                        <p>${video.description}</p>
+                    </div>
+                    <div class="card-actions">
+                         <a href="${video.src}" download="${video.name}" class="action-btn download-btn" title="下载视频">
+                            <i class="fas fa-download"></i>
+                         </a>
+                         <div class="action-btn delete-btn" onclick="deleteItem('video', ${video.id}, event)" title="删除视频">
+                            <i class="fas fa-trash"></i>
+                         </div>
+                    </div>
                 `;
-                videosGrid.appendChild(videoCard);
+                grid.appendChild(card);
             });
         }
         
-        function deleteVideo(id, event) {
+        // --- Universal Delete Function ---
+        function deleteItem(dbKey, id, event) {
             event.stopPropagation();
-            if (confirm('确定要删除这个视频吗？')) {
-                videoDB = videoDB.filter(video => video.id !== id);
-                localStorage.setItem('videoDB', JSON.stringify(videoDB));
-                renderVideoGallery();
+            if (!confirm('确定要删除这个项目吗？此操作不可恢复。')) return;
+
+            let db = [];
+            let renderFunc = () => {};
+            
+            if (dbKey === 'image') {
+                imageDB = imageDB.filter(item => item.id !== id);
+                db = imageDB;
+                renderFunc = renderImageGallery;
+            } else if (dbKey === 'video') {
+                videoDB = videoDB.filter(item => item.id !== id);
+                db = videoDB;
+                renderFunc = renderVideoGallery;
+            } else if (dbKey === 'music') {
+                musicDB = musicDB.filter(item => item.id !== id);
+                db = musicDB;
+                renderFunc = renderMusic;
             }
+            
+            localStorage.setItem(`${dbKey}DB`, JSON.stringify(db));
+            renderFunc();
         }
         
+        // --- Music Gallery ---
         function initMusicGallery() {
             const musicGrid = document.getElementById('music-grid');
-            const musicUpload = document.getElementById('music-upload');
-            const musicUploadButton = document.getElementById('music-upload-button');
-            const musicUploadStatus = document.getElementById('music-upload-status');
+            const uploader = document.getElementById('music-upload');
+            const uploadBtn = document.getElementById('music-upload-button');
+            const statusEl = document.getElementById('music-upload-status');
 
-            musicUploadButton.addEventListener('click', () => musicUpload.click());
-
-            musicUpload.addEventListener('change', e => {
-                const file = e.target.files[0];
-                if (!file || !file.type.match('audio.*') || file.size > 20 * 1024 * 1024) {
-                    musicUploadStatus.textContent = '错误：请选择小于20MB的音频文件';
-                    musicUploadStatus.style.color = 'var(--accent)';
-                    return;
+            uploadBtn.addEventListener('click', () => uploader.click());
+            
+            uploader.addEventListener('change', async (e) => {
+                const files = e.target.files;
+                if (!files.length) return;
+                
+                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
+                
+                for (const file of files) {
+                    if (!file.type.match('audio.*') || file.size > 20 * 1024 * 1024) {
+                         alert(`文件 "${file.name}" 不合格（必须是小于20MB的音频），已跳过。`);
+                        continue;
+                    }
+                     try {
+                        const fileSrc = await readFileAsDataURL(file);
+                        const newMusic = {
+                            id: Date.now() + Math.random(), name: file.name, src: fileSrc,
+                            thumbnail: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070",
+                            artist: "本地上传", duration: "未知"
+                        };
+                        musicDB.unshift(newMusic);
+                    } catch (error) {
+                        alert(`读取文件 "${file.name}" 失败，请重试。`);
+                    }
                 }
-                const newMusic = {
-                    id: Date.now(), name: file.name, src: URL.createObjectURL(file),
-                    thumbnail: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070",
-                    artist: "创作者", duration: "未知"
-                };
-                musicDB.push(newMusic);
                 localStorage.setItem('musicDB', JSON.stringify(musicDB));
-                musicUploadStatus.textContent = `上传成功: ${file.name}`;
-                musicUploadStatus.style.color = 'var(--primary)';
+                statusEl.textContent = '上传完成！';
                 renderMusic();
+                uploader.value = '';
             });
             renderMusic();
         }
@@ -1029,10 +480,21 @@
                 return;
             }
             musicDB.forEach(music => {
-                const musicCard = document.createElement('div');
-                musicCard.className = 'card';
-                musicCard.innerHTML = `<div class="music-card"><div class="delete-btn" onclick="deleteMusic(<span class="math-inline">\{music\.id\}, event\)"\><i class\="fas fa\-trash"\></i\></div\><div class\="album\-cover" onclick\="playMusic\('</span>{music.src}', '<span class="math-inline">\{music\.name\}'\)"\><img src\="</span>{music.thumbnail}" alt="<span class="math-inline">\{music\.name\}"\></div\><div class\="music\-info"\><h3\></span>{music.name}</h3><div class="artist"><span class="math-inline">\{music\.artist\}</div\></div\><div class\="play\-btn" onclick\="playMusic\('</span>{music.src}', '${music.name}')"><i class="fas fa-play"></i></div></div>`;
-                musicGrid.appendChild(musicCard);
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="music-card">
+                        <div class="album-cover" onclick="playMusic('${music.src}', '${music.name}')"><img src="${music.thumbnail}" alt="${music.name}"></div>
+                        <div class="music-info">
+                            <h3>${music.name.length > 20 ? music.name.slice(0, 20) + '...' : music.name}</h3>
+                            <div class="artist">${music.artist}</div>
+                        </div>
+                        <div class="play-btn" onclick="playMusic('${music.src}', '${music.name}')"><i class="fas fa-play"></i></div>
+                        <div class="card-actions" style="opacity:1; right: 80px; top: 50%; transform: translateY(-50%);">
+                            <div class="action-btn delete-btn" onclick="deleteItem('music', ${music.id}, event)"><i class="fas fa-trash"></i></div>
+                        </div>
+                    </div>`;
+                musicGrid.appendChild(card);
             });
         }
 
@@ -1040,7 +502,6 @@
             const modal = document.getElementById('music-player-modal');
             const player = document.getElementById('audio-player');
             const musicTitle = document.getElementById('music-title');
-            
             musicTitle.textContent = title;
             player.src = src;
             modal.style.display = 'flex';
@@ -1054,61 +515,32 @@
             document.getElementById('music-player-modal').style.display = 'none';
         }
 
-        function deleteMusic(id, event) {
-             event.stopPropagation();
-             if (confirm('确定要删除这首音乐吗？')) {
-                musicDB = musicDB.filter(music => music.id !== id);
-                localStorage.setItem('musicDB', JSON.stringify(musicDB));
-                renderMusic();
-            }
-        }
-
+        // --- Games Page ---
         function initGames() {
              const gamesDB = [{ id: 1, name: "益智解谜", description: "挑战您的逻辑思维能力，解决复杂的谜题关卡", link: "#", icon: "fa-puzzle-piece" }, { id: 2, name: "跑酷冒险", description: "在奇幻世界中奔跑跳跃，收集金币避开障碍", link: "#", icon: "fa-running" }, { id: 3, name: "策略棋类", description: "与AI对战，测试您的策略和战术能力", link: "#", icon: "fa-chess" }];
              const gamesGrid = document.getElementById('games-grid');
              gamesDB.forEach(game => {
                 const gameCard = document.createElement('div');
                 gameCard.className = 'card';
-                gameCard.innerHTML = `<div style="text-align: center; padding: 30px; display: flex; flex-direction: column; align-items: center; height: 100%;"><div style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; font-size: 2.5rem; color: white;"><i class="fas <span class="math-inline">\{game\.icon\}"\></i\></div\><h3 style\="font\-size\: 1\.7rem; margin\-bottom\: 15px; color\: var\(\-\-text\-light\);"\></span>{game.name}</h3><p style="color: var(--text-gray); margin-bottom: 25px; flex-grow: 1;"><span class="math-inline">\{game\.description\}</p\><a href\="</span>{game.link}" target="_blank" class="btn"><i class="fas fa-play"></i> 开始游戏</a></div>`;
+                gameCard.innerHTML = `<div style="text-align: center; padding: 30px; display: flex; flex-direction: column; align-items: center; height: 100%;"><div style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; font-size: 2.5rem; color: white;"><i class="fas ${game.icon}"></i></div><h3 style="font-size: 1.7rem; margin-bottom: 15px; color: var(--text-light);">${game.name}</h3><p style="color: var(--text-gray); margin-bottom: 25px; flex-grow: 1;">${game.description}</p><a href="${game.link}" target="_blank" class="btn"><i class="fas fa-play"></i> 开始游戏</a></div>`;
                 gamesGrid.appendChild(gameCard);
              });
         }
         
-        function addMessage(text, sender, targetId = 'chat-messages') {
-            const messageContainer = document.getElementById(targetId);
-            const messageElement = document.createElement('div');
-            messageElement.classList.add('message', `${sender}-message`);
-            messageElement.style.cssText = `background: ${sender === 'user' ? 'rgba(108, 99, 255, 0.25)' : 'rgba(42, 42, 60, 0.9)'}; align-self: <span class="math-inline">\{sender \=\=\= 'user' ? 'flex\-end' \: 'flex\-start'\}; border\-bottom\-</span>{sender === 'user' ? 'right' : 'left'}-radius: 5px; padding: 15px; margin-bottom: 15px; border-radius: 20px; max-width: 80%;`;
-            messageElement.innerHTML = text; // Use innerHTML to render the spinner
-            messageContainer.appendChild(messageElement);
-            messageContainer.scrollTop = messageContainer.scrollHeight;
-            return messageElement;
-        }
-
+        // --- AI Chat ---
         function initChat() {
             const chatInput = document.getElementById('chat-input');
             const sendBtn = document.getElementById('send-btn');
             const settingsBtn = document.getElementById('api-settings-btn');
             let chatHistory = [];
             
-            settingsBtn.addEventListener('click', () => {
-                document.getElementById('api-modal').style.display = 'flex';
-            });
+            settingsBtn.addEventListener('click', () => { document.getElementById('api-modal').style.display = 'flex'; });
             
             const apiKey = localStorage.getItem('gemini-api-key');
             if (apiKey) {
-                chatInput.disabled = false;
-                sendBtn.disabled = false;
-                chatInput.placeholder = "输入您的问题...";
-                addMessage("您好！我已准备好回答您的问题。", 'ai');
-            } else {
-                 addMessage("请点击右上角的设置按钮，输入您的Gemini API密钥以开始对话。", 'ai');
-            }
-            
-            sendBtn.addEventListener('click', sendMessage);
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') sendMessage();
-            });
+                chatInput.disabled = false; sendBtn.disabled = false;
+                chatInput.placeholder = "输入您的问题..."; addMessage("您好！我已准备好回答您的问题。", 'ai');
+            } else { addMessage("请点击右上角的设置按钮，输入您的API密钥以开始对话。", 'ai'); }
             
             async function sendMessage() {
                 const messageText = chatInput.value.trim();
@@ -1122,14 +554,11 @@
                 
                 try {
                     const payload = { contents: chatHistory };
-                    const apiUrl = `/api/gemini`; // Pointing to our backend function for chat
-                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    
+                    const response = await fetch(`/api/gemini`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     if (!response.ok) {
                         const errorResult = await response.json();
                         throw new Error(errorResult.error?.message || `API请求失败: ${response.status}`);
                     }
-                    
                     const result = await response.json();
                     loadingMsg.remove();
                     
@@ -1137,22 +566,20 @@
                         const aiResponse = result.candidates[0].content.parts[0].text;
                         addMessage(aiResponse, 'ai');
                         chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
-                    } else {
-                        throw new Error("无效的API响应格式。");
-                    }
+                    } else { throw new Error("无效的API响应格式。"); }
                 } catch (error) {
                     loadingMsg.remove();
                     addMessage(`请求出错: ${error.message}`, 'ai');
                 }
             }
+
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
         }
         
         function saveApiKey() {
             const apiKey = document.getElementById('api-key').value.trim();
-            if (!apiKey) {
-                alert('请输入API密钥');
-                return;
-            }
+            if (!apiKey) { alert('请输入API密钥'); return; }
             localStorage.setItem('gemini-api-key', apiKey);
             document.getElementById('api-modal').style.display = 'none';
             
@@ -1160,16 +587,24 @@
             const sendBtn = document.getElementById('send-btn');
             const chatMessages = document.getElementById('chat-messages');
 
-            chatInput.disabled = false;
-            sendBtn.disabled = false;
-            chatInput.placeholder = "输入您的问题...";
-            chatMessages.innerHTML = '';
+            chatInput.disabled = false; sendBtn.disabled = false;
+            chatInput.placeholder = "输入您的问题..."; chatMessages.innerHTML = '';
             addMessage("API密钥已保存！现在可以开始对话了。", 'ai');
         }
 
-        // --- Prompt Generator Logic ---
+        function addMessage(text, sender) {
+            const messageContainer = document.getElementById('chat-messages');
+            const messageElement = document.createElement('div');
+            messageElement.style.cssText = `background: ${sender === 'user' ? 'rgba(108, 99, 255, 0.25)' : 'rgba(42, 42, 60, 0.9)'}; align-self: ${sender === 'user' ? 'flex-end' : 'flex-start'}; border-bottom-${sender === 'user' ? 'right' : 'left'}-radius: 5px; padding: 15px; margin-bottom: 15px; border-radius: 20px; max-width: 80%;`;
+            messageElement.innerHTML = text;
+            messageContainer.appendChild(messageElement);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+            return messageElement;
+        }
+
+        // --- AI Prompt Generator ---
         function initPromptGenerator() {
-             const promptData = {
+            const promptData = {
                 style: { "逼真写实": "photorealistic", "二次元动漫": "anime", "CG渲染": "cg render", "油画质感": "oil painting", "水墨国风": "ink wash painting", "复古港风": "hong kong retro", "赛博朋克": "cyberpunk", "蒸汽朋克": "steampunk", "水彩": "watercolor", "素描": "sketch" },
                 quality: { "杰作": "masterpiece", "最佳质量": "best quality", "极其精细": "ultra-detailed", "8K画质": "8k", "逼真细节": "photorealistic details", "复杂细节": "intricate details" },
                 temperament: { "清冷御姐": "cold and elegant lady", "纯欲少女": "pure and seductive girl", "元气少女": "energetic girl", "书卷气": "scholarly", "赛博魅影": "cyber phantom", "复古女郎": "retro lady" },
@@ -1184,29 +619,8 @@
                 camera: { "85mm f/1.2": "85mm f/1.2 lens", "35mm 电影感": "35mm cinematic", "鱼眼镜头": "fisheye lens", "哈苏色彩": "Hasselblad natural colors", "富士胶片色彩": "Fujifilm film color", "浅景深": "shallow depth of field", "大景深": "deep depth of field" },
                 color_motion: { "鲜艳色彩": "vibrant colors", "单色调": "monochromatic", "对比色": "contrasting colors", "高饱和度": "highly saturated colors", "动态模糊": "motion blur", "摇摄": "panning shot"}
             };
-
-            const styleKeywords = {
-                'photorealistic': '1girl',
-                'anime': 'anime style, anime artwork, key visual, 1girl',
-                'cg render': 'cgstation, 3d render, octane render, 1girl',
-                'oil painting': 'oil painting, impressionistic, thick brush strokes, 1girl',
-                'ink wash painting': 'Chinese ink painting, guofeng, traditional art, 1girl',
-                'hong kong retro': 'cinematic film still, Hong Kong movie style, 1990s, kodak portra 400, 1girl',
-                'cyberpunk': 'cyberpunk, futuristic, neon, night city, cinematic, 1girl',
-                'steampunk': 'steampunk, victorian, gears, brass, 1girl',
-                'watercolor': 'watercolor painting, vibrant, soft edges, paper texture, 1girl',
-                'sketch': 'graphite pencil sketch, detailed, black and white, hatching, 1girl',
-                'default': '1girl'
-            };
-
-            const colors = [
-                { bg: 'bg-red-200', text: 'text-red-800', ring: 'ring-red-400' }, { bg: 'bg-yellow-200', text: 'text-yellow-800', ring: 'ring-yellow-400' },
-                { bg: 'bg-green-200', text: 'text-green-800', ring: 'ring-green-400' }, { bg: 'bg-blue-200', text: 'text-blue-800', ring: 'ring-blue-400' },
-                { bg: 'bg-indigo-200', text: 'text-indigo-800', ring: 'ring-indigo-400' }, { bg: 'bg-purple-200', text: 'text-purple-800', ring: 'ring-purple-400' },
-                { bg: 'bg-pink-200', text: 'text-pink-800', ring: 'ring-pink-400' }, { bg: 'bg-teal-200', text: 'text-teal-800', ring: 'ring-teal-400' },
-                { bg: 'bg-orange-200', text: 'text-orange-800', ring: 'ring-orange-400' },
-            ];
-
+            const styleKeywords = { 'photorealistic':'1girl', 'anime':'anime style, anime artwork, key visual, 1girl', 'cg render':'cgstation, 3d render, octane render, 1girl', 'oil painting':'oil painting, impressionistic, thick brush strokes, 1girl', 'ink wash painting':'Chinese ink painting, guofeng, traditional art, 1girl', 'hong kong retro':'cinematic film still, Hong Kong movie style, 1990s, kodak portra 400, 1girl', 'cyberpunk':'cyberpunk, futuristic, neon, night city, cinematic, 1girl', 'steampunk':'steampunk, victorian, gears, brass, 1girl', 'watercolor':'watercolor painting, vibrant, soft edges, paper texture, 1girl', 'sketch':'graphite pencil sketch, detailed, black and white, hatching, 1girl', 'default':'1girl' };
+            const colors = [ {bg:'bg-red-200',text:'text-red-800',ring:'ring-red-400'}, {bg:'bg-yellow-200',text:'text-yellow-800',ring:'ring-yellow-400'}, {bg:'bg-green-200',text:'text-green-800',ring:'ring-green-400'}, {bg:'bg-blue-200',text:'text-blue-800',ring:'ring-blue-400'}, {bg:'bg-indigo-200',text:'text-indigo-800',ring:'ring-indigo-400'}, {bg:'bg-purple-200',text:'text-purple-800',ring:'ring-purple-400'}, {bg:'bg-pink-200',text:'text-pink-800',ring:'ring-pink-400'}, {bg:'bg-teal-200',text:'text-teal-800',ring:'ring-teal-400'}, {bg:'bg-orange-200',text:'text-orange-800',ring:'ring-orange-400'} ];
             const selectedTags = new Map();
             const finalPromptInput = document.getElementById('pg-final-prompt-input');
             const copyBtnEn = document.getElementById('pg-copy-button-en');
@@ -1230,22 +644,19 @@
                         tagEl.textContent = tagText;
                         tagEl.dataset.value = tagText;
                         tagEl.dataset.group = group;
-                        
                         const color = colors[index % colors.length];
                         tagEl.classList.add(color.bg, color.text);
                         tagEl.dataset.ringColor = color.ring;
-
                         container.appendChild(tagEl);
                     });
                 }
             }
-             
+            
             pgUpdateOutput();
 
             document.getElementById('pg-builder-container').addEventListener('click', (e) => {
                 if (e.target.classList.contains('pg-prompt-tag')) {
                     const { value, group, ringColor } = e.target.dataset;
-
                     if (group === 'style') {
                         const currentActive = document.querySelector(`[data-group="style"].active`);
                         if (currentActive) {
@@ -1286,19 +697,24 @@
                 gallery.classList.add('hidden');
                 placeholderText.classList.remove('hidden');
             });
-            
-            async function callNewTextAPI(prompt, button) {
+
+            async function callTextAPI(prompt, button) {
                 const originalText = button.innerHTML;
                 button.innerHTML = '<div class="pg-spinner-sm"></div>';
                 button.disabled = true;
                 errorMessage.textContent = '';
                 try {
-                    // TODO: 在这里实现调用新文本API的逻辑
-                    // 1. 定义新API的 aipUrl 和 payload
-                    // 2. 使用 fetch 调用
-                    // 3. 处理返回结果
-                    alert('此功能正在等待接入新的文本API。');
-                    return null; // 暂时返回null
+                    const response = await fetch(`/api/replicate-text`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ prompt: prompt })
+                    });
+                    if (!response.ok) {
+                        const err = await response.json();
+                        throw new Error(err.error || `Text API Error: ${response.status}`);
+                    }
+                    const result = await response.json();
+                    return result.text;
                 } catch (error) {
                     showError(error.message);
                     return null;
@@ -1310,7 +726,7 @@
             
             inspireBtn.addEventListener('click', async () => {
                 const prompt = "Generate a creative, highly detailed, and visually stunning English prompt for an AI image generator. The subject can be anything, not just a beautiful woman. The prompt should be a single, continuous string of keywords and phrases, describing the subject, a unique and interesting scene, the atmosphere, and specific lighting and camera details. Do not use any line breaks.";
-                const inspiration = await callNewTextAPI(prompt, inspireBtn); // 改为调用新函数
+                const inspiration = await callTextAPI(prompt, inspireBtn);
                 if (inspiration) {
                     finalPromptInput.value = inspiration;
                     pgUpdateOutput(false); 
@@ -1320,9 +736,8 @@
             enrichBtn.addEventListener('click', async () => {
                 let currentPrompt = finalPromptInput.value.trim();
                 if (!currentPrompt) return;
-
                 const prompt = `Take the following AI image generator prompt and make it more detailed, vivid, and artistic. Add more specific details about the subject's expression, the background, the atmosphere, and the lighting. Return only the enhanced prompt as a single, continuous string of keywords and phrases. Do not use any line breaks. The prompt to enhance is: "${currentPrompt}"`;
-                const enrichment = await callNewTextAPI(prompt, enrichBtn); // 改为调用新函数
+                const enrichment = await callTextAPI(prompt, enrichBtn);
                 if (enrichment) {
                     finalPromptInput.value = enrichment;
                     pgUpdateOutput(false);
@@ -1336,9 +751,10 @@
                         const originalIcon = button.innerHTML;
                         button.innerHTML = `<svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
                         setTimeout(() => { button.innerHTML = originalIcon; }, 2000);
-                    }).catch(err => console.error('Copy failed', err));
+                    }).catch(err => console.error("Copy failed", err));
                 });
             }
+
             pgSetupCopyButton(copyBtnEn, finalPromptInput);
             
             lightbox.addEventListener('click', () => {
@@ -1383,33 +799,6 @@
                 }
                 generateBtn.disabled = finalPromptInput.value.trim() === '';
             }
-            
-            generateBtn.addEventListener('click', async () => {
-                showLoading(true);
-                let englishPrompt = finalPromptInput.value.trim();
-                const negativePrompt = document.getElementById('pg-negative-prompt').value;
-
-                if (!englishPrompt) {
-                    showError('指令输入框不能为空！');
-                    showLoading(false);
-                    return;
-                }
-
-                try {
-                    // TODO: 在这里实现调用新图片API的逻辑
-                    // 1. 根据新API的要求，准备 payload
-                    // 2. 定义新API的后端函数地址，例如 const apiUrl = `/api/new-image-api`;
-                    // 3. 使用 fetch 调用
-                    // 4. 处理返回的图片结果
-                    alert('AI绘画功能正在等待接入新的API。');
-
-                } catch (error) {
-                    console.error('Image generation error:', error);
-                    showError(error.message || '未知错误，请检查控制台日志。');
-                } finally {
-                    showLoading(false);
-                }
-            });
 
             function showLoading(isLoading) {
                 generateBtn.disabled = isLoading;
@@ -1424,51 +813,78 @@
                     loader.classList.add('hidden');
                 }
             }
-            
-            function pgDisplayGallery(predictions) {
+
+            function pgDisplayGallery(imageUrls) {
                 gallery.innerHTML = ''; 
                 gallery.classList.remove('hidden');
                 placeholderText.classList.add('hidden');
-                predictions.forEach((prediction, index) => {
-                    if (prediction.bytesBase64Encoded) { // Assuming the new API also returns base64
-                        const imgSrc = `data:image/png;base64,${prediction.bytesBase64Encoded}`;
-                        const container = document.createElement('div');
-                        container.className = 'relative group w-full h-full';
-                        const img = document.createElement('img');
-                        img.src = imgSrc;
-                        img.className = 'w-full h-full object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity';
-                        img.addEventListener('click', () => { lightboxImage.src = imgSrc; lightbox.style.display = 'flex'; });
-                        const downloadLink = document.createElement('a');
-                        downloadLink.href = imgSrc;
-                        downloadLink.download = `ai-creation-<span class="math-inline">\{Date\.now\(\)\}\-</span>{index}.png`;
-                        downloadLink.className = 'absolute bottom-2 right-2 bg-black/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80';
-                        downloadLink.title = '下载图片';
-                        downloadLink.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
-                        const addToGalleryBtn = document.createElement('button');
-                        addToGalleryBtn.className = 'absolute top-2 right-2 bg-blue-500/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-500/80';
-                        addToGalleryBtn.title = '添加到作品图库';
-                        addToGalleryBtn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>`;
-                        addToGalleryBtn.onclick = (e) => {
-                            e.stopPropagation();
-                            const newImage = { id: Date.now(), name: `AI作品-${Date.now()}.png`, src: imgSrc, description: "AI生成于创意工坊" };
-                            imageDB.push(newImage);
-                            localStorage.setItem('imageDB', JSON.stringify(imageDB));
-                            renderImageGallery();
-                            alert('已成功添加到作品图库！');
-                        };
-                        container.appendChild(img);
-                        container.appendChild(downloadLink);
-                        container.appendChild(addToGalleryBtn);
-                        gallery.appendChild(container);
-                    }
+                
+                if (!imageUrls || imageUrls.length === 0) {
+                    showError("API did not return any images.");
+                    return;
+                }
+
+                imageUrls.forEach((imgSrc, index) => {
+                    const container = document.createElement('div');
+                    container.className = 'relative group w-full h-full';
+                    const img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.className = 'w-full h-full object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity';
+                    img.addEventListener('click', () => { lightboxImage.src = imgSrc; lightbox.style.display = 'flex'; });
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = imgSrc;
+                    downloadLink.download = `ai-creation-${Date.now()}-${index}.png`;
+                    downloadLink.className = 'absolute bottom-2 right-2 bg-black/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80';
+                    downloadLink.title = '下载图片';
+                    downloadLink.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
+                    
+                    container.appendChild(img);
+                    container.appendChild(downloadLink);
+                    gallery.appendChild(container);
                 });
             }
 
             function showError(message) {
                 errorMessage.textContent = message;
-                placeholderText.classList.remove('hidden');
-                gallery.classList.add('hidden');
+                if(placeholderText) {
+                     placeholderText.classList.remove('hidden');
+                }
+                if(gallery){
+                    gallery.classList.add('hidden');
+                }
             }
+
+            generateBtn.addEventListener('click', async () => {
+                showLoading(true);
+                let englishPrompt = finalPromptInput.value.trim();
+                const negativePrompt = document.getElementById('pg-negative-prompt').value;
+                if (!englishPrompt) {
+                    showError("指令输入框不能为空！");
+                    showLoading(false);
+                    return;
+                }
+                try {
+                    const response = await fetch(`/api/replicate-image`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            prompt: englishPrompt,
+                            negative_prompt: negativePrompt 
+                        })
+                    });
+                    if (!response.ok) {
+                        const err = await response.json();
+                        throw new Error(err.error || `Image API Error: ${response.status}`);
+                    }
+                    const result = await response.json();
+                    pgDisplayGallery(result);
+                } catch (error) {
+                    console.error("Image generation error:", error);
+                    showError(error.message || "未知错误，请检查控制台日志。");
+                } finally {
+                    showLoading(false);
+                }
+            });
         }
     </script>
 </body>
