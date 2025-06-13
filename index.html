@@ -33,7 +33,7 @@
         .content-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-bottom: 50px; }
         .card { background: rgba(42, 42, 60, 0.7); border-radius: 16px; overflow: hidden; transition: all 0.4s ease; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25); position: relative; }
         .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(108, 99, 255, 0.35); }
-        .card-media-container { height: 250px; overflow: hidden; position: relative; cursor: pointer; }
+        .card-media-container { height: 250px; overflow: hidden; position: relative; cursor: pointer; background-color: #0d0d1a;}
         .card-media-container img, .card-media-container video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
         .card:hover .card-media-container img, .card:hover .card-media-container video { transform: scale(1.1); }
         .card-info { padding: 20px; }
@@ -124,40 +124,10 @@
         </div>
 
         <div id="prompt-generator" class="page">
-            <div class="space-y-8">
-                <div id="pg-builder-container" class="pg-section-container">
-                    <div class="space-y-6">
-                        <div><div class="pg-section-title">1. 画质与风格</div><div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4"><div><div class="pg-category-title">艺术风格 (单选)</div><div class="flex flex-wrap" data-group="style"></div></div><div><div class="pg-category-title">图像质量</div><div class="flex flex-wrap" data-group="quality"></div></div></div></div>
-                        <div><div class="pg-section-title">2. 人物与气质</div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4"><div><div class="pg-category-title">气质类型</div><div class="flex flex-wrap" data-group="temperament"></div></div><div><div class="pg-category-title">面部特征</div><div class="flex flex-wrap" data-group="face"></div></div><div><div class="pg-category-title">发型</div><div class="flex flex-wrap" data-group="hair"></div></div><div><div class="pg-category-title">穿着服饰</div><div class="flex flex-wrap" data-group="clothing"></div></div></div></div>
-                        <div><div class="pg-section-title">3. 场景与光影</div><div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4"><div><div class="pg-category-title">地点/背景</div><div class="flex flex-wrap" data-group="scene"></div></div><div><div class="pg-category-title">环境光与氛围</div><div class="flex flex-wrap" data-group="lighting"></div></div></div></div>
-                        <div><div class="pg-section-title">4. 镜头语言</div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4"><div><div class="pg-category-title">景别与构图</div><div class="flex flex-wrap" data-group="composition"></div></div><div><div class="pg-category-title">视角与透视</div><div class="flex flex-wrap" data-group="angle"></div></div><div><div class="pg-category-title">相机与景深</div><div class="flex flex-wrap" data-group="camera"></div></div><div><div class="pg-category-title">色彩与动感</div><div class="flex flex-wrap" data-group="color_motion"></div></div></div></div>
-                    </div>
-                </div>
-                <div class="pg-section-container">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold text-indigo-400">最终指令 (可编辑)</h2>
-                        <div class="flex items-center space-x-4">
-                            <button id="pg-inspire-button" class="pg-gemini-button">✨ 随机灵感</button>
-                            <button id="pg-enrich-button" class="pg-gemini-button" title="使用AI丰富细节">✨ 丰富</button>
-                            <button id="pg-clear-button" class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button>
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <textarea id="pg-final-prompt-input" rows="6" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="可直接在此输入，或通过上方引导模式构建..."></textarea>
-                        <button id="pg-copy-button-en" class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="复制英文指令"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button>
-                    </div>
-                    <div class="mt-4"><h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3><input id="pg-negative-prompt" type="text" class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono" value="ng_deepnegative_v1_75t, (worst quality, low quality:1.4), (bad anatomy), (inaccurate limb:1.2), bad hands, extra fingers, (realistic, 3d:1.3), man, boy, blurry, simple background, text, watermark"></div>
-                </div>
-                <div class="pg-section-container">
-                    <h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2>
-                    <button id="pg-generate-button" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50"><svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>生成杰作 (一次4张)</button>
-                    <div id="pg-gallery-container" class="mt-4 w-full aspect-video bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-700 min-h-[300px]">
-                        <div id="pg-placeholder-text" class="text-gray-500 text-center"><p class="text-lg">艺术品，即将诞生</p><p class="text-sm">请开始你的创作</p></div>
-                        <div id="pg-loader" class="pg-loader hidden"></div>
-                        <div id="pg-image-gallery" class="w-full h-full grid grid-cols-2 md:grid-cols-4 gap-2 p-2 hidden"></div>
-                    </div>
-                    <div id="pg-error-message" class="mt-2 text-red-400 text-sm text-center font-semibold"></div>
-                </div>
+             <div class="space-y-8">
+                <div id="pg-builder-container" class="pg-section-container"><div class="space-y-6"><div><div class="pg-section-title">1. 画质与风格</div><div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4"><div><div class="pg-category-title">艺术风格 (单选)</div><div class="flex flex-wrap" data-group="style"></div></div><div><div class="pg-category-title">图像质量</div><div class="flex flex-wrap" data-group="quality"></div></div></div></div><div><div class="pg-section-title">2. 人物与气质</div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4"><div><div class="pg-category-title">气质类型</div><div class="flex flex-wrap" data-group="temperament"></div></div><div><div class="pg-category-title">面部特征</div><div class="flex flex-wrap" data-group="face"></div></div><div><div class="pg-category-title">发型</div><div class="flex flex-wrap" data-group="hair"></div></div><div><div class="pg-category-title">穿着服饰</div><div class="flex flex-wrap" data-group="clothing"></div></div></div></div><div><div class="pg-section-title">3. 场景与光影</div><div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4"><div><div class="pg-category-title">地点/背景</div><div class="flex flex-wrap" data-group="scene"></div></div><div><div class="pg-category-title">环境光与氛围</div><div class="flex flex-wrap" data-group="lighting"></div></div></div></div><div><div class="pg-section-title">4. 镜头语言</div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4"><div><div class="pg-category-title">景别与构图</div><div class="flex flex-wrap" data-group="composition"></div></div><div><div class="pg-category-title">视角与透视</div><div class="flex flex-wrap" data-group="angle"></div></div><div><div class="pg-category-title">相机与景深</div><div class="flex flex-wrap" data-group="camera"></div></div><div><div class="pg-category-title">色彩与动感</div><div class="flex flex-wrap" data-group="color_motion"></div></div></div></div></div></div>
+                <div class="pg-section-container"><div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-bold text-indigo-400">最终指令 (可编辑)</h2><div class="flex items-center space-x-4"><button id="pg-inspire-button" class="pg-gemini-button">✨ 随机灵感</button><button id="pg-enrich-button" class="pg-gemini-button" title="使用AI丰富细节">✨ 丰富</button><button id="pg-clear-button" class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button></div></div><div class="relative"><textarea id="pg-final-prompt-input" rows="6" class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition" placeholder="可直接在此输入，或通过上方引导模式构建..."></textarea><button id="pg-copy-button-en" class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="复制英文指令"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg></button></div><div class="mt-4"><h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3><input id="pg-negative-prompt" type="text" class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono" value="ng_deepnegative_v1_75t,(badhandv4:1.2),EasyNegative,(worst quality:2),"></div></div>
+                <div class="pg-section-container"><h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2><button id="pg-generate-button" class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50"><svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>生成杰作 (一次4张)</button><div id="pg-gallery-container" class="mt-4 w-full aspect-video bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-700 min-h-[300px]"><div id="pg-placeholder-text" class="text-gray-500 text-center"><p class="text-lg">艺术品，即将诞生</p><p class="text-sm">请开始你的创作</p></div><div id="pg-loader" class="pg-loader hidden"></div><div id="pg-image-gallery" class="w-full h-full grid grid-cols-2 md:grid-cols-4 gap-2 p-2 hidden"></div></div><div id="pg-error-message" class="mt-2 text-red-400 text-sm text-center font-semibold"></div></div>
             </div>
         </div>
         
@@ -413,6 +383,7 @@
 
             let db = [];
             let renderFunc = () => {};
+            let storageKey = `${dbKey}DB`;
             
             if (dbKey === 'image') {
                 imageDB = imageDB.filter(item => item.id !== id);
@@ -428,7 +399,7 @@
                 renderFunc = renderMusic;
             }
             
-            localStorage.setItem(`${dbKey}DB`, JSON.stringify(db));
+            localStorage.setItem(storageKey, JSON.stringify(db));
             renderFunc();
         }
         
@@ -699,33 +670,12 @@
             });
 
             async function callTextAPI(prompt, button) {
-                const originalText = button.innerHTML;
-                button.innerHTML = '<div class="pg-spinner-sm"></div>';
-                button.disabled = true;
-                errorMessage.textContent = '';
-                try {
-                    const response = await fetch(`/api/replicate-text`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt: prompt })
-                    });
-                    if (!response.ok) {
-                        const err = await response.json();
-                        throw new Error(err.error || `Text API Error: ${response.status}`);
-                    }
-                    const result = await response.json();
-                    return result.text;
-                } catch (error) {
-                    showError(error.message);
-                    return null;
-                } finally {
-                    button.innerHTML = originalText;
-                    button.disabled = false;
-                }
+                alert("此功能正在等待接入新的文本API。");
+                return null;
             }
             
             inspireBtn.addEventListener('click', async () => {
-                const prompt = "Generate a creative, highly detailed, and visually stunning English prompt for an AI image generator. The subject can be anything, not just a beautiful woman. The prompt should be a single, continuous string of keywords and phrases, describing the subject, a unique and interesting scene, the atmosphere, and specific lighting and camera details. Do not use any line breaks.";
+                const prompt = "Generate a creative, highly detailed, and visually stunning English prompt for an AI image generator...";
                 const inspiration = await callTextAPI(prompt, inspireBtn);
                 if (inspiration) {
                     finalPromptInput.value = inspiration;
@@ -736,7 +686,7 @@
             enrichBtn.addEventListener('click', async () => {
                 let currentPrompt = finalPromptInput.value.trim();
                 if (!currentPrompt) return;
-                const prompt = `Take the following AI image generator prompt and make it more detailed, vivid, and artistic. Add more specific details about the subject's expression, the background, the atmosphere, and the lighting. Return only the enhanced prompt as a single, continuous string of keywords and phrases. Do not use any line breaks. The prompt to enhance is: "${currentPrompt}"`;
+                const prompt = `Take the following AI image generator prompt and make it more detailed...`;
                 const enrichment = await callTextAPI(prompt, enrichBtn);
                 if (enrichment) {
                     finalPromptInput.value = enrichment;
@@ -854,30 +804,83 @@
                 }
             }
 
-            generateBtn.addEventListener('click', async () => {
+            async function pollForResult(generateUuid) {
+                const maxAttempts = 20;
+                const interval = 3000;
+                for (let i = 0; i < maxAttempts; i++) {
+                    await new Promise(resolve => setTimeout(resolve, interval));
+                    try {
+                        const response = await fetch(`/api/liblib-image`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ generateUuid: generateUuid })
+                        });
+                        if (!response.ok) continue;
+                        const result = await response.json();
+                        if (result.data && result.data.generateStatus === 5) {
+                            if (result.data.images && result.data.images.length > 0) {
+                                return result.data.images.map(img => img.imageUrl);
+                            } else {
+                                throw new Error("任务成功但未返回图片。");
+                            }
+                        } else if (result.data && result.data.generateStatus < 5) {
+                            console.log(`Polling... status: ${result.data.generateStatus}`);
+                        } else {
+                            throw new Error(result.data.generateMsg || "生成任务失败。");
+                        }
+                    } catch (error) {
+                        throw error;
+                    }
+                }
+                throw new Error("任务超时，请稍后再试。");
+            }
+
+            generateBtn.addEventListener("click", async () => {
                 showLoading(true);
-                let englishPrompt = finalPromptInput.value.trim();
-                const negativePrompt = document.getElementById('pg-negative-prompt').value;
+                const englishPrompt = finalPromptInput.value.trim();
+                const negativePrompt = document.getElementById("pg-negative-prompt").value;
+
                 if (!englishPrompt) {
                     showError("指令输入框不能为空！");
                     showLoading(false);
                     return;
                 }
+
                 try {
-                    const response = await fetch(`/api/replicate-image`, {
+                    const initialPayload = {
+                        generateParams: {
+                            prompt: englishPrompt,
+                            negativePrompt: negativePrompt,
+                            width: 1024,
+                            height: 1024,
+                            imgCount: 4,
+                            seed: -1,
+                            sampler: 15,
+                            steps: 20,
+                            cfgScale: 7
+                        }
+                    };
+                    
+                    const initialResponse = await fetch(`/api/liblib-image`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ 
-                            prompt: englishPrompt,
-                            negative_prompt: negativePrompt 
-                        })
+                        body: JSON.stringify(initialPayload)
                     });
-                    if (!response.ok) {
-                        const err = await response.json();
-                        throw new Error(err.error || `Image API Error: ${response.status}`);
+
+                    if (!initialResponse.ok) {
+                        const err = await initialResponse.json();
+                        throw new Error(err.error || `提交任务失败: ${initialResponse.status}`);
                     }
-                    const result = await response.json();
-                    pgDisplayGallery(result);
+
+                    const initialResult = await initialResponse.json();
+                    if (initialResult.code !== 0 || !initialResult.data.generateUuid) {
+                        throw new Error(initialResult.msg || "未能获取任务UUID。");
+                    }
+                    
+                    const generateUuid = initialResult.data.generateUuid;
+                    const imageUrls = await pollForResult(generateUuid);
+                    pgDisplayGallery(imageUrls);
+
                 } catch (error) {
                     console.error("Image generation error:", error);
                     showError(error.message || "未知错误，请检查控制台日志。");
