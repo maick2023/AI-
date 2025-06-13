@@ -4,13 +4,17 @@
   publish = "/"
   functions = "netlify/functions"
 
-# [functions] 部分不再包含 timeout
+# 基础的函数配置
 [functions]
   node_bundler = "esbuild"
 
-# 新增！这是为所有函数设置超时的正确格式
-[functions."*"]
-  timeout = 60 # 将超时时间延长到 60 秒
+# 新方法：只为会超时的 huggingface-image 函数单独设置超时
+[functions.huggingface-image]
+  timeout = 60 # 将这个函数的超时时间延长到 60 秒
+
+# 为AI对话功能也设置一个长一点的超时，以防万一
+[functions.gemini]
+  timeout = 30 # 将这个函数的超时时间延长到 30 秒
 
 [[redirects]]
   from = "/api/*"
