@@ -2,7 +2,7 @@
 const crypto = require('crypto');
 
 // LiblibAI API 的主域名，请根据官方文档确认，这里使用通用地址
-const API_HOST = 'https://api.liblibai.com';
+const API_HOST = 'https://openapi.liblibai.cloud';
 
 // 签名生成函数
 function getSignature(uri, timestamp, nonce, secretKey) {
