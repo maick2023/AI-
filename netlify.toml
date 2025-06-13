@@ -4,9 +4,13 @@
   publish = "/"
   functions = "netlify/functions"
 
+# [functions] 部分不再包含 timeout
 [functions]
   node_bundler = "esbuild"
 
+# 新增！这是为所有函数设置超时的正确格式
+[functions."*"]
+  timeout = 60 # 将超时时间延长到 60 秒
 
 [[redirects]]
   from = "/api/*"
