@@ -30,8 +30,8 @@ exports.handler = async (event) => {
             req_key: "jimeng_high_aes_general_v21_L",
             prompt: body.prompt,
             negative_prompt: body.negativePrompt || "",
-            // 关键修正！添加了这一行，以传递图片数量
-            imgCount: body.n || 1, 
+            // 最终修正：根据API返回日志，使用正确的参数名 n_samples
+            n_samples: body.n || 1, 
             seed: body.seed || -1,
             width: 512,
             height: 512,
@@ -103,7 +103,7 @@ exports.handler = async (event) => {
             },
             body: requestBody
         });
-        
+
         const result = await response.json();
 
         if (result.code !== 10000 && result.ResponseMetadata?.Error) {
