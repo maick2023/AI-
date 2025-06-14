@@ -611,7 +611,6 @@
             
             const selectedTags = new Map();
             const finalPromptInput = document.getElementById('pg-final-prompt-input');
-            const copyBtnEn = document.getElementById('pg-copy-button-en');
             const generateBtn = document.getElementById('pg-generate-button');
             const clearBtn = document.getElementById('pg-clear-button');
             const inspireBtn = document.getElementById('pg-inspire-button');
@@ -702,7 +701,7 @@
                 });
             }
 
-            pgSetupCopyButton(copyBtnEn, finalPromptInput);
+            pgSetupCopyButton(document.getElementById('pg-copy-button-en'), finalPromptInput);
             
             lightbox.addEventListener('click', () => {
                 lightbox.style.display = 'none';
@@ -771,30 +770,22 @@
                     return;
                 }
                 
-                gallery.className = `w-full h-full grid grid-cols-1 md:grid-cols-2 gap-2 p-2`;
-                if(imageUrls.length > 1) {
-                    gallery.classList.add('md:grid-cols-2');
-                }
-                if(imageUrls.length > 2) {
-                     gallery.classList.add('grid-cols-2');
-                }
+                let gridColsClass = 'grid-cols-1';
+                if (imageUrls.length === 2) gridColsClass = 'grid-cols-2';
+                if (imageUrls.length >= 3) gridColsClass = 'grid-cols-2 md:grid-cols-4';
+                gallery.className = `w-full h-full grid ${gridColsClass} gap-2 p-2`;
 
                 imageUrls.forEach((imgSrc, index) => {
                     const container = document.createElement('div');
                     container.className = 'relative group w-full h-full';
-                    const img = document.createElement('img');
-                    img.src = imgSrc;
-                    img.className = 'w-full h-full object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity';
-                    img.addEventListener('click', () => { lightboxImage.src = imgSrc; lightbox.style.display = 'flex'; });
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = imgSrc;
-                    downloadLink.download = `ai-creation-${Date.now()}-${index}.png`;
-                    downloadLink.className = 'absolute bottom-2 right-2 bg-black/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80';
-                    downloadLink.title = '下载图片';
-                    downloadLink.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
-                    
-                    container.appendChild(img);
-                    container.appendChild(downloadLink);
+                    const filename = `ai-creation-${Date.now()}-${index}.png`;
+                    container.innerHTML = `
+                        <img src="${imgSrc}" class="w-full h-full object-cover rounded-md cursor-pointer group-hover:opacity-80 transition-opacity" onclick="lightboxImage.src='${imgSrc}'; lightbox.style.display='flex';">
+                        <div class="card-actions">
+                            <button onclick="addImageToGalleryFromUrl('${imgSrc}', this)" class="action-btn" title="添加到作品图库" style="background-color: var(--primary);"><i class="fas fa-plus"></i></button>
+                            <button onclick="downloadImageFromUrl('${imgSrc}', '${filename}')" class="action-btn download-btn" title="下载图片"><i class="fas fa-download"></i></button>
+                        </div>
+                    `;
                     gallery.appendChild(container);
                 });
             }
@@ -806,6 +797,66 @@
                 }
                 if(gallery){
                     gallery.classList.add('hidden');
+                }
+            }
+            
+            async function convertUrlToDataURL(url) {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(blob);
+                });
+            }
+
+            async function downloadImageFromUrl(url, filename) {
+                try {
+                    const response = await fetch(url);
+                    const blob = await response.blob();
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(blobUrl);
+                    a.remove();
+                } catch (e) {
+                    console.error("Download failed:", e);
+                    window.open(url, '_blank');
+                }
+            }
+
+            async function addImageToGalleryFromUrl(imgSrc, buttonEl) {
+                const originalIcon = buttonEl.innerHTML;
+                buttonEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                try {
+                    const dataUrl = await convertUrlToDataURL(imgSrc);
+                    const newImage = { 
+                        id: Date.now() + Math.random(), 
+                        name: `AI作品-${Date.now()}.png`, 
+                        src: dataUrl, 
+                        description: "AI生成于创意工坊" 
+                    };
+                    imageDB.unshift(newImage);
+                    localStorage.setItem('imageDB', JSON.stringify(imageDB));
+                    buttonEl.innerHTML = '<i class="fas fa-check"></i>';
+                    buttonEl.style.backgroundColor = 'var(--success)';
+                    if(document.getElementById('gallery-grid')) {
+                       renderImageGallery();
+                    }
+                } catch (e) {
+                    console.error("Failed to add image to gallery:", e);
+                    alert("添加到图库失败！");
+                    buttonEl.innerHTML = '<i class="fas fa-times"></i>';
+                } finally {
+                    setTimeout(() => {
+                        buttonEl.innerHTML = originalIcon;
+                        buttonEl.style.backgroundColor = '';
+                    }, 2000);
                 }
             }
 
