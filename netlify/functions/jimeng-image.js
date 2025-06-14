@@ -30,6 +30,7 @@ exports.handler = async (event) => {
             req_key: "jimeng_high_aes_general_v21_L",
             prompt: body.prompt,
             negative_prompt: body.negativePrompt || "",
+            imgCount: body.n || 1,
             seed: body.seed || -1,
             width: 512,
             height: 512,
