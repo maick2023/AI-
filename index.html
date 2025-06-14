@@ -779,7 +779,6 @@
                      gallery.classList.add('grid-cols-2');
                 }
 
-
                 imageUrls.forEach((imgSrc, index) => {
                     const container = document.createElement('div');
                     container.className = 'relative group w-full h-full';
@@ -810,12 +809,11 @@
                 }
             }
 
-            // LiblibAI轮询函数
             async function pollForLiblibResult(generateUuid) {
-                const maxAttempts = 40; // 增加轮询次数
+                const maxAttempts = 40; 
                 const interval = 3000;
                 for (let i = 0; i < maxAttempts; i++) {
-                    showError(`正在生成图片... (${i * 3}秒)`);
+                    showError(`正在向 LiblibAI 查询结果... (${i * 3}秒)`);
                     await new Promise(resolve => setTimeout(resolve, interval));
                     try {
                         const response = await fetch(`/api/liblib-image`, {
@@ -828,7 +826,7 @@
                         if (result.data && result.data.generateStatus === 5) {
                             if (result.data.images && result.data.images.length > 0) {
                                 return result.data.images.map(img => img.imageUrl);
-                            } else { throw new Error("任务成功但未返回图片。"); }
+                            } else { throw new Error("LiblibAI任务成功但未返回图片。"); }
                         } else if (result.data && result.data.generateStatus < 5) {
                             console.log(`Polling Liblib... status: ${result.data.generateStatus}`);
                         } else { throw new Error(result.data.generateMsg || "Liblib任务失败。"); }
@@ -892,10 +890,10 @@
                             throw new Error(err.error || `提交任务失败: ${response.status}`);
                         }
                         const result = await response.json();
-                        if (result.data && result.data.length > 0 && result.data[0].url) {
-                            imageUrls = result.data.map(item => item.url);
+                        if (result.data && result.data.image_urls && result.data.image_urls.length > 0) {
+                            imageUrls = result.data.image_urls;
                         } else {
-                            throw new Error(result.msg || "API返回数据格式不正确或没有图片URL。");
+                            throw new Error(result.message || "API返回数据格式不正确或没有图片URL。");
                         }
                     }
                     pgDisplayGallery(imageUrls);
