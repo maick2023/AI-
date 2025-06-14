@@ -21,7 +21,7 @@ exports.handler = async (event) => {
         const accessKeyId = process.env.JIMENG_ACCESS_KEY_ID;
         const secretAccessKey = process.env.JIMENG_SECRET_ACCESS_KEY;
         if (!accessKeyId || !secretAccessKey) {
-            return { statusCode: 500, body: JSON.stringify({ error: "服务器未配置即梦API的密钥" }) };
+            return { statusCode: 500, body: JSON.stringify({ error: "服务器未配置即梦API的AccessKey或SecretKey" }) };
         }
 
         // --- 准备请求参数和元数据 ---
@@ -30,7 +30,8 @@ exports.handler = async (event) => {
             req_key: "jimeng_high_aes_general_v21_L",
             prompt: body.prompt,
             negative_prompt: body.negativePrompt || "",
-            imgCount: body.n || 1,
+            // 关键修正！添加了这一行，以传递图片数量
+            imgCount: body.n || 1, 
             seed: body.seed || -1,
             width: 512,
             height: 512,
@@ -38,8 +39,8 @@ exports.handler = async (event) => {
             return_url: true
         });
 
-        const service = "cv"; // 根据文档，服务固定为cv
-        const region = "cn-north-1"; // 根据文档，Region固定为cn-north-1
+        const service = "cv";
+        const region = "cn-north-1";
         const host = "visual.volcengineapi.com";
         const action = "CVProcess";
         const version = "2022-08-31";
@@ -102,11 +103,11 @@ exports.handler = async (event) => {
             },
             body: requestBody
         });
-
+        
         const result = await response.json();
 
-        if (result.code !== 10000) {
-            throw new Error(result.message || `API返回错误码: ${result.code}`);
+        if (result.code !== 10000 && result.ResponseMetadata?.Error) {
+             throw new Error(result.ResponseMetadata.Error.Message || `API返回错误码: ${result.ResponseMetadata.Error.CodeN}`);
         }
         
         return { statusCode: 200, body: JSON.stringify(result) };
