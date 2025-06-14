@@ -20,3 +20,12 @@
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+  # 新增这条规则来代理图片请求
+[[redirects]]
+  from = "/.netlify/images"
+  to = "https://images.unsplash.com" # 只是一个占位符，实际会动态替换
+  status = 200
+  force = true
+  [redirects.query]
+    url = ":url"

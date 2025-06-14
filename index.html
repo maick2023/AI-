@@ -590,372 +590,414 @@
         }
 
         // --- AI Prompt Generator ---
-        function initPromptGenerator() {
-            const promptData = {
-                style: { "逼真写实": "photorealistic", "二次元动漫": "anime", "CG渲染": "cg render", "油画质感": "oil painting", "水墨国风": "ink wash painting", "复古港风": "hong kong retro", "赛博朋克": "cyberpunk", "蒸汽朋克": "steampunk", "水彩": "watercolor", "素描": "sketch" },
-                quality: { "杰作": "masterpiece", "最佳质量": "best quality", "极其精细": "ultra-detailed", "8K画质": "8k", "逼真细节": "photorealistic details", "复杂细节": "intricate details" },
-                temperament: { "清冷御姐": "cold and elegant lady", "纯欲少女": "pure and seductive girl", "元气少女": "energetic girl", "书卷气": "scholarly", "赛博魅影": "cyber phantom", "复古女郎": "retro lady" },
-                face: { "精致脸庞": "delicate face", "鹅蛋脸": "oval face", "心形脸": "heart-shaped face", "桃花眼": "peach blossom eyes", "蓝色眼眸": "blue eyes", "微笑": "smile", "红唇": "red lips", "长睫毛": "long eyelashes", "无辜表情": "innocent expression", "泪痣": "tear mole", "水光唇釉": "glossy lips", "雀斑": "freckles" },
-                hair: { "及腰长发": "waist-length long hair", "银色长发": "silver long hair", "双马尾": "twintails", "麻花辫": "braids", "蓬松卷发": "fluffy curly hair", "飘逸的": "flowing hair", "绸缎黑发": "silky black hair", "铂金渐变挑染": "platinum ombre highlights", "湿发": "wet hair" },
-                clothing: { "白色连衣裙": "white dress", "丝绸旗袍": "silk cheongsam", "JK校服": "JK uniform", "哥特式长裙": "gothic long dress", "机能风外套": "techwear jacket", "婚纱": "wedding dress", "缎面吊带裙": "satin slip dress", "牛仔喇叭裤": "denim flare pants", "宽大男友衬衫": "oversized boyfriend shirt", "荧光纹身": "fluorescent tattoo", "翡翠耳坠": "jade earrings", "皮夹克": "leather jacket" },
-                dynamics: { "回头看": "looking back", "奔跑中": "running", "跳舞": "dancing", "沉思": "pondering", "害羞地笑": "shyly smiling", "自信地凝视": "confidently gazing", "咬唇思索": "biting lip and pondering", "撩发回眸": "flicking hair and looking back", "抱膝远眺": "hugging knees and gazing into the distance", "湿发贴颈": "wet hair sticking to neck", "动态抓拍": "dynamic action shot" },
-                scene: { "樱花树下": "under a cherry blossom tree", "未来都市": "futuristic city", "巴洛克城堡": "baroque castle", "海边": "seaside", "雨中街头": "rainy street", "图书馆": "library", "极光雪原": "aurora snowfield", "薰衣草田": "lavender field", "霓虹街巷": "neon alley", "地铁隧道": "subway tunnel", "天台夜景": "rooftop night view", "复古咖啡馆": "retro cafe", "音乐节后台": "backstage at a music festival" },
-                lighting: { "电影感光效": "cinematic lighting", "黄金时刻": "golden hour", "伦勃朗光": "Rembrandt lighting", "霓虹灯光": "neon light", "体积光": "volumetric light", "戏剧性阴影": "dramatic shadows", "丁达尔效应": "Tyndall effect", "晨光": "morning light", "夕阳": "sunset light", "柔焦光晕": "soft focus halo", "菲林颗粒": "film grain", "发丝轮廓光": "rim light on hair" },
-                composition: { "全身像": "full body shot", "半身像": "medium shot", "大特写": "extreme close-up", "脸部特写": "close-up", "远景": "long shot", "建环镜头": "establishing shot", "黄金分割": "golden ratio composition", "对称构图": "symmetrical composition", "三分法构图": "rule of thirds", "引导线构图": "leading lines", "画中画构图": "frame within a frame", "牛仔景别": "cowboy shot" },
-                angle: { "低角度": "low angle shot", "高角度": "high angle shot", "鸟瞰视角": "bird's-eye view", "仰视视角": "worm's-eye view", "荷兰角": "dutch angle", "单点透视": "one-point perspective", "大气透视": "atmospheric perspective" },
-                camera: { "85mm f/1.2": "85mm f/1.2 lens", "35mm 电影感": "35mm cinematic", "鱼眼镜头": "fisheye lens", "哈苏色彩": "Hasselblad natural colors", "富士胶片色彩": "Fujifilm film color", "浅景深": "shallow depth of field", "大景深": "deep depth of field" },
-                color_motion: { "鲜艳色彩": "vibrant colors", "单色调": "monochromatic", "对比色": "contrasting colors", "高饱和度": "highly saturated colors", "动态模糊": "motion blur", "摇摄": "panning shot"}
-            };
-            const styleKeywords = { 'photorealistic':'1girl', 'anime':'anime style, anime artwork, key visual, 1girl', 'cg render':'cgstation, 3d render, octane render, 1girl', 'oil painting':'oil painting, impressionistic, thick brush strokes, 1girl', 'ink wash painting':'Chinese ink painting, guofeng, traditional art, 1girl', 'hong kong retro':'cinematic film still, Hong Kong movie style, 1990s, kodak portra 400, 1girl', 'cyberpunk':'cyberpunk, futuristic, neon, night city, cinematic, 1girl', 'steampunk':'steampunk, victorian, gears, brass, 1girl', 'watercolor':'watercolor painting, vibrant, soft edges, paper texture, 1girl', 'sketch':'graphite pencil sketch, detailed, black and white, hatching, 1girl', 'default':'1girl' };
-            const colors = [ {bg:'bg-red-200',text:'text-red-800',ring:'ring-red-400'}, {bg:'bg-yellow-200',text:'text-yellow-800',ring:'ring-yellow-400'}, {bg:'bg-green-200',text:'text-green-800',ring:'ring-green-400'}, {bg:'bg-blue-200',text:'text-blue-800',ring:'ring-blue-400'}, {bg:'bg-indigo-200',text:'text-indigo-800',ring:'ring-indigo-400'}, {bg:'bg-purple-200',text:'text-purple-800',ring:'ring-purple-400'}, {bg:'bg-pink-200',text:'text-pink-800',ring:'ring-pink-400'}, {bg:'bg-teal-200',text:'text-teal-800',ring:'ring-teal-400'}, {bg:'bg-orange-200',text:'text-orange-800',ring:'ring-orange-400'} ];
-            
-            const selectedTags = new Map();
-            const finalPromptInput = document.getElementById('pg-final-prompt-input');
-            const generateBtn = document.getElementById('pg-generate-button');
-            const clearBtn = document.getElementById('pg-clear-button');
-            const inspireBtn = document.getElementById('pg-inspire-button');
-            const enrichBtn = document.getElementById('pg-enrich-button');
-            const gallery = document.getElementById('pg-image-gallery');
-            const placeholderText = document.getElementById('pg-placeholder-text');
-            const loader = document.getElementById('pg-loader');
-            const errorMessage = document.getElementById('pg-error-message');
-            const lightbox = document.getElementById('pg-lightbox');
-            const lightboxImage = document.getElementById('pg-lightbox-image');
-            const apiSelector = document.getElementById('api-selector');
-            const imageCountSelector = document.getElementById('image-count-selector');
+       // --- AI Prompt Generator ---
+function initPromptGenerator() {
+    // --- 数据和UI元素定义 (这部分保持不变) ---
+    const promptData = {
+        style: { "逼真写实": "photorealistic", "二次元动漫": "anime", "CG渲染": "cg render", "油画质感": "oil painting", "水墨国风": "ink wash painting", "复古港风": "hong kong retro", "赛博朋克": "cyberpunk", "蒸汽朋克": "steampunk", "水彩": "watercolor", "素描": "sketch" },
+        quality: { "杰作": "masterpiece", "最佳质量": "best quality", "极其精细": "ultra-detailed", "8K画质": "8k", "逼真细节": "photorealistic details", "复杂细节": "intricate details" },
+        temperament: { "清冷御姐": "cold and elegant lady", "纯欲少女": "pure and seductive girl", "元气少女": "energetic girl", "书卷气": "scholarly", "赛博魅影": "cyber phantom", "复古女郎": "retro lady" },
+        face: { "精致脸庞": "delicate face", "鹅蛋脸": "oval face", "心形脸": "heart-shaped face", "桃花眼": "peach blossom eyes", "蓝色眼眸": "blue eyes", "微笑": "smile", "红唇": "red lips", "长睫毛": "long eyelashes", "无辜表情": "innocent expression", "泪痣": "tear mole", "水光唇釉": "glossy lips", "雀斑": "freckles" },
+        hair: { "及腰长发": "waist-length long hair", "银色长发": "silver long hair", "双马尾": "twintails", "麻花辫": "braids", "蓬松卷发": "fluffy curly hair", "飘逸的": "flowing hair", "绸缎黑发": "silky black hair", "铂金渐变挑染": "platinum ombre highlights", "湿发": "wet hair" },
+        clothing: { "白色连衣裙": "white dress", "丝绸旗袍": "silk cheongsam", "JK校服": "JK uniform", "哥特式长裙": "gothic long dress", "机能风外套": "techwear jacket", "婚纱": "wedding dress", "缎面吊带裙": "satin slip dress", "牛仔喇叭裤": "denim flare pants", "宽大男友衬衫": "oversized boyfriend shirt", "荧光纹身": "fluorescent tattoo", "翡翠耳坠": "jade earrings", "皮夹克": "leather jacket" },
+        dynamics: { "回头看": "looking back", "奔跑中": "running", "跳舞": "dancing", "沉思": "pondering", "害羞地笑": "shyly smiling", "自信地凝视": "confidently gazing", "咬唇思索": "biting lip and pondering", "撩发回眸": "flicking hair and looking back", "抱膝远眺": "hugging knees and gazing into the distance", "湿发贴颈": "wet hair sticking to neck", "动态抓拍": "dynamic action shot" },
+        scene: { "樱花树下": "under a cherry blossom tree", "未来都市": "futuristic city", "巴洛克城堡": "baroque castle", "海边": "seaside", "雨中街头": "rainy street", "图书馆": "library", "极光雪原": "aurora snowfield", "薰衣草田": "lavender field", "霓虹街巷": "neon alley", "地铁隧道": "subway tunnel", "天台夜景": "rooftop night view", "复古咖啡馆": "retro cafe", "音乐节后台": "backstage at a music festival" },
+        lighting: { "电影感光效": "cinematic lighting", "黄金时刻": "golden hour", "伦勃朗光": "Rembrandt lighting", "霓虹灯光": "neon light", "体积光": "volumetric light", "戏剧性阴影": "dramatic shadows", "丁达尔效应": "Tyndall effect", "晨光": "morning light", "夕阳": "sunset light", "柔焦光晕": "soft focus halo", "菲林颗粒": "film grain", "发丝轮廓光": "rim light on hair" },
+        composition: { "全身像": "full body shot", "半身像": "medium shot", "大特写": "extreme close-up", "脸部特写": "close-up", "远景": "long shot", "建环镜头": "establishing shot", "黄金分割": "golden ratio composition", "对称构图": "symmetrical composition", "三分法构图": "rule of thirds", "引导线构图": "leading lines", "画中画构图": "frame within a frame", "牛仔景别": "cowboy shot" },
+        angle: { "低角度": "low angle shot", "高角度": "high angle shot", "鸟瞰视角": "bird's-eye view", "仰视视角": "worm's-eye view", "荷兰角": "dutch angle", "单点透视": "one-point perspective", "大气透视": "atmospheric perspective" },
+        camera: { "85mm f/1.2": "85mm f/1.2 lens", "35mm 电影感": "35mm cinematic", "鱼眼镜头": "fisheye lens", "哈苏色彩": "Hasselblad natural colors", "富士胶片色彩": "Fujifilm film color", "浅景深": "shallow depth of field", "大景深": "deep depth of field" },
+        color_motion: { "鲜艳色彩": "vibrant colors", "单色调": "monochromatic", "对比色": "contrasting colors", "高饱和度": "highly saturated colors", "动态模糊": "motion blur", "摇摄": "panning shot"}
+    };
+    const styleKeywords = { 'photorealistic':'1girl', 'anime':'anime style, anime artwork, key visual, 1girl', 'cg render':'cgstation, 3d render, octane render, 1girl', 'oil painting':'oil painting, impressionistic, thick brush strokes, 1girl', 'ink wash painting':'Chinese ink painting, guofeng, traditional art, 1girl', 'hong kong retro':'cinematic film still, Hong Kong movie style, 1990s, kodak portra 400, 1girl', 'cyberpunk':'cyberpunk, futuristic, neon, night city, cinematic, 1girl', 'steampunk':'steampunk, victorian, gears, brass, 1girl', 'watercolor':'watercolor painting, vibrant, soft edges, paper texture, 1girl', 'sketch':'graphite pencil sketch, detailed, black and white, hatching, 1girl', 'default':'1girl' };
+    const colors = [ {bg:'bg-red-200',text:'text-red-800',ring:'ring-red-400'}, {bg:'bg-yellow-200',text:'text-yellow-800',ring:'ring-yellow-400'}, {bg:'bg-green-200',text:'text-green-800',ring:'ring-green-400'}, {bg:'bg-blue-200',text:'text-blue-800',ring:'ring-blue-400'}, {bg:'bg-indigo-200',text:'text-indigo-800',ring:'ring-indigo-400'}, {bg:'bg-purple-200',text:'text-purple-800',ring:'ring-purple-400'}, {bg:'bg-pink-200',text:'text-pink-800',ring:'ring-pink-400'}, {bg:'bg-teal-200',text:'text-teal-800',ring:'ring-teal-400'}, {bg:'bg-orange-200',text:'text-orange-800',ring:'ring-orange-400'} ];
+    
+    const selectedTags = new Map();
+    const finalPromptInput = document.getElementById('pg-final-prompt-input');
+    const generateBtn = document.getElementById('pg-generate-button');
+    const clearBtn = document.getElementById('pg-clear-button');
+    const inspireBtn = document.getElementById('pg-inspire-button');
+    const enrichBtn = document.getElementById('pg-enrich-button');
+    const gallery = document.getElementById('pg-image-gallery');
+    const placeholderText = document.getElementById('pg-placeholder-text');
+    const loader = document.getElementById('pg-loader');
+    const errorMessage = document.getElementById('pg-error-message');
+    const lightbox = document.getElementById('pg-lightbox');
+    const lightboxImage = document.getElementById('pg-lightbox-image');
+    const apiSelector = document.getElementById('api-selector');
+    const imageCountSelector = document.getElementById('image-count-selector');
 
-            for (const group in promptData) {
-                const container = document.querySelector(`div[data-group="${group}"]`);
-                if (container) {
-                    Object.keys(promptData[group]).forEach((tagText, index) => {
-                        const tagEl = document.createElement('span');
-                        tagEl.className = 'pg-prompt-tag';
-                        tagEl.textContent = tagText;
-                        tagEl.dataset.value = tagText;
-                        tagEl.dataset.group = group;
-                        const color = colors[index % colors.length];
-                        tagEl.classList.add(color.bg, color.text);
-                        tagEl.dataset.ringColor = color.ring;
-                        container.appendChild(tagEl);
-                    });
-                }
-            }
-            
-            pgUpdateOutput();
-
-            document.getElementById('pg-builder-container').addEventListener('click', (e) => {
-                if (e.target.classList.contains('pg-prompt-tag')) {
-                    const { value, group, ringColor } = e.target.dataset;
-                    if (group === 'style') {
-                        const currentActive = document.querySelector(`[data-group="style"].active`);
-                        if (currentActive) {
-                            currentActive.classList.remove('active', currentActive.dataset.ringColor);
-                        }
-                        if (currentActive?.dataset.value !== value) {
-                            e.target.classList.add('active', ringColor);
-                            selectedTags.set('style', value);
-                        } else {
-                            selectedTags.delete('style');
-                        }
-                    } else {
-                        const currentGroupTags = new Set(selectedTags.get(group) || []);
-                        if (currentGroupTags.has(value)) {
-                            currentGroupTags.delete(value);
-                            e.target.classList.remove('active', ringColor);
-                        } else {
-                            currentGroupTags.add(value);
-                            e.target.classList.add('active', ringColor);
-                        }
-                        selectedTags.set(group, Array.from(currentGroupTags));
-                    }
-                    pgUpdateOutput(true);
-                }
-            });
-            
-            finalPromptInput.addEventListener('input', () => {
-                generateBtn.disabled = finalPromptInput.value.trim() === '';
-            });
-
-            clearBtn.addEventListener('click', () => {
-                document.querySelectorAll('.pg-prompt-tag.active').forEach(tag => {
-                    tag.classList.remove('active', tag.dataset.ringColor);
-                });
-                selectedTags.clear();
-                pgUpdateOutput(true);
-                gallery.innerHTML = '';
-                gallery.classList.add('hidden');
-                placeholderText.classList.remove('hidden');
-            });
-            
-            inspireBtn.addEventListener('click', () => alert("此功能正在开发中。"));
-            enrichBtn.addEventListener('click', () => alert("此功能正在开发中。"));
-
-            function pgSetupCopyButton(button, textarea) {
-                button.addEventListener('click', () => {
-                    if (!textarea.value) return;
-                    navigator.clipboard.writeText(textarea.value).then(() => {
-                        const originalIcon = button.innerHTML;
-                        button.innerHTML = `<svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
-                        setTimeout(() => { button.innerHTML = originalIcon; }, 2000);
-                    }).catch(err => console.error("Copy failed", err));
-                });
-            }
-
-            pgSetupCopyButton(document.getElementById('pg-copy-button-en'), finalPromptInput);
-            
-            lightbox.addEventListener('click', () => {
-                lightbox.style.display = 'none';
-            });
-
-            function pgUpdateOutput(fromSelection = false) {
-                if (fromSelection) {
-                    const styleZh = selectedTags.get('style');
-                    if (!styleZh) {
-                        finalPromptInput.value = '';
-                    } else {
-                        const translate = (group) => (selectedTags.get(group) || []).map(key => promptData[group][key]);
-                        const styleEn = promptData.style[styleZh];
-                        const coreStyle = styleKeywords[styleEn];
-                        let promptEnParts = [];
-                        const qualityEn = translate('quality');
-                        promptEnParts.push(`(${(qualityEn.join(', ') || 'masterpiece, best quality')}, ${coreStyle})`);
-                        const sceneEn = translate('scene');
-                        if (sceneEn.length > 0) promptEnParts.push(`((${sceneEn.join(' and ')} scene:1.5))`);
-                        const temperamentEn = translate('temperament');
-                        const faceEn = translate('face');
-                        const hairEn = translate('hair');
-                        const clothingEn = translate('clothing');
-                        const dynamicsEn = translate('dynamics');
-                        const compositionEn = translate('composition');
-                        let characterDetailsEn = [...temperamentEn, ...faceEn, ...hairEn, ...dynamicsEn];
-                        let characterStr = `((${compositionEn.join(', ') || 'medium shot'} of a beautiful woman`;
-                        if (characterDetailsEn.length > 0) characterStr += ` with ${characterDetailsEn.join(' and ')}`;
-                        if (clothingEn.length > 0) characterStr += `, wearing ${clothingEn.join(' and ')}`;
-                        characterStr += `))`;
-                        promptEnParts.push(characterStr);
-                        const lightingEn = translate('lighting');
-                        if (lightingEn.length > 0) promptEnParts.push(`((${lightingEn.join(' and ')} lighting)):1.2`);
-                        const angleEn = translate('angle');
-                        const cameraEn = translate('camera');
-                        const colorMotionEn = translate('color_motion');
-                        const lensDetailsEn = [...angleEn, ...cameraEn, ...colorMotionEn];
-                        if (lensDetailsEn.length > 0) promptEnParts.push(`((${lensDetailsEn.join(', ')})):1.1`);
-                        finalPromptInput.value = promptEnParts.join(', ');
-                    }
-                }
-                generateBtn.disabled = finalPromptInput.value.trim() === '';
-            }
-
-            function showLoading(isLoading) {
-                generateBtn.disabled = isLoading;
-                if (isLoading) {
-                    generateBtn.classList.add('opacity-70');
-                    loader.classList.remove('hidden');
-                    placeholderText.classList.add('hidden');
-                    gallery.classList.add('hidden');
-                    errorMessage.textContent = '';
-                } else {
-                    generateBtn.disabled = finalPromptInput.value.trim() === '';
-                    loader.classList.add('hidden');
-                }
-            }
-
-            function pgDisplayGallery(imageUrls) {
-                gallery.innerHTML = ''; 
-                gallery.classList.remove('hidden');
-                placeholderText.classList.add('hidden');
-                
-                if (!imageUrls || imageUrls.length === 0) {
-                    showError("API 未能返回有效图片。");
-                    return;
-                }
-                
-                let gridColsClass = 'grid-cols-1';
-                if (imageUrls.length === 2) gridColsClass = 'grid-cols-2';
-                if (imageUrls.length >= 3) gridColsClass = 'grid-cols-2 md:grid-cols-4';
-                gallery.className = `w-full h-full grid ${gridColsClass} gap-2 p-2`;
-
-                imageUrls.forEach((imgSrc, index) => {
-                    const container = document.createElement('div');
-                    container.className = 'relative group w-full h-full';
-                    const filename = `ai-creation-${Date.now()}-${index}.png`;
-                    container.innerHTML = `
-                        <img src="${imgSrc}" class="w-full h-full object-cover rounded-md cursor-pointer group-hover:opacity-80 transition-opacity" onclick="lightboxImage.src='${imgSrc}'; lightbox.style.display='flex';">
-                        <div class="card-actions">
-                            <button onclick="addImageToGalleryFromUrl('${imgSrc}', this)" class="action-btn" title="添加到作品图库" style="background-color: var(--primary);"><i class="fas fa-plus"></i></button>
-                            <button onclick="downloadImageFromUrl('${imgSrc}', '${filename}')" class="action-btn download-btn" title="下载图片"><i class="fas fa-download"></i></button>
-                        </div>
-                    `;
-                    gallery.appendChild(container);
-                });
-            }
-
-            function showError(message) {
-                errorMessage.textContent = message;
-                if(placeholderText) {
-                     placeholderText.classList.remove('hidden');
-                }
-                if(gallery){
-                    gallery.classList.add('hidden');
-                }
-            }
-            
-            async function convertUrlToDataURL(url) {
-                const response = await fetch(url);
-                const blob = await response.blob();
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(blob);
-                });
-            }
-
-            async function downloadImageFromUrl(url, filename) {
-                try {
-                    const response = await fetch(url);
-                    const blob = await response.blob();
-                    const blobUrl = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = blobUrl;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(blobUrl);
-                    a.remove();
-                } catch (e) {
-                    console.error("Download failed:", e);
-                    window.open(url, '_blank');
-                }
-            }
-
-            async function addImageToGalleryFromUrl(imgSrc, buttonEl) {
-                const originalIcon = buttonEl.innerHTML;
-                buttonEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                try {
-                    const dataUrl = await convertUrlToDataURL(imgSrc);
-                    const newImage = { 
-                        id: Date.now() + Math.random(), 
-                        name: `AI作品-${Date.now()}.png`, 
-                        src: dataUrl, 
-                        description: "AI生成于创意工坊" 
-                    };
-                    imageDB.unshift(newImage);
-                    localStorage.setItem('imageDB', JSON.stringify(imageDB));
-                    buttonEl.innerHTML = '<i class="fas fa-check"></i>';
-                    buttonEl.style.backgroundColor = 'var(--success)';
-                    if(document.getElementById('gallery-grid')) {
-                       renderImageGallery();
-                    }
-                } catch (e) {
-                    console.error("Failed to add image to gallery:", e);
-                    alert("添加到图库失败！");
-                    buttonEl.innerHTML = '<i class="fas fa-times"></i>';
-                } finally {
-                    setTimeout(() => {
-                        buttonEl.innerHTML = originalIcon;
-                        buttonEl.style.backgroundColor = '';
-                    }, 2000);
-                }
-            }
-
-            async function pollForLiblibResult(generateUuid) {
-                const maxAttempts = 40; 
-                const interval = 3000;
-                for (let i = 0; i < maxAttempts; i++) {
-                    showError(`正在向 LiblibAI 查询结果... (${i * 3}秒)`);
-                    await new Promise(resolve => setTimeout(resolve, interval));
-                    try {
-                        const response = await fetch(`/api/liblib-image`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ generateUuid: generateUuid })
-                        });
-                        if (!response.ok) continue;
-                        const result = await response.json();
-                        if (result.data && result.data.generateStatus === 5) {
-                            if (result.data.images && result.data.images.length > 0) {
-                                return result.data.images.map(img => img.imageUrl);
-                            } else { throw new Error("LiblibAI任务成功但未返回图片。"); }
-                        } else if (result.data && result.data.generateStatus < 5) {
-                            console.log(`Polling Liblib... status: ${result.data.generateStatus}`);
-                        } else { throw new Error(result.data.generateMsg || "Liblib任务失败。"); }
-                    } catch (error) { throw error; }
-                }
-                throw new Error("Liblib任务超时，请稍后再试。");
-            }
-
-            generateBtn.addEventListener("click", async () => {
-                showLoading(true);
-                const englishPrompt = finalPromptInput.value.trim();
-                const negativePrompt = document.getElementById("pg-negative-prompt").value;
-                const selectedApi = apiSelector.value;
-                const imageCount = parseInt(imageCountSelector.value, 10);
-
-                if (!englishPrompt) {
-                    showError("指令输入框不能为空！");
-                    showLoading(false);
-                    return;
-                }
-
-                try {
-                    let imageUrls = [];
-                    if (selectedApi === 'liblib') {
-                        const initialPayload = {
-                            generateParams: {
-                                prompt: englishPrompt, negativePrompt: negativePrompt,
-                                width: 1024, height: 1024, imgCount: imageCount, seed: -1,
-                                sampler: 15, steps: 20, cfgScale: 7
-                            }
-                        };
-                        const initialResponse = await fetch(`/api/liblib-image`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(initialPayload)
-                        });
-                        if (!initialResponse.ok) {
-                            const err = await initialResponse.json();
-                            throw new Error(err.error || `提交任务失败: ${initialResponse.status}`);
-                        }
-                        const initialResult = await initialResponse.json();
-                        if (initialResult.code !== 0 || !initialResult.data.generateUuid) {
-                            throw new Error(initialResult.msg || "未能获取任务UUID。");
-                        }
-                        const generateUuid = initialResult.data.generateUuid;
-                        imageUrls = await pollForLiblibResult(generateUuid);
-
-                    } else if (selectedApi === 'jimeng') {
-                         const payload = {
-                            prompt: englishPrompt,
-                            negativePrompt: negativePrompt,
-                            n: imageCount
-                        };
-                        const response = await fetch(`/api/jimeng-image`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                        if (!response.ok) {
-                            const err = await response.json();
-                            throw new Error(err.error || `提交任务失败: ${response.status}`);
-                        }
-                        const result = await response.json();
-                        if (result.data && result.data.image_urls && result.data.image_urls.length > 0) {
-                            imageUrls = result.data.image_urls;
-                        } else {
-                            throw new Error(result.message || "API返回数据格式不正确或没有图片URL。");
-                        }
-                    }
-                    pgDisplayGallery(imageUrls);
-                } catch (error) {
-                    console.error("Image generation error:", error);
-                    showError(error.message || "未知错误，请检查控制台日志。");
-                } finally {
-                    showLoading(false);
-                }
+    for (const group in promptData) {
+        const container = document.querySelector(`div[data-group="${group}"]`);
+        if (container) {
+            Object.keys(promptData[group]).forEach((tagText, index) => {
+                const tagEl = document.createElement('span');
+                tagEl.className = 'pg-prompt-tag';
+                tagEl.textContent = tagText;
+                tagEl.dataset.value = tagText;
+                tagEl.dataset.group = group;
+                const color = colors[index % colors.length];
+                tagEl.classList.add(color.bg, color.text);
+                tagEl.dataset.ringColor = color.ring;
+                container.appendChild(tagEl);
             });
         }
+    }
+    
+    pgUpdateOutput();
+
+    document.getElementById('pg-builder-container').addEventListener('click', (e) => {
+        if (e.target.classList.contains('pg-prompt-tag')) {
+            const { value, group, ringColor } = e.target.dataset;
+            if (group === 'style') {
+                const currentActive = document.querySelector(`[data-group="style"].active`);
+                if (currentActive) {
+                    currentActive.classList.remove('active', currentActive.dataset.ringColor);
+                }
+                if (currentActive?.dataset.value !== value) {
+                    e.target.classList.add('active', ringColor);
+                    selectedTags.set('style', value);
+                } else {
+                    selectedTags.delete('style');
+                }
+            } else {
+                const currentGroupTags = new Set(selectedTags.get(group) || []);
+                if (currentGroupTags.has(value)) {
+                    currentGroupTags.delete(value);
+                    e.target.classList.remove('active', ringColor);
+                } else {
+                    currentGroupTags.add(value);
+                    e.target.classList.add('active', ringColor);
+                }
+                selectedTags.set(group, Array.from(currentGroupTags));
+            }
+            pgUpdateOutput(true);
+        }
+    });
+    
+    finalPromptInput.addEventListener('input', () => {
+        generateBtn.disabled = finalPromptInput.value.trim() === '';
+    });
+
+    clearBtn.addEventListener('click', () => {
+        document.querySelectorAll('.pg-prompt-tag.active').forEach(tag => {
+            tag.classList.remove('active', tag.dataset.ringColor);
+        });
+        selectedTags.clear();
+        pgUpdateOutput(true);
+        gallery.innerHTML = '';
+        gallery.classList.add('hidden');
+        placeholderText.classList.remove('hidden');
+    });
+    
+    inspireBtn.addEventListener('click', () => alert("此功能正在开发中。"));
+    enrichBtn.addEventListener('click', () => alert("此功能正在开发中。"));
+
+    function pgSetupCopyButton(button, textarea) {
+        button.addEventListener('click', () => {
+            if (!textarea.value) return;
+            navigator.clipboard.writeText(textarea.value).then(() => {
+                const originalIcon = button.innerHTML;
+                button.innerHTML = `<svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                setTimeout(() => { button.innerHTML = originalIcon; }, 2000);
+            }).catch(err => console.error("Copy failed", err));
+        });
+    }
+
+    pgSetupCopyButton(document.getElementById('pg-copy-button-en'), finalPromptInput);
+    
+    lightbox.addEventListener('click', () => {
+        lightbox.style.display = 'none';
+    });
+
+    function pgUpdateOutput(fromSelection = false) {
+        if (fromSelection) {
+            const styleZh = selectedTags.get('style');
+            if (!styleZh) {
+                finalPromptInput.value = '';
+            } else {
+                const translate = (group) => (selectedTags.get(group) || []).map(key => promptData[group][key]);
+                const styleEn = promptData.style[styleZh];
+                const coreStyle = styleKeywords[styleEn];
+                let promptEnParts = [];
+                const qualityEn = translate('quality');
+                promptEnParts.push(`(${(qualityEn.join(', ') || 'masterpiece, best quality')}, ${coreStyle})`);
+                const sceneEn = translate('scene');
+                if (sceneEn.length > 0) promptEnParts.push(`((${sceneEn.join(' and ')} scene:1.5))`);
+                const temperamentEn = translate('temperament');
+                const faceEn = translate('face');
+                const hairEn = translate('hair');
+                const clothingEn = translate('clothing');
+                const dynamicsEn = translate('dynamics');
+                const compositionEn = translate('composition');
+                let characterDetailsEn = [...temperamentEn, ...faceEn, ...hairEn, ...dynamicsEn];
+                let characterStr = `((${compositionEn.join(', ') || 'medium shot'} of a beautiful woman`;
+                if (characterDetailsEn.length > 0) characterStr += ` with ${characterDetailsEn.join(' and ')}`;
+                if (clothingEn.length > 0) characterStr += `, wearing ${clothingEn.join(' and ')}`;
+                characterStr += `))`;
+                promptEnParts.push(characterStr);
+                const lightingEn = translate('lighting');
+                if (lightingEn.length > 0) promptEnParts.push(`((${lightingEn.join(' and ')} lighting)):1.2`);
+                const angleEn = translate('angle');
+                const cameraEn = translate('camera');
+                const colorMotionEn = translate('color_motion');
+                const lensDetailsEn = [...angleEn, ...cameraEn, ...colorMotionEn];
+                if (lensDetailsEn.length > 0) promptEnParts.push(`((${lensDetailsEn.join(', ')})):1.1`);
+                finalPromptInput.value = promptEnParts.join(', ');
+            }
+        }
+        generateBtn.disabled = finalPromptInput.value.trim() === '';
+    }
+
+    function showLoading(isLoading) {
+        generateBtn.disabled = isLoading;
+        if (isLoading) {
+            generateBtn.classList.add('opacity-70');
+            loader.classList.remove('hidden');
+            placeholderText.classList.add('hidden');
+            gallery.classList.add('hidden');
+            errorMessage.textContent = '';
+        } else {
+            generateBtn.disabled = finalPromptInput.value.trim() === '';
+            loader.classList.add('hidden');
+        }
+    }
+    
+    // --- 新增的辅助函数 ---
+    async function convertUrlToDataURL(url) {
+        // 使用Netlify的图像转换功能作为代理来避免CORS问题
+        const proxyUrl = `/.netlify/images?url=${encodeURIComponent(url)}`;
+        const response = await fetch(proxyUrl);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch image through proxy: ${response.statusText}`);
+        }
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    }
+
+    async function downloadImageFromUrl(url, filename) {
+        try {
+             // 使用Netlify的图像转换功能作为代理
+            const proxyUrl = `/.netlify/images?url=${encodeURIComponent(url)}`;
+            const response = await fetch(proxyUrl);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = blobUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(blobUrl);
+            a.remove();
+        } catch (e) {
+            console.error("Download failed:", e);
+            window.open(url, '_blank');
+        }
+    }
+
+    async function addImageToGalleryFromUrl(imgSrc, buttonEl) {
+        const originalIconHTML = buttonEl.innerHTML;
+        buttonEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        buttonEl.disabled = true;
+        try {
+            const dataUrl = await convertUrlToDataURL(imgSrc);
+            const newImage = { 
+                id: Date.now() + Math.random(), 
+                name: `AI作品-${Date.now()}.png`, 
+                src: dataUrl, 
+                description: "AI生成于创意工坊" 
+            };
+            imageDB.unshift(newImage);
+            localStorage.setItem('imageDB', JSON.stringify(imageDB));
+            buttonEl.innerHTML = '<i class="fas fa-check"></i>';
+            buttonEl.style.backgroundColor = 'var(--success)';
+            if(document.getElementById('gallery-grid')) {
+               renderImageGallery();
+            }
+        } catch (e) {
+            console.error("Failed to add image to gallery:", e);
+            alert("添加到图库失败！");
+            buttonEl.innerHTML = '<i class="fas fa-times"></i>';
+        } finally {
+            setTimeout(() => {
+                buttonEl.innerHTML = originalIconHTML;
+                buttonEl.style.backgroundColor = '';
+                buttonEl.disabled = false;
+            }, 2000);
+        }
+    }
+    
+    // --- 重写的核心函数 ---
+    function pgDisplayGallery(imageUrls) {
+        gallery.innerHTML = ''; 
+        gallery.classList.remove('hidden');
+        placeholderText.classList.add('hidden');
+        
+        if (!imageUrls || imageUrls.length === 0) {
+            showError("API 未能返回有效图片。");
+            return;
+        }
+        
+        let gridColsClass = 'grid-cols-1';
+        if (imageUrls.length === 2) gridColsClass = 'grid-cols-2';
+        if (imageUrls.length >= 3) gridColsClass = 'grid-cols-2 md:grid-cols-4';
+        gallery.className = `w-full h-full grid ${gridColsClass} gap-2 p-2`;
+
+        imageUrls.forEach((imgSrc, index) => {
+            const container = document.createElement('div');
+            container.className = 'relative group w-full h-full';
+
+            const img = document.createElement('img');
+            img.src = imgSrc;
+            img.className = 'w-full h-full object-cover rounded-md cursor-pointer group-hover:opacity-80 transition-opacity';
+            img.addEventListener('click', () => {
+                lightboxImage.src = imgSrc;
+                lightbox.style.display = 'flex';
+            });
+
+            const actionsContainer = document.createElement('div');
+            actionsContainer.className = 'card-actions';
+
+            const addBtn = document.createElement('button');
+            addBtn.className = 'action-btn';
+            addBtn.title = '添加到作品图库';
+            addBtn.style.backgroundColor = 'var(--primary)';
+            addBtn.innerHTML = '<i class="fas fa-plus"></i>';
+            addBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                addImageToGalleryFromUrl(imgSrc, addBtn);
+            });
+
+            const downloadBtn = document.createElement('button');
+            downloadBtn.className = 'action-btn download-btn';
+            downloadBtn.title = '下载图片';
+            const filename = `ai-creation-${Date.now()}-${index}.png`;
+            downloadBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                downloadImageFromUrl(imgSrc, filename);
+            });
+            downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
+
+            actionsContainer.appendChild(addBtn);
+            actionsContainer.appendChild(downloadBtn);
+            
+            container.appendChild(img);
+            container.appendChild(actionsContainer);
+            gallery.appendChild(container);
+        });
+    }
+
+    function showError(message) {
+        errorMessage.textContent = message;
+        if(placeholderText) {
+             placeholderText.classList.remove('hidden');
+        }
+        if(gallery){
+            gallery.classList.add('hidden');
+        }
+    }
+
+    async function pollForLiblibResult(generateUuid) {
+        const maxAttempts = 40; 
+        const interval = 3000;
+        for (let i = 0; i < maxAttempts; i++) {
+            showError(`正在向 LiblibAI 查询结果... (${i * 3}秒)`);
+            await new Promise(resolve => setTimeout(resolve, interval));
+            try {
+                const response = await fetch(`/api/liblib-image`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ generateUuid: generateUuid })
+                });
+                if (!response.ok) continue;
+                const result = await response.json();
+                if (result.data && result.data.generateStatus === 5) {
+                    if (result.data.images && result.data.images.length > 0) {
+                        return result.data.images.map(img => img.imageUrl);
+                    } else { throw new Error("LiblibAI任务成功但未返回图片。"); }
+                } else if (result.data && result.data.generateStatus < 5) {
+                    console.log(`Polling Liblib... status: ${result.data.generateStatus}`);
+                } else { throw new Error(result.data.generateMsg || "Liblib任务失败。"); }
+            } catch (error) { throw error; }
+        }
+        throw new Error("Liblib任务超时，请稍后再试。");
+    }
+
+    generateBtn.addEventListener("click", async () => {
+        showLoading(true);
+        const englishPrompt = finalPromptInput.value.trim();
+        const negativePrompt = document.getElementById("pg-negative-prompt").value;
+        const selectedApi = apiSelector.value;
+        const imageCount = parseInt(imageCountSelector.value, 10);
+
+        if (!englishPrompt) {
+            showError("指令输入框不能为空！");
+            showLoading(false);
+            return;
+        }
+
+        try {
+            let imageUrls = [];
+            if (selectedApi === 'liblib') {
+                const initialPayload = {
+                    generateParams: {
+                        prompt: englishPrompt, negativePrompt: negativePrompt,
+                        width: 1024, height: 1024, imgCount: imageCount, seed: -1,
+                        sampler: 15, steps: 20, cfgScale: 7
+                    }
+                };
+                const initialResponse = await fetch(`/api/liblib-image`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(initialPayload)
+                });
+                if (!initialResponse.ok) {
+                    const err = await initialResponse.json();
+                    throw new Error(err.error || `提交任务失败: ${initialResponse.status}`);
+                }
+                const initialResult = await initialResponse.json();
+                if (initialResult.code !== 0 || !initialResult.data.generateUuid) {
+                    throw new Error(initialResult.msg || "未能获取任务UUID。");
+                }
+                const generateUuid = initialResult.data.generateUuid;
+                imageUrls = await pollForLiblibResult(generateUuid);
+
+            } else if (selectedApi === 'jimeng') {
+                 const payload = {
+                    prompt: englishPrompt,
+                    negativePrompt: negativePrompt,
+                    n: imageCount
+                };
+                const response = await fetch(`/api/jimeng-image`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error || `提交任务失败: ${response.status}`);
+                }
+                const result = await response.json();
+                if (result.data && result.data.image_urls && result.data.image_urls.length > 0) {
+                    imageUrls = result.data.image_urls;
+                } else {
+                    throw new Error(result.message || "API返回数据格式不正确或没有图片URL。");
+                }
+            }
+            pgDisplayGallery(imageUrls);
+        } catch (error) {
+            console.error("Image generation error:", error);
+            showError(error.message || "未知错误，请检查控制台日志。");
+        } finally {
+            showLoading(false);
+        }
+    });
+}
     </script>
 </body>
 </html>
