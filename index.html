@@ -1643,7 +1643,6 @@ margin-bottom: 15px; color: var(--text-light);">${game.name}</h3><p style="color
             function pgDisplayGallery(imageUrls) {
                 const gallery = document.getElementById('pg-image-gallery');
                 const placeholderText = document.getElementById('pg-placeholder-text');
-                const errorMessage = document.getElementById('pg-error-message');
 
                 gallery.innerHTML = '';
                 gallery.classList.remove('hidden');
@@ -1654,11 +1653,10 @@ margin-bottom: 15px; color: var(--text-light);">${game.name}</h3><p style="color
                     return;
                 }
 
-                // 动态调整网格布局，确保单张图片能居中放大
                 let gridColsClass = 'grid-cols-1';
                 if (imageUrls.length === 2) gridColsClass = 'grid-cols-2';
                 if (imageUrls.length >= 3) gridColsClass = 'grid-cols-2 md:grid-cols-4';
-                // 当只有一张图片时，我们给它一个特定的网格设置，让它更好看
+
                 if (imageUrls.length === 1) {
                     gallery.className = `w-full h-full grid grid-cols-1 grid-rows-1 p-2`;
                 } else {
@@ -1666,26 +1664,23 @@ margin-bottom: 15px; color: var(--text-light);">${game.name}</h3><p style="color
                 }
 
                 imageUrls.forEach((imgSrc, index) => {
-                    // ---【这是核心修改】---
-                    // 我们不再使用 .card 和 .card-media-container，而是使用更适合此场景的样式
                     const container = document.createElement('div');
                     container.className = 'relative group w-full h-full bg-black/30 rounded-lg overflow-hidden';
 
                     const img = document.createElement('img');
                     img.src = imgSrc;
                     img.alt = `Generated Image ${index + 1}`;
-                    // 图片样式：充满容器，保持比例（contain），并添加点击放大功能
                     img.className = 'w-full h-full object-contain cursor-pointer transition-transform duration-300 group-hover:scale-105';
                     img.addEventListener('click', () => {
                         document.getElementById('pg-lightbox-image').src = imgSrc;
                         document.getElementById('pg-lightbox').style.display = 'flex';
                     });
 
-                    // 操作按钮的容器
                     const actionsContainer = document.createElement('div');
-                    actionsContainer.className = 'card-actions'; // 复用这个样式让按钮出现在右上角
+                    // ---【这里是唯一的修改】---
+                    // 添加了Tailwind的 group-hover 功能，让按钮在鼠标悬停在父元素(group)上时显示出来
+                    actionsContainer.className = 'card-actions opacity-0 group-hover:opacity-100 transition-opacity duration-300';
 
-                    // 添加到图库按钮
                     const addBtn = document.createElement('button');
                     addBtn.className = 'action-btn';
                     addBtn.title = '添加到作品图库';
@@ -1696,7 +1691,6 @@ margin-bottom: 15px; color: var(--text-light);">${game.name}</h3><p style="color
                         addImageToGalleryFromUrl(imgSrc, addBtn);
                     });
 
-                    // 下载按钮
                     const downloadBtn = document.createElement('button');
                     downloadBtn.className = 'action-btn download-btn';
                     downloadBtn.title = '下载图片';
