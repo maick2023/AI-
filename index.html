@@ -32,1779 +32,679 @@
         body {
             background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
             color: var(--text-light);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        .navbar {
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(10px);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(108, 99, 255, 0.2);
-            padding: 0 20px;
+        #root {
+            display: flex;
+            flex: 1;
         }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
+        header {
+            background-color: var(--dark);
+            border-bottom: 1px solid var(--secondary);
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 0;
+            z-index: 20;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
+        header .logo {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--light);
-            text-decoration: none;
-        }
-
-        .logo i {
             color: var(--primary);
-            margin-right: 12px;
-            font-size: 2rem;
         }
 
-        .nav-links {
+        nav a {
+            color: var(--text-gray);
+            margin-left: 1.5rem;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--primary);
+        }
+
+        .sidebar {
+            background-color: var(--dark);
+            border-right: 1px solid var(--secondary);
+            width: 250px;
+            flex-shrink: 0;
+            padding: 2rem;
             display: flex;
-            list-style: none;
+            flex-direction: column;
+            align-items: center;
+            z-index: 10;
         }
 
-        .nav-links li {
-            margin-left: 25px;
+        .sidebar .avatar-section {
+            text-align: center;
+            margin-bottom: 2rem;
         }
 
-        .nav-links a {
+        .sidebar .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar .username {
+            font-size: 1.2rem;
+            font-weight: 600;
             color: var(--text-light);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            position: relative;
-            padding: 8px 0;
+        }
+
+        .sidebar .nav-links a {
             display: flex;
             align-items: center;
-            cursor: pointer;
-        }
-
-        .nav-links a i {
-            margin-right: 8px;
-            font-size: 1.2rem;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 3px;
-            background: var(--primary);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .main-content {
-            max-width: 1200px;
-            margin: 90px auto 40px;
-            padding: 0 20px;
-            min-height: calc(100vh - 150px);
-        }
-
-        .page-title {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-            padding-top: 20px;
-        }
-
-        .page-title h1 {
-            font-size: 2.8rem;
-            display: inline-block;
-            background: linear-gradient(to right, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-        }
-
-        .page-title p {
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
             color: var(--text-gray);
-            max-width: 700px;
-            margin: 0 auto;
-            font-size: 1.2rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
+        .sidebar .nav-links a i {
+            margin-right: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .sidebar .nav-links a:hover,
+        .sidebar .nav-links a.active {
+            background-color: var(--secondary);
+            color: var(--text-light);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
         }
 
         .card {
-            background: rgba(42, 42, 60, 0.7);
-            border-radius: 16px;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-            position: relative;
+            background-color: var(--dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
         }
 
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(108, 99, 255, 0.35);
-        }
-
-        .card-media-container {
-            height: 250px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            background-color: #0d0d1a;
-        }
-
-        .card-media-container img,
-        .card-media-container video {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            transition: transform 0.5s ease;
-        }
-
-        .card:hover .card-media-container img,
-        .card:hover .card-media-container video {
-            transform: scale(1.1);
-        }
-
-        .card-info {
-            padding: 20px;
-        }
-
-        .card-info h3 {
-            margin-bottom: 8px;
-            font-size: 1.4rem;
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            background-color: var(--darker);
+            border: 1px solid var(--secondary);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
             color: var(--text-light);
-            word-break: break-all;
+            width: 100%;
+            margin-top: 0.5rem;
         }
 
-        .card-info p {
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.5);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .tab-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px 8px 0 0;
+            background-color: var(--darker);
             color: var(--text-gray);
-            font-size: 0.95rem;
-            margin-bottom: 15px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .card-actions {
-            position: absolute;
-            top: 15px;
-            right: 15px;
+        .tab-button.active {
+            background-color: var(--dark);
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .tab-content {
+            background-color: var(--dark);
+            padding: 1.5rem;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .range-slider-container {
             display: flex;
-            gap: 10px;
-            z-index: 10;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .range-slider-container input[type="range"] {
+            flex-grow: 1;
+            margin-right: 1rem;
+            -webkit-appearance: none;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .range-slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: 2px solid var(--text-light);
+        }
+
+        .range-slider-container input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            border: 2px solid var(--text-light);
+        }
+
+        .range-slider-container .range-value {
+            color: var(--text-light);
+            font-weight: 500;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        /* 进度条 */
+        .progress-container {
+            background-color: var(--secondary);
+            border-radius: 5px;
+            height: 10px;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            background-color: var(--primary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* 图片结果区域 */
+        #generatedImagesContainer {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .image-card {
+            position: relative;
+            background-color: var(--darker);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-card .card-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+            padding: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
 
-        .card:hover .card-actions {
+        .image-card:hover .card-actions {
             opacity: 1;
         }
 
-        .action-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .image-card .card-actions button,
+        .image-card .card-actions a {
             color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .action-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .delete-btn {
-            background: rgba(249, 65, 68, 0.8);
-        }
-
-        .delete-btn:hover {
-            background: var(--danger);
-        }
-
-        .download-btn {
-            background: rgba(76, 201, 240, 0.8);
-        }
-
-        .download-btn:hover {
-            background: var(--success);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--primary);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 15px rgba(108, 99, 255, 0.3);
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn i {
-            margin-right: 10px;
-        }
-
-        .btn:hover {
-            background: var(--secondary);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
-        }
-
-        .upload-section {
-            background: rgba(42, 42, 60, 0.7);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 40px;
-            border: 2px dashed rgba(108, 99, 255, 0.3);
-            text-align: center;
-        }
-
-        .upload-icon {
-            font-size: 3.5rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-
-        .upload-text {
-            margin-bottom: 25px;
-            color: var(--text-gray);
-        }
-
-        .file-input {
-            display: none;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 3000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: var(--dark);
-            border-radius: 20px;
-            width: 90%;
-            max-width: 800px;
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-            position: relative;
-            text-align: center;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: var(--text-gray);
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 10;
-        }
-
-        .image-preview {
-            max-width: 90%;
-            max-height: 80vh;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        footer {
-            background: rgba(26, 26, 46, 0.95);
-            padding: 40px 0 20px;
-            text-align: center;
-            border-top: 1px solid rgba(108, 99, 255, 0.2);
-        }
-
-        .copyright {
-            color: var(--text-gray);
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            font-size: 0.95rem;
-        }
-
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        #prompt-generator {
-            font-family: 'Inter', 'Noto Sans SC', sans-serif;
-            color: #d1d5db;
-        }
-
-        .pg-section-container {
-            @apply bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700;
-        }
-
-        .pg-section-title {
-            @apply text-xl font-bold text-indigo-400 border-b-2 border-indigo-500/30 pb-2 mb-4;
-        }
-
-        .pg-category-title {
-            @apply font-semibold text-gray-300 mb-3 text-base;
-        }
-
-        .pg-prompt-tag {
-            @apply text-sm font-medium mr-2 mb-2 px-3 py-1.5 rounded-lg cursor-pointer transition-all duration-200 shadow;
-        }
-
-        .pg-prompt-tag:not(.active) {
-            @apply hover:scale-105 hover:shadow-lg;
-        }
-
-        .pg-prompt-tag.active {
-            @apply ring-2 ring-offset-2 ring-offset-gray-900;
-        }
-
-        #pg-generate-button:disabled {
-            @apply bg-gray-500 cursor-not-allowed hover:bg-gray-500 shadow-none;
-        }
-
-        #pg-lightbox {
-            @apply hidden fixed inset-0 bg-black/80 flex items-center justify-center z-50;
-        }
-
-        #pg-lightbox img {
-            @apply max-w-[90vw] max-h-[90vh] rounded-lg;
-        }
-
-        .pg-gemini-button {
-            @apply text-sm text-indigo-400 hover:text-indigo-300 font-semibold flex items-center disabled:opacity-50 disabled:cursor-not-allowed;
-        }
-
-        .pg-loader,
-        .pg-spinner-sm {
+            padding: 8px;
             border-radius: 50%;
-            animation: pg-spin 1s linear infinite;
+            background-color: rgba(0, 0, 0, 0.5);
+            transition: background-color 0.2s ease;
         }
 
-        .pg-loader {
-            border: 4px solid #4b5563;
-            border-top: 4px solid #818cf8;
-            width: 50px;
-            height: 50px;
+        .image-card .card-actions button:hover,
+        .image-card .card-actions a:hover {
+            background-color: var(--primary);
         }
 
-        .pg-spinner-sm {
-            border: 2px solid #4b5563;
-            border-top: 2px solid #818cf8;
-            width: 16px;
-            height: 16px;
+        .image-card .collect-btn {
+            background-color: rgba(108, 99, 255, 0.5);
+            /* 使用primary color的半透明 */
         }
 
-        @keyframes pg-spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+        .image-card .collect-btn:hover {
+            background-color: var(--primary);
         }
 
-        .music-card {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            position: relative;
+        .image-card .download-btn {
+            background-color: rgba(255, 107, 107, 0.5);
+            /* 使用accent color的半透明 */
         }
 
-        .music-card .album-cover {
-            width: 80px;
-            height: 80px;
-            border-radius: 10px;
-            overflow: hidden;
-            margin-right: 20px;
-            flex-shrink: 0;
-            cursor: pointer;
-        }
-
-        .music-card .album-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .music-card .music-info {
-            flex-grow: 1;
-        }
-
-        .music-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 5px;
-            color: var(--text-light);
-        }
-
-        .music-card .artist {
-            color: var(--text-gray);
-            margin-bottom: 10px;
-        }
-
-        .music-card .duration {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
-
-        .music-card .play-btn {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .music-card .play-btn:hover {
-            background: var(--secondary);
-            transform: scale(1.1);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-light);
-            font-weight: 500;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 14px 20px;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(108, 99, 255, 0.3);
-            border-radius: 10px;
-            color: var(--text-light);
-            font-size: 1rem;
+        .image-card .download-btn:hover {
+            background-color: var(--accent);
         }
     </style>
 </head>
 
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo" onclick="showPage('home')"><i class="fas fa-robot"></i><span>AI创意工坊</span></a>
-            <ul class="nav-links">
-                <li><a onclick="showPage('prompt-generator')"><i class="fas fa-magic"></i> AI绘画</a></li>
-                <li><a onclick="showPage('gallery')"><i class="fas fa-images"></i> 作品图库</a></li>
-                <li><a onclick="showPage('videos')"><i class="fas fa-film"></i> 视频集库</a></li>
-                <li><a onclick="showPage('music')"><i class="fas fa-music"></i> 音乐库</a></li>
-                <li><a onclick="showPage('games')"><i class="fas fa-gamepad"></i> 游戏中心</a></li>
-                <li><a onclick="showPage('chat')"><i class="fas fa-comments"></i> AI对话</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="main-content">
-        <div id="home" class="page active">
-            <div class="page-title">
-                <h1>AI创意工坊</h1>
-                <p>一个集成了AI绘画、作品管理与展示的创意空间</p>
-            </div>
-            <div class="content-grid">
-                <div class="card" onclick="showPage('prompt-generator')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0?q=80&w=1974" alt="AI绘画">
-                    </div>
-                    <div class="card-info">
-                        <h3>AI绘画</h3>
-                        <p>使用专业提示词生成器创作AI艺术品</p>
-                        <div class="btn">开始创作</div>
-                    </div>
-                </div>
-                <div class="card" onclick="showPage('gallery')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=1974" alt="作品图库">
-                    </div>
-                    <div class="card-info">
-                        <h3>作品图库</h3>
-                        <p>展示您所有的AI生成图片作品</p>
-                        <div class="btn btn-outline">浏览图库</div>
-                    </div>
-                </div>
-                <div class="card" onclick="showPage('videos')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1574717024453-354056aafa98?q=80&w=1974" alt="视频集库">
-                    </div>
-                    <div class="card-info">
-                        <h3>视频集库</h3>
-                        <p>欣赏所有生成的AI视频作品</p>
-                        <div class="btn btn-outline">浏览视频</div>
-                    </div>
-                </div>
-                <div class="card" onclick="showPage('music')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070" alt="音乐库">
-                    </div>
-                    <div class="card-info">
-                        <h3>音乐库</h3>
-                        <p>聆听和管理您的音乐收藏</p>
-                        <div class="btn btn-outline">进入音乐库</div>
-                    </div>
-                </div>
-                <div class="card" onclick="showPage('games')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1550745165-9bc0b252726a?q=80&w=2070" alt="游戏中心">
-                    </div>
-                    <div class="card-info">
-                        <h3>游戏中心</h3>
-                        <p>体验我们集成的小游戏</p>
-                        <div class="btn btn-outline">进入游戏</div>
-                    </div>
-                </div>
-                <div class="card" onclick="showPage('chat')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071" alt="AI对话">
-                    </div>
-                    <div class="card-info">
-                        <h3>AI对话</h3>
-                        <p>与您的私人AI助手进行交流</p>
-                        <div class="btn btn-outline">开始对话</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="prompt-generator" class="page">
-            <div class="space-y-8">
-                <div id="pg-builder-container" class="pg-section-container">
-                    <div class="space-y-6">
-                        <div>
-                            <div class="pg-section-title">1. 画质与风格</div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                                <div>
-                                    <div class="pg-category-title">艺术风格 (单选)</div>
-                                    <div class="flex flex-wrap" data-group="style"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">图像质量</div>
-                                    <div class="flex flex-wrap" data-group="quality"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="pg-section-title">2. 人物与气质</div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4">
-                                <div>
-                                    <div class="pg-category-title">气质类型</div>
-                                    <div class="flex flex-wrap" data-group="temperament"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">面部特征</div>
-                                    <div class="flex flex-wrap" data-group="face"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">发型</div>
-                                    <div class="flex flex-wrap" data-group="hair"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">穿着服饰</div>
-                                    <div class="flex flex-wrap" data-group="clothing"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="pg-section-title">3. 场景与光影</div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                                <div>
-                                    <div class="pg-category-title">地点/背景</div>
-                                    <div class="flex flex-wrap" data-group="scene"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">环境光与氛围</div>
-                                    <div class="flex flex-wrap" data-group="lighting"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="pg-section-title">4. 镜头语言</div>
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-4">
-                                <div>
-                                    <div class="pg-category-title">景别与构图</div>
-                                    <div class="flex flex-wrap" data-group="composition"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">视角与透视</div>
-                                    <div class="flex flex-wrap" data-group="angle"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">相机与景深</div>
-                                    <div class="flex flex-wrap" data-group="camera"></div>
-                                </div>
-                                <div>
-                                    <div class="pg-category-title">色彩与动感</div>
-                                    <div class="flex flex-wrap" data-group="color_motion"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="pg-section-container">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-2xl font-bold text-indigo-400">最终指令 (可编辑)</h2>
-                        <div class="flex items-center space-x-4"><button id="pg-inspire-button"
-                                class="pg-gemini-button">✨ 随机灵感</button><button id="pg-enrich-button"
-                                class="pg-gemini-button" title="使用AI丰富细节">✨ 丰富</button><button id="pg-clear-button"
-                                class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button></div>
-                    </div>
-                    <div class="relative"><textarea id="pg-final-prompt-input" rows="6"
-                            class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                            placeholder="可直接在此输入，或通过上方引导模式构建..."></textarea><button id="pg-copy-button-en"
-                            class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="复制英文指令"><svg
-                                class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
-                                </path>
-                            </svg></button></div>
-                    <div class="mt-4">
-                        <h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3><input id="pg-negative-prompt"
-                            type="text"
-                            class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono"
-                            value="ng_deepnegative_v1_75t,(badhandv4:1.2),EasyNegative,(worst quality:2),">
-                    </div>
-                </div>
-                <div class="pg-section-container">
-                    <h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2>
-                    <div class="flex flex-wrap items-center gap-4 mt-4">
-                        <label for="api-selector" class="text-gray-300 font-semibold">选择API引擎:</label>
-                        <select id="api-selector"
-                            class="flex-grow bg-gray-700 text-white rounded-lg p-2 border border-gray-600 focus:ring-2 focus:ring-indigo-500">
-                            <option value="liblib" selected>LiblibAI (推荐)</option>
-                            <option value="jimeng">即梦API</option>
-                        </select>
-                        <select id="image-count-selector"
-                            class="bg-gray-700 text-white rounded-lg p-2 border border-gray-600 focus:ring-2 focus:ring-indigo-500">
-                            <option value="1">生成1张</option>
-                            <option value="2">生成2张</option>
-                            <option value="3">生成3张</option>
-                            <option value="4" selected>生成4张</option>
-                        </select>
-                    </div>
-                    <button id="pg-generate-button"
-                        class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50"><svg
-                            class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 
-2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>生成杰作</button>
-                    <div id="pg-gallery-container"
-                        class="mt-4 w-full aspect-video bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-700 min-h-[300px]">
-                        <div id="pg-placeholder-text" class="text-gray-500 text-center">
-                            <p class="text-lg">艺术品，即将诞生</p>
-                            <p class="text-sm">请开始你的创作</p>
-                        </div>
-                        <div id="pg-loader" class="pg-loader hidden"></div>
-                        <div id="pg-image-gallery"
-                            class="w-full h-full grid grid-cols-2 md:grid-cols-4 gap-2 p-2 hidden"></div>
-                    </div>
-                    <div id="pg-error-message" class="mt-2 text-red-400 text-sm text-center font-semibold"></div>
-                </div>
-            </div>
-        </div>
-
-        <div id="gallery" class="page">
-            <div class="page-title">
-                <h1>作品图库</h1>
-                <p>管理并展示您所有的AI生成图片作品</p>
-            </div>
-            <div class="upload-section">
-                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                <h2>上传新图片</h2>
-                <p class="upload-text">支持JPG、PNG格式，最大10MB</p>
-                <input type="file" id="image-upload" class="file-input" accept="image/*" multiple>
-                <button class="btn" id="image-upload-button"><i class="fas fa-upload"></i> 选择图片</button>
-                <div id="upload-status" style="margin-top: 15px;
-color: var(--primary);"></div>
-            </div>
-            <div class="content-grid" id="gallery-grid"></div>
-        </div>
-
-        <div id="videos" class="page">
-            <div class="page-title">
-                <h1>视频集库</h1>
-                <p>管理并展示您所有的AI生成视频作品</p>
-            </div>
-            <div class="upload-section">
-                <div class="upload-icon"><i class="fas fa-video"></i></div>
-                <h2>上传新视频</h2>
-                <p class="upload-text">支持MP4格式，最大50MB</p>
-                <input type="file" id="video-upload" class="file-input" accept="video/*" multiple>
-                <button class="btn" id="video-upload-button"><i class="fas fa-upload"></i> 选择视频</button>
-                <div id="video-upload-status" style="margin-top: 15px;
-color: var(--primary);"></div>
-            </div>
-            <div class="content-grid" id="videos-grid"></div>
-        </div>
-
-        <div id="games" class="page">
-            <div class="page-title">
-                <h1>游戏中心</h1>
-                <p>体验我们集成的小游戏</p>
-            </div>
-            <div class="content-grid" id="games-grid"></div>
-        </div>
-
-        <div id="music" class="page">
-            <div class="page-title">
-                <h1>音乐库</h1>
-                <p>管理并展示您所有的音乐作品</p>
-            </div>
-            <div class="upload-section">
-                <div class="upload-icon"><i class="fas fa-music"></i></div>
-                <h2>上传新音乐</h2>
-                <p class="upload-text">支持MP3格式，最大20MB</p>
-                <input type="file" id="music-upload" class="file-input" accept="audio/*" multiple>
-                <button class="btn" id="music-upload-button"><i class="fas fa-upload"></i> 选择音乐</button>
-                <div id="music-upload-status" style="margin-top: 15px;
-color: var(--primary);"></div>
-            </div>
-            <div id="music-grid"></div>
-        </div>
-
-        <div id="chat" class="page">
-            <div class="page-title">
-                <h1>AI对话助手</h1>
-                <p>与您的私人AI助手进行实时对话</p>
-            </div>
-            <div class="chat-container" style="max-width: 800px;
-margin: auto;">
-                <div class="chat-header" style="background: linear-gradient(90deg, var(--primary), var(--secondary));
-padding: 15px; text-align: center; position: relative;">
-                    <h3 style="font-size: 1.5rem;
-display: flex; align-items: center; justify-content: center;"><i class="fas fa-robot" style="margin-right: 10px;"></i>
-                        AI助手</h3>
-                    <button id="api-settings-btn" style="position: absolute;
-top: 50%; right: 20px; transform: translateY(-50%); background: rgba(255,255,255,0.1); border:none; width: 36px; height: 36px; border-radius: 50%;
-cursor: pointer;"><i class="fas fa-cog"></i></button>
-                </div>
-                <div class="chat-messages" id="chat-messages" style="height: 400px;
-padding: 20px; overflow-y: auto; background: rgba(26, 26, 46, 0.5);"></div>
-                <div class="chat-input" style="display: flex;
-padding: 15px; background: rgba(26, 26, 46, 0.9);">
-                    <input type="text" id="chat-input" placeholder="请先设置API密钥..." style="flex: 1;
-padding: 15px; border: none; border-radius: 50px 0 0 50px; background: rgba(255, 255, 255, 0.08); color: white; font-size: 1rem;
-outline: none;" disabled>
-                    <button id="send-btn" style="background: var(--primary);
-color: white; border: none; padding: 0 30px; border-radius: 0 50px 50px 0; cursor: pointer;
-font-size: 1rem;" disabled><i class="fas fa-paper-plane"></i></button>
-                </div>
-            </div>
-        </div>
+<body class="flex flex-col min-h-screen">
+    <div id="notification"
+        class="fixed bottom-4 right-4 p-4 rounded-lg shadow-lg text-white z-50 transition-all duration-300 transform translate-y-full opacity-0">
     </div>
 
-    <div id="pg-lightbox"><img id="pg-lightbox-image" src="" alt="Enlarged image" /></div>
-    <div id="image-preview-modal" class="modal">
-        <div class="modal-content" style="background: transparent;
-box-shadow: none;"><button class="close-modal" onclick="closePreviewModal()">&times;</button><img id="preview-image"
-                class="image-preview" src="" alt="预览图片"></div>
-    </div>
-    <div id="music-player-modal" class="modal">
-        <div class="modal-content"><button class="close-modal" onclick="closeMusicPlayer()">&times;</button>
-            <h2 id="music-title" class="text-2xl font-bold text-indigo-400 mb-4"></h2><audio id="audio-player" controls
-                class="w-full"></audio>
-        </div>
-    </div>
-    <div id="api-modal" class="modal">
-        <div class="modal-content"><button class="close-modal"
-                onclick="document.getElementById('api-modal').style.display='none'">&times;</button>
-            <h2 style="margin-bottom: 25px;
-color: var(--primary);">设置AI对话API密钥</h2>
-            <div class="form-group" style="text-align: left;"><label for="api-key"
-                    style="display: block; margin-bottom: 8px;">API密钥</label><input type="password" id="api-key"
-                    class="form-control" placeholder="在此输入您的API密钥"></div><button class="btn" style="width:100%;
-margin-top: 20px;" onclick="saveApiKey()"><i class="fas fa-save"></i> 保存API密钥</button>
-        </div>
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="animate-spin rounded-full h-20 w-20 border-t-2 border-b-2 border-white"></div>
     </div>
 
-    <footer>
-        <div class="copyright">
-            <p>&copy; 2024 AI创意工坊 | 使用localStorage存储所有内容</p>
-        </div>
-    </footer>
+    <div id="fullScreenImageDiv"
+        class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50 hidden"
+        onclick="this.classList.add('hidden')">
+        <img id="fullScreenImg" src="" alt="Full Screen Image"
+            class="max-w-full max-h-full object-contain cursor-pointer" onclick="event.stopPropagation()">
+        <button class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300"
+            onclick="document.getElementById('fullScreenImageDiv').classList.add('hidden')">
+            &times;
+        </button>
+    </div>
 
+    <div id="root" class="flex flex-1">
+        <aside class="sidebar hidden md:flex">
+            <div class="avatar-section">
+                <img src="https://via.placeholder.com/100" alt="User Avatar" class="avatar">
+                <p class="username">即梦星人</p>
+            </div>
+            <nav class="nav-links w-full">
+                <a href="#" class="active"><i class="fas fa-magic"></i>AI绘画</a>
+                <a href="#" id="myGalleryNav"><i class="fas fa-images"></i>我的图库</a>
+                <a href="#"><i class="fas fa-history"></i>生成历史</a>
+                <a href="#"><i class="fas fa-cog"></i>设置</a>
+            </nav>
+            <div class="mt-auto w-full">
+                <button class="btn-primary w-full"><i class="fas fa-sign-out-alt mr-2"></i>退出登录</button>
+            </div>
+        </aside>
+
+        <main id="mainContent" class="flex-1 overflow-y-auto p-4 md:p-8 relative z-10">
+            <h1 class="text-4xl font-bold text-white mb-6 text-center">AI创意工坊</h1>
+
+            <div class="card mb-8">
+                <div class="flex border-b border-secondary">
+                    <button id="textToImageTab" class="tab-button active">文生图</button>
+                    <button id="imageToImageTab" class="tab-button">图生图</button>
+                </div>
+                <div id="textToImageContent" class="tab-content">
+                    <form id="textToImageForm" class="space-y-4">
+                        <div>
+                            <label for="prompt" class="block text-gray-300 text-sm font-medium mb-1">提示词
+                                (Prompt):</label>
+                            <textarea id="prompt" placeholder="输入您的创作灵感，例如：一个赛博朋克风格的城市夜景，高楼林立，霓虹闪烁，未来感十足。"
+                                required></textarea>
+                            <p class="text-xs text-gray-500 mt-1">详细的提示词能帮助AI更好地理解您的想法。</p>
+                        </div>
+                        <div>
+                            <label for="negativePrompt" class="block text-gray-300 text-sm font-medium mb-1">负面提示词
+                                (Negative Prompt):</label>
+                            <textarea id="negativePrompt" placeholder="不希望在图中出现的元素，例如：模糊，低质量，水印，变形。"
+                                rows="3"></textarea>
+                            <p class="text-xs text-gray-500 mt-1">排除不想要的元素，提高图片质量。</p>
+                        </div>
+                        <div>
+                            <label for="imageCount" class="block text-gray-300 text-sm font-medium mb-1">生成数量:</label>
+                            <div class="range-slider-container">
+                                <input type="range" id="imageCount" min="1" max="4" value="1" class="w-full">
+                                <span id="imageCountValue" class="range-value">1</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary w-full mt-4">
+                            <i class="fas fa-sparkles mr-2"></i>生成图片
+                        </button>
+                    </form>
+                </div>
+                <div id="imageToImageContent" class="tab-content hidden">
+                    <p class="text-gray-400 text-center">图生图功能即将推出，敬请期待！</p>
+                </div>
+            </div>
+
+            <h2 class="text-3xl font-bold text-white mb-6 text-center">生成结果</h2>
+            <div id="generatedImagesContainer"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <p class="text-gray-400 text-center col-span-full">生成结果将显示在此处。</p>
+            </div>
+        </main>
+
+        <section id="gallerySection" class="p-8 bg-gradient-to-br from-darker to-dark min-h-screen hidden">
+            <h2 class="text-3xl font-bold text-white mb-8 text-center">我的收藏</h2>
+            <div id="myGallery" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8">
+            </div>
+        </section>
+    </div>
     <script>
-        // --- Database Setup ---
-        let imageDB = JSON.parse(localStorage.getItem('imageDB')) || [];
-        let videoDB = JSON.parse(localStorage.getItem('videoDB')) || [];
-        let musicDB = JSON.parse(localStorage.getItem('musicDB')) || [];
+        // 通知相关函数
+        const notificationElement = document.getElementById('notification');
+        let notificationTimeout;
 
-        // --- Page Navigation ---
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0, 0);
+        function showNotification(message, type = 'info', duration = 3000) {
+            clearTimeout(notificationTimeout);
+            notificationElement.textContent = message;
+            notificationElement.classList.remove('bg-green-500', 'bg-red-500', 'bg-blue-500'); // Remove previous classes
+
+            switch (type) {
+                case 'success':
+                    notificationElement.classList.add('bg-green-500');
+                    break;
+                case 'danger':
+                    notificationElement.classList.add('bg-red-500');
+                    break;
+                case 'info':
+                default:
+                    notificationElement.classList.add('bg-blue-500');
+                    break;
+            }
+
+            notificationElement.classList.remove('translate-y-full', 'opacity-0');
+            notificationElement.classList.add('translate-y-0', 'opacity-100');
+
+            notificationTimeout = setTimeout(() => {
+                notificationElement.classList.remove('translate-y-0', 'opacity-100');
+                notificationElement.classList.add('translate-y-full', 'opacity-0');
+            }, duration);
         }
 
-        // --- App Initialization ---
-        document.addEventListener('DOMContentLoaded', function () {
-            initImageGallery();
-            initVideoGallery();
-            initPromptGenerator();
-            initMusicGallery();
-            initChat();
-            initGames();
+        function showSuccess(message, duration = 3000) {
+            showNotification(message, 'success', duration);
+        }
+
+        function showError(message, duration = 5000) {
+            showNotification(message, 'danger', duration);
+        }
+
+        // 新增：showInfo 函数 (请确认您的代码中是否有此函数，如果没有，请保留此段)
+        function showInfo(message, duration = 3000) {
+            showNotification(message, 'info', duration);
+        }
+
+
+        // 加载动画
+        const loadingOverlay = document.getElementById('loadingOverlay');
+
+        function showLoading(show) {
+            if (show) {
+                loadingOverlay.classList.remove('hidden');
+            } else {
+                loadingOverlay.classList.add('hidden');
+            }
+        }
+
+        // 全屏图片显示
+        const fullScreenImageDiv = document.getElementById('fullScreenImageDiv');
+        const fullScreenImg = document.getElementById('fullScreenImg');
+
+        function pgShowFullscreenImage(imageUrl) {
+            fullScreenImg.src = imageUrl;
+            fullScreenImageDiv.classList.remove('hidden');
+        }
+
+        // ====== 新增：我的图库相关功能 ======
+
+        // 定义一个变量来存储图库中的图片URL，通常会从localStorage加载
+        let myGalleryImages = JSON.parse(localStorage.getItem('myGalleryImages')) || [];
+
+        // 我的图库容器元素
+        const myGalleryContainer = document.getElementById('myGallery');
+
+        // 函数：将图片添加到图库
+        function pgAddToGallery(imageUrl) {
+            if (!myGalleryImages.includes(imageUrl)) { // 避免重复添加
+                myGalleryImages.push(imageUrl);
+                localStorage.setItem('myGalleryImages', JSON.stringify(myGalleryImages));
+                renderMyGallery(); // 重新渲染图库
+                showSuccess('图片已添加到图库！'); // 显示成功消息
+            } else {
+                showInfo('图片已在图库中。'); // 显示提示消息
+            }
+        }
+
+        // 函数：渲染我的图库
+        function renderMyGallery() {
+            if (!myGalleryContainer) return; // 如果图库容器不存在，则不执行
+
+            myGalleryContainer.innerHTML = ''; // 清空现有内容
+
+            if (myGalleryImages.length === 0) {
+                myGalleryContainer.innerHTML = '<p class="text-gray-400 text-center col-span-full">你的图库是空的。开始添加一些图片吧！</p>';
+                return;
+            }
+
+            myGalleryImages.forEach((imageUrl, index) => {
+                const card = document.createElement('div');
+                card.className = 'relative group bg-gray-800 rounded-lg overflow-hidden shadow-lg';
+                card.innerHTML = `
+                    <img src="${imageUrl}" alt="Gallery Image ${index + 1}" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105 cursor-pointer" onclick="pgShowFullscreenImage('${imageUrl}')">
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button class="text-white mx-2 p-2 bg-red-600 rounded-full hover:bg-red-700 transition-colors duration-200" onclick="pgRemoveFromGallery('${imageUrl}', event)">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <a href="${imageUrl}" download class="text-white mx-2 p-2 bg-blue-600 rounded-full hover:bg-blue-700 transition-colors duration-200" onclick="event.stopPropagation()">
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </div>
+                `;
+                myGalleryContainer.appendChild(card);
+            });
+        }
+
+        // 函数：从图库中移除图片
+        function pgRemoveFromGallery(imageUrl, event) {
+            event.stopPropagation(); // 阻止事件冒泡
+            myGalleryImages = myGalleryImages.filter(img => img !== imageUrl);
+            localStorage.setItem('myGalleryImages', JSON.stringify(myGalleryImages));
+            renderMyGallery(); // 重新渲染图库
+            showSuccess('图片已从图库移除。');
+        }
+
+        // ====== 我的图库相关功能结束 ======
+
+
+        // AI绘画结果展示
+        const generatedImagesContainer = document.getElementById('generatedImagesContainer');
+
+        function pgDisplayGallery(imageUrls) {
+            if (!generatedImagesContainer) return;
+
+            generatedImagesContainer.innerHTML = ''; // 清空之前的图片
+
+            if (imageUrls.length === 0) {
+                generatedImagesContainer.innerHTML = '<p class="text-gray-400 text-center col-span-full">没有图片生成。</p>';
+                return;
+            }
+
+            imageUrls.forEach(imageUrl => {
+                const card = document.createElement('div');
+                card.className = 'image-card';
+                card.innerHTML = `
+                    <img src="${imageUrl}" alt="Generated Image" class="w-full h-48 object-cover rounded-lg" onclick="pgShowFullscreenImage('${imageUrl}')">
+                    <div class="card-actions">
+                        <button class="collect-btn" onclick="pgAddToGallery('${imageUrl}'); event.stopPropagation();">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <a href="${imageUrl}" download class="download-btn" onclick="event.stopPropagation();">
+                            <i class="fas fa-download"></i>
+                        </a>
+                    </div>
+                `;
+                generatedImagesContainer.appendChild(card);
+            });
+        }
+
+
+        // 表单和事件监听
+        const textToImageTab = document.getElementById('textToImageTab');
+        const imageToImageTab = document.getElementById('imageToImageTab');
+        const textToImageContent = document.getElementById('textToImageContent');
+        const imageToImageContent = document.getElementById('imageToImageContent');
+        const textToImageForm = document.getElementById('textToImageForm');
+        const promptInput = document.getElementById('prompt');
+        const negativePromptInput = document.getElementById('negativePrompt');
+        const imageCountInput = document.getElementById('imageCount');
+        const imageCountValueSpan = document.getElementById('imageCountValue');
+
+        // 新增：侧边栏导航和主内容区域的元素引用
+        const myGalleryNav = document.getElementById('myGalleryNav');
+        const mainContent = document.getElementById('mainContent');
+        const gallerySection = document.getElementById('gallerySection');
+
+
+        // 初始化滑块值显示
+        if (imageCountInput && imageCountValueSpan) {
+            imageCountValueSpan.textContent = imageCountInput.value;
+            imageCountInput.addEventListener('input', () => {
+                imageCountValueSpan.textContent = imageCountInput.value;
+            });
+        }
+
+
+        // Tab切换
+        textToImageTab.addEventListener('click', () => {
+            textToImageTab.classList.add('active');
+            imageToImageTab.classList.remove('active');
+            textToImageContent.classList.remove('hidden');
+            imageToImageContent.classList.add('hidden');
         });
 
-        // --- Generic File Reader ---
-        function readFileAsDataURL(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = (error) => reject(error);
-                reader.readAsDataURL(file);
+        imageToImageTab.addEventListener('click', () => {
+            imageToImageTab.classList.add('active');
+            textToImageTab.classList.remove('active');
+            imageToImageContent.classList.remove('hidden');
+            textToImageContent.classList.add('hidden');
+        });
+
+        // 新增：我的图库导航点击事件
+        if (myGalleryNav) {
+            myGalleryNav.addEventListener('click', (e) => {
+                e.preventDefault(); // 阻止默认链接行为
+                // 切换激活状态
+                document.querySelector('.sidebar .nav-links a.active').classList.remove('active');
+                myGalleryNav.classList.add('active');
+
+                // 显示/隐藏内容区域
+                mainContent.classList.add('hidden');
+                gallerySection.classList.remove('hidden');
+
+                renderMyGallery(); // 确保每次切换到图库时都重新渲染
             });
         }
 
-        // --- Image Gallery ---
-        function initImageGallery() {
-            const grid = document.getElementById('gallery-grid');
-            const uploader = document.getElementById('image-upload');
-            const uploadBtn = document.getElementById('image-upload-button');
-            const statusEl = document.getElementById('upload-status');
-
-            uploadBtn.addEventListener('click', () => uploader.click());
-            uploader.addEventListener('change', async (e) => {
-                const files = e.target.files;
-                if (!files.length) return;
-
-                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
-                statusEl.style.color = 'var(--primary)';
-
-                for (const file of files) {
-                    if (!file.type.match('image.*') || file.size > 10 * 1024 * 1024) {
-                        alert(`文件 "${file.name}" 不合格（必须是小于10MB的图片），已跳过。`);
-                        continue;
-                    }
-                    try {
-                        const fileSrc = await readFileAsDataURL(file);
-                        const newImage = { id: Date.now() + Math.random(), name: file.name, src: fileSrc, description: "本地上传的作品" };
-                        imageDB.unshift(newImage);
-                    } catch (error) {
-                        alert(`读取文件 "${file.name}" 失败，请重试。`);
-                    }
-                }
-
-                localStorage.setItem('imageDB', JSON.stringify(imageDB));
-                statusEl.textContent = `上传完成！`;
-                renderImageGallery();
-                uploader.value = '';
-            });
-            renderImageGallery();
-        }
-
-        function renderImageGallery() {
-            const grid = document.getElementById('gallery-grid');
-            grid.innerHTML = '';
-            if (!imageDB.length) {
-                grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">图库为空，快去创作或上传吧！</p>';
-                return;
-            }
-            imageDB.forEach(image => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-media-container" onclick="previewImage('${image.src}')">
-                        <img src="${image.src}" alt="${image.name}">
-                    </div>
-                    <div class="card-info">
-                        <h3>${image.name.length > 20 ? image.name.slice(0, 20) + '...' : image.name}</h3>
-                        <p>${image.description}</p>
-                    </div>
-                    <div class="card-actions">
-                         <a href="${image.src}" download="${image.name}" class="action-btn download-btn" title="下载图片">
-                            <i class="fas fa-download"></i>
-                         </a>
-                         <div class="action-btn delete-btn" onclick="deleteItem('image', ${image.id}, event)" title="删除图片">
-                            <i class="fas fa-trash"></i>
-                         </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function previewImage(src) {
-            document.getElementById('preview-image').src = src;
-            document.getElementById('image-preview-modal').style.display = 'flex';
-        }
-        function closePreviewModal() {
-            document.getElementById('image-preview-modal').style.display = 'none';
-        }
-
-        // --- Video Gallery ---
-        function initVideoGallery() {
-            const grid = document.getElementById('videos-grid');
-            const uploader = document.getElementById('video-upload');
-            const uploadBtn = document.getElementById('video-upload-button');
-            const statusEl = document.getElementById('video-upload-status');
-
-            uploadBtn.addEventListener('click', () => uploader.click());
-            uploader.addEventListener('change', async (e) => {
-                const files = e.target.files;
-                if (!files.length) return;
-
-                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
-                statusEl.style.color = 'var(--primary)';
-
-                for (const file of files) {
-                    if (!file.type.match('video.*') || file.size > 50 * 1024 * 1024) {
-                        alert(`文件 "${file.name}" 不合格（必须是小于50MB的视频），已跳过。`);
-                        continue;
-                    }
-                    try {
-                        const fileSrc = await readFileAsDataURL(file);
-                        const newVideo = { id: Date.now() + Math.random(), name: file.name, src: fileSrc, description: "本地上传的视频", type: file.type };
-                        videoDB.unshift(newVideo);
-                    } catch (error) {
-                        alert(`读取文件 "${file.name}" 失败，请重试。`);
-                    }
-                }
-
-                localStorage.setItem('videoDB', JSON.stringify(videoDB));
-                statusEl.textContent = `上传完成！`;
-                renderVideoGallery();
-                uploader.value = '';
-            });
-            renderVideoGallery();
-        }
-
-        function renderVideoGallery() {
-            const grid = document.getElementById('videos-grid');
-            grid.innerHTML = '';
-            if (!videoDB.length) {
-                grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">视频集库为空，快去上传吧。</p>';
-                return;
-            }
-            videoDB.forEach(video => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-media-container">
-                        <video loop muted controls class="w-full h-full object-cover">
-                            <source src="${video.src}" type="${video.type || 'video/mp4'}">
-                        </video>
-                    </div>
-                    <div class="card-info">
-                        <h3>${video.name.length > 20 ? video.name.slice(0, 20) + '...' : video.name}</h3>
-                        <p>${video.description}</p>
-                    </div>
-                    <div class="card-actions">
-                         <a href="${video.src}" download="${video.name}" class="action-btn download-btn" title="下载视频">
-                            <i class="fas fa-download"></i>
-                         </a>
-                         <div class="action-btn delete-btn" onclick="deleteItem('video', ${video.id}, event)" title="删除视频">
-                            <i class="fas fa-trash"></i>
-                         </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // --- Universal Delete Function ---
-        function deleteItem(dbKey, id, event) {
-            event.stopPropagation();
-            if (!confirm('确定要删除这个项目吗？此操作不可恢复。')) return;
-
-            let db = [];
-            let renderFunc = () => { };
-            let storageKey = `${dbKey}DB`;
-            if (dbKey === 'image') {
-                imageDB = imageDB.filter(item => item.id !== id);
-                db = imageDB;
-                renderFunc = renderImageGallery;
-            } else if (dbKey === 'video') {
-                videoDB = videoDB.filter(item => item.id !== id);
-                db = videoDB;
-                renderFunc = renderVideoGallery;
-            } else if (dbKey === 'music') {
-                musicDB = musicDB.filter(item => item.id !== id);
-                db = musicDB;
-                renderFunc = renderMusic;
-            }
-
-            localStorage.setItem(storageKey, JSON.stringify(db));
-            renderFunc();
-        }
-
-        // --- Music Gallery ---
-        function initMusicGallery() {
-            const musicGrid = document.getElementById('music-grid');
-            const uploader = document.getElementById('music-upload');
-            const uploadBtn = document.getElementById('music-upload-button');
-            const statusEl = document.getElementById('music-upload-status');
-
-            uploadBtn.addEventListener('click', () => uploader.click());
-            uploader.addEventListener('change', async (e) => {
-                const files = e.target.files;
-                if (!files.length) return;
-
-                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
-
-                for (const file of files) {
-                    if (!file.type.match('audio.*') || file.size > 20 * 1024 * 1024) {
-                        alert(`文件 "${file.name}" 不合格（必须是小于20MB的音频），已跳过。`);
-                        continue;
-                    }
-                    try {
-                        const fileSrc = await readFileAsDataURL(file);
-                        const newMusic = {
-                            id: Date.now() + Math.random(), name: file.name, src: fileSrc,
-                            thumbnail: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070",
-                            artist: "本地上传", duration: "未知"
-                        };
-                        musicDB.unshift(newMusic);
-                    } catch (error) {
-                        alert(`读取文件 "${file.name}" 失败，请重试。`);
-                    }
-                }
-                localStorage.setItem('musicDB', JSON.stringify(musicDB));
-                statusEl.textContent = '上传完成！';
-                renderMusic();
-                uploader.value = '';
-            });
-            renderMusic();
-        }
-
-        function renderMusic() {
-            const musicGrid = document.getElementById('music-grid');
-            musicGrid.innerHTML = '';
-            if (musicDB.length === 0) {
-                musicGrid.innerHTML = '<p style="text-align:center; color:var(--text-gray);">音乐库为空，请上传音乐。</p>';
-                return;
-            }
-            musicDB.forEach(music => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="music-card">
-                        <div class="album-cover" onclick="playMusic('${music.src}', '${music.name}')"><img src="${music.thumbnail}" alt="${music.name}"></div>
-                        <div class="music-info">
-                            <h3>${music.name.length > 20 ? music.name.slice(0, 20) + '...' : music.name}</h3>
-                            <div class="artist">${music.artist}</div>
-                        </div>
-                        <div class="play-btn" onclick="playMusic('${music.src}', '${music.name}')"><i class="fas fa-play"></i></div>
-                        <div class="card-actions" style="opacity:1; right: 80px; top: 50%; transform: translateY(-50%);">
-                            <div class="action-btn delete-btn" onclick="deleteItem('music', ${music.id}, event)"><i class="fas fa-trash"></i></div>
-                        </div>
-                    </div>`;
-                musicGrid.appendChild(card);
-            });
-        }
-
-        function playMusic(src, title) {
-            const modal = document.getElementById('music-player-modal');
-            const player = document.getElementById('audio-player');
-            const musicTitle = document.getElementById('music-title');
-            musicTitle.textContent = title;
-            player.src = src;
-            modal.style.display = 'flex';
-            player.play();
-        }
-
-        function closeMusicPlayer() {
-            const player = document.getElementById('audio-player');
-            player.pause();
-            player.src = '';
-            document.getElementById('music-player-modal').style.display = 'none';
-        }
-
-        // --- Games Page ---
-        function initGames() {
-            const gamesDB = [{ id: 1, name: "益智解谜", description: "挑战您的逻辑思维能力，解决复杂的谜题关卡", link: "#", icon: "fa-puzzle-piece" }, { id: 2, name: "跑酷冒险", description: "在奇幻世界中奔跑跳跃，收集金币避开障碍", link: "#", icon: "fa-running" }, { id: 3, name: "策略棋类", description: "与AI对战，测试您的策略和战术能力", link: "#", icon: "fa-chess" }];
-            const gamesGrid = document.getElementById('games-grid');
-            gamesDB.forEach(game => {
-                const gameCard = document.createElement('div');
-                gameCard.className = 'card';
-                gameCard.innerHTML = `<div style="text-align: center; padding: 30px; display: flex; flex-direction: column; align-items: center; height: 100%;"><div style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; font-size: 2.5rem; color: white;"><i class="fas ${game.icon}"></i></div><h3 style="font-size: 1.7rem; 
-margin-bottom: 15px; color: var(--text-light);">${game.name}</h3><p style="color: var(--text-gray); margin-bottom: 25px; flex-grow: 1;">${game.description}</p><a href="${game.link}" target="_blank" class="btn"><i class="fas fa-play"></i> 开始游戏</a></div>`;
-                gamesGrid.appendChild(gameCard);
-            });
-        }
-
-        // --- AI Chat ---
-        function initChat() {
-            const chatInput = document.getElementById('chat-input');
-            const sendBtn = document.getElementById('send-btn');
-            const settingsBtn = document.getElementById('api-settings-btn');
-            let chatHistory = [];
-
-            settingsBtn.addEventListener('click', () => { document.getElementById('api-modal').style.display = 'flex'; });
-            const apiKey = localStorage.getItem('gemini-api-key');
-            if (apiKey) {
-                chatInput.disabled = false;
-                sendBtn.disabled = false;
-                chatInput.placeholder = "输入您的问题..."; addMessage("您好！我已准备好回答您的问题。", 'ai');
-            } else {
-                addMessage("请点击右上角的设置按钮，输入您的API密钥以开始对话。", 'ai');
-            }
-
-            async function sendMessage() {
-                const messageText = chatInput.value.trim();
-                if (!messageText) return;
-
-                addMessage(messageText, 'user');
-                chatHistory.push({ role: "user", parts: [{ text: messageText }] });
-                chatInput.value = '';
-                const loadingMsg = addMessage("<div class='pg-spinner-sm'></div>", 'ai');
-
-                try {
-                    const payload = { contents: chatHistory };
-                    const response = await fetch(`/api/gemini`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) {
-                        const errorResult = await response.json();
-                        throw new Error(errorResult.error?.message || `API请求失败: ${response.status}`);
-                    }
-                    const result = await response.json();
-                    loadingMsg.remove();
-
-                    if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
-                        const aiResponse = result.candidates[0].content.parts[0].text;
-                        addMessage(aiResponse, 'ai');
-                        chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
-                    } else {
-                        throw new Error("无效的API响应格式。");
-                    }
-                } catch (error) {
-                    loadingMsg.remove();
-                    addMessage(`请求出错: ${error.message}`, 'ai');
-                }
-            }
-
-            sendBtn.addEventListener('click', sendMessage);
-            chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-        }
-
-        function saveApiKey() {
-            const apiKey = document.getElementById('api-key').value.trim();
-            if (!apiKey) { alert('请输入API密钥'); return; }
-            localStorage.setItem('gemini-api-key', apiKey);
-            document.getElementById('api-modal').style.display = 'none';
-
-            const chatInput = document.getElementById('chat-input');
-            const sendBtn = document.getElementById('send-btn');
-            const chatMessages = document.getElementById('chat-messages');
-
-            chatInput.disabled = false;
-            sendBtn.disabled = false;
-            chatInput.placeholder = "输入您的问题..."; chatMessages.innerHTML = '';
-            addMessage("API密钥已保存！现在可以开始对话了。", 'ai');
-        }
-
-        function addMessage(text, sender) {
-            const messageContainer = document.getElementById('chat-messages');
-            const messageElement = document.createElement('div');
-            messageElement.style.cssText = `background: ${sender === 'user' ? 'rgba(108, 99, 255, 0.25)' : 'rgba(42, 42, 60, 0.9)'};
-            align-self: ${sender === 'user' ? 'flex-end' : 'flex-start'}; border-bottom-${sender === 'user' ? 'right' : 'left'}-radius: 5px; padding: 15px; margin-bottom: 15px;
-            border-radius: 20px; max-width: 80%;`;
-            messageElement.innerHTML = text;
-            messageContainer.appendChild(messageElement);
-            messageContainer.scrollTop = messageContainer.scrollHeight;
-            return messageElement;
-        }
-
-        // --- Gemini API 调用核心函数 ---
-        async function callGemini(prompt, button) {
-            // 先获取按钮的原始内容和最终的prompt输入框
-            const originalHtml = button.innerHTML;
-            const finalPromptInput = document.getElementById('pg-final-prompt-input');
-
-            button.innerHTML = '<span class="pg-spinner-sm mr-2"></span> 处理中...';
-            button.disabled = true;
-
-            try {
-                const payload = {
-                    contents: [{ role: "user", parts: [{ text: prompt }] }]
-                };
-                const response = await fetch(`/api/gemini`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!response.ok) {
-                    const errorResult = await response.json();
-                    // 将alert改为直接显示错误在输入框
-                    throw new Error(errorResult.error?.message || `API请求失败: ${response.status}`);
-                }
-
-                const result = await response.json();
-                if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
-                    return result.candidates[0].content.parts[0].text.trim(); // 返回处理后的文本
-                } else {
-                    throw new Error("从API收到了无效的响应格式。");
-                }
-            } catch (error) {
-                console.error("Gemini API 调用出错:", error);
-                // 将错误信息显示在最终的输入框里
-                finalPromptInput.value = `错误: ${error.message}`;
-                return null;
-            } finally {
-                button.innerHTML = originalHtml;
-                // 只有在API key存在时才恢复按钮
-                if (localStorage.getItem('gemini-api-key')) {
-                    button.disabled = false;
-                }
-            }
-        }
-
-        // “丰富”功能
-        async function enrichPrompt() {
-            const finalPromptInput = document.getElementById('pg-final-prompt-input');
-            const enrichBtn = document.getElementById('pg-enrich-button');
-            const currentPrompt = finalPromptInput.value.trim();
-
-            if (!currentPrompt) {
-                alert("请先在指令框中输入内容！");
-                return;
-            }
-
-            const instruction = `You are an AI assistant for a text-to-image generator. Your task is to enrich and expand the user's prompt to make it more vivid, detailed, and creative for generating better images. Keep the core subject but add more details about the environment, lighting, mood, and style. Only return the final, enriched prompt. Do not add any extra text like "Here is the enriched prompt:". Prompt to enrich: "${currentPrompt}"`;
-
-            const enrichedText = await callGemini(instruction, enrichBtn);
-            if (enrichedText) {
-                finalPromptInput.value = enrichedText;
-            }
-        }
-
-        // “随机灵感”功能
-        async function getInspiration() {
-            const finalPromptInput = document.getElementById('pg-final-prompt-input');
-            const inspireBtn = document.getElementById('pg-inspire-button');
-            const instruction = `You are an AI assistant for a text-to-image generator. Generate a single, random, creative, and detailed prompt for an amazing AI artwork. The prompt should describe a character in a scene with a specific style. For example: "masterpiece, best quality, 1girl, intricate details, cinematic lighting, (a beautiful cyberpunk girl with neon hair, standing on a rainy rooftop overlooking a futuristic city), wearing a techwear jacket, 85mm f/1.4 lens". Only return the final prompt text. Do not add any extra text like "Here is a prompt:".`;
-
-            const inspiredText = await callGemini(instruction, inspireBtn);
-            if (inspiredText) {
-                finalPromptInput.value = inspiredText;
-            }
-        }
-
-
-        // --- AI Prompt Generator ---
-        function initPromptGenerator() {
-            const promptData = {
-                style: { "逼真写实": "photorealistic", "二次元动漫": "anime", "CG渲染": "cg render", "油画质感": "oil painting", "水墨国风": "ink wash painting", "复古港风": "hong kong retro", "赛博朋克": "cyberpunk", "蒸汽朋克": "steampunk", "水彩": "watercolor", "素描": "sketch" },
-                quality: {
-                    "杰作": "masterpiece", "最佳质量": "best quality", "极其精细": "ultra-detailed", "8K画质": "8k", "逼真细节": "photorealistic details", "复杂细节": "intricate details"
-                },
-                temperament: { "清冷御姐": "cold and elegant lady", "纯欲少女": "pure and seductive girl", "元气少女": "energetic girl", "书卷气": "scholarly", "赛博魅影": "cyber phantom", "复古女郎": "retro lady" },
-                face: {
-                    "精致脸庞": "delicate face", "鹅蛋脸": "oval face", "心形脸": "heart-shaped face", "桃花眼": "peach blossom eyes", "蓝色眼眸": "blue eyes", "微笑": "smile", "红唇": "red lips", "长睫毛": "long eyelashes", "无辜表情": "innocent expression", "泪痣":
-                        "tear mole", "水光唇釉": "glossy lips", "雀斑": "freckles"
-                },
-                hair: { "及腰长发": "waist-length long hair", "银色长发": "silver long hair", "双马尾": "twintails", "麻花辫": "braids", "蓬松卷发": "fluffy curly hair", "飘逸的": "flowing hair", "绸缎黑发": "silky black hair", "铂金渐变挑染": "platinum ombre highlights", "湿发": "wet hair" },
-                clothing: {
-                    "白色连衣裙": "white dress", "丝绸旗袍": "silk cheongsam", "JK校服": "JK uniform", "哥特式长裙": "gothic long dress", "机能风外套": "techwear jacket", "婚纱": "wedding dress", "缎面吊带裙": "satin slip dress", "牛仔喇叭裤": "denim flare pants",
-                    "宽大男友衬衫": "oversized boyfriend shirt", "荧光纹身": "fluorescent tattoo", "翡翠耳坠": "jade earrings", "皮夹克": "leather jacket"
-                },
-                dynamics: { "回头看": "looking back", "奔跑中": "running", "跳舞": "dancing", "沉思": "pondering", "害羞地笑": "shyly smiling", "自信地凝视": "confidently gazing", "咬唇思索": "biting lip and pondering", "撩发回眸": "flicking hair and looking back", "抱膝远眺": "hugging knees and gazing into the distance", "湿发贴颈": "wet hair sticking to neck", "动态抓拍": "dynamic action shot" },
-                scene: {
-                    "樱花树下": "under a cherry blossom tree", "未来都市":
-                        "futuristic city", "巴洛克城堡": "baroque castle", "海边": "seaside", "雨中街头": "rainy street", "图书馆": "library", "极光雪原": "aurora snowfield", "薰衣草田": "lavender field", "霓虹街巷": "neon alley", "地铁隧道": "subway tunnel", "天台夜景": "rooftop night view", "复古咖啡馆": "retro cafe", "音乐节后台": "backstage at a music festival"
-                },
-                lighting: { "电影感光效": "cinematic lighting", "黄金时刻": "golden hour", "伦勃朗光": "Rembrandt lighting", "霓虹灯光": "neon light", "体积光": "volumetric light", "戏剧性阴影": "dramatic shadows", "丁达尔效应": "Tyndall effect", "晨光": "morning light", "夕阳": "sunset light", "柔焦光晕": "soft focus halo", "菲林颗粒": "film grain", "发丝轮廓光": "rim light on hair" },
-
-                composition: { "全身像": "full body shot", "半身像": "medium shot", "大特写": "extreme close-up", "脸部特写": "close-up", "远景": "long shot", "建环镜头": "establishing shot", "黄金分割": "golden ratio composition", "对称构图": "symmetrical composition", "三分法构图": "rule of thirds", "引导线构图": "leading lines", "画中画构图": "frame within a frame", "牛仔景别": "cowboy shot" },
-                angle: { "低角度": "low angle shot", "高角度": "high angle shot", "鸟瞰视角": "bird's-eye view", "仰视视角": "worm's-eye view", "荷兰角": "dutch angle", "单点透视": "one-point perspective", "大气透视": "atmospheric perspective" },
-
-                camera: { "85mm f/1.2": "85mm f/1.2 lens", "35mm 电影感": "35mm cinematic", "鱼眼镜头": "fisheye lens", "哈苏色彩": "Hasselblad natural colors", "富士胶片色彩": "Fujifilm film color", "浅景深": "shallow depth of field", "大景深": "deep depth of field" },
-                color_motion: { "鲜艳色彩": "vibrant colors", "单色调": "monochromatic", "对比色": "contrasting colors", "高饱和度": "highly saturated colors", "动态模糊": "motion blur", "摇摄": "panning shot" }
-            };
-            const styleKeywords = { 'photorealistic': '1girl', 'anime': 'anime style, anime artwork, key visual, 1girl', 'cg render': 'cgstation, 3d render, octane render, 1girl', 'oil painting': 'oil painting, impressionistic, thick brush strokes, 1girl', 'ink wash painting': 'Chinese ink painting, guofeng, traditional art, 1girl', 'hong kong retro': 'cinematic film still, Hong Kong movie style, 1990s, kodak portra 400, 1girl', 'cyberpunk': 'cyberpunk, futuristic, neon, night city, cinematic, 1girl', 'steampunk': 'steampunk, victorian, gears, brass, 1girl', 'watercolor': 'watercolor painting, vibrant, soft edges, paper texture, 1girl', 'sketch': 'graphite pencil sketch, detailed, black and white, hatching, 1girl', 'default': '1girl' };
-            const colors = [{ bg: 'bg-red-200', text: 'text-red-800', ring: 'ring-red-400' }, { bg: 'bg-yellow-200', text: 'text-yellow-800', ring: 'ring-yellow-400' }, { bg: 'bg-green-200', text: 'text-green-800', ring: 'ring-green-400' }, { bg: 'bg-blue-200', text: 'text-blue-800', ring: 'ring-blue-400' }, { bg: 'bg-indigo-200', text: 'text-indigo-800', ring: 'ring-indigo-400' }, { bg: 'bg-purple-200', text: 'text-purple-800', ring: 'ring-purple-400' }, { bg: 'bg-pink-200', text: 'text-pink-800', ring: 'ring-pink-400' }, { bg: 'bg-teal-200', text: 'text-teal-800', ring: 'ring-teal-400' }, { bg: 'bg-orange-200', text: 'text-orange-800', ring: 'ring-orange-400' }];
-
-            const selectedTags = new Map();
-            const finalPromptInput = document.getElementById('pg-final-prompt-input');
-            const generateBtn = document.getElementById('pg-generate-button');
-            const clearBtn = document.getElementById('pg-clear-button');
-            const inspireBtn = document.getElementById('pg-inspire-button');
-            const enrichBtn = document.getElementById('pg-enrich-button');
-            const gallery = document.getElementById('pg-image-gallery');
-            const placeholderText = document.getElementById('pg-placeholder-text');
-            const loader = document.getElementById('pg-loader');
-            const errorMessage = document.getElementById('pg-error-message');
-            const lightbox = document.getElementById('pg-lightbox');
-            const lightboxImage = document.getElementById('pg-lightbox-image');
-            const apiSelector = document.getElementById('api-selector');
-            const imageCountSelector = document.getElementById('image-count-selector');
-            for (const group in promptData) {
-                const container = document.querySelector(`div[data-group="${group}"]`);
-                if (container) {
-                    Object.keys(promptData[group]).forEach((tagText, index) => {
-                        const tagEl = document.createElement('span');
-                        tagEl.className = 'pg-prompt-tag';
-                        tagEl.textContent = tagText;
-                        tagEl.dataset.value = tagText;
-                        tagEl.dataset.group = group;
-                        const color = colors[index % colors.length];
-                        tagEl.classList.add(color.bg, color.text);
-                        tagEl.dataset.ringColor = color.ring;
-                        container.appendChild(tagEl);
-                    });
-                }
-            }
-
-            pgUpdateOutput();
-            document.getElementById('pg-builder-container').addEventListener('click', (e) => {
-                if (e.target.classList.contains('pg-prompt-tag')) {
-                    const { value, group, ringColor } = e.target.dataset;
-                    if (group === 'style') {
-                        const currentActive = document.querySelector(`[data-group="style"].active`);
-
-                        if (currentActive) {
-                            currentActive.classList.remove('active', currentActive.dataset.ringColor);
-                        }
-
-                        if (currentActive?.dataset.value !== value) {
-                            e.target.classList.add('active', ringColor);
-                            selectedTags.set('style', value);
-                        } else {
-
-                            selectedTags.delete('style');
-                        }
-                    } else {
-                        const currentGroupTags = new Set(selectedTags.get(group) || []);
-
-                        if (currentGroupTags.has(value)) {
-                            currentGroupTags.delete(value);
-                            e.target.classList.remove('active', ringColor);
-                        } else {
-                            currentGroupTags.add(value);
-                            e.target.classList.add('active', ringColor);
-                        }
-                        selectedTags.set(group, Array.from(currentGroupTags));
-                    }
-                    pgUpdateOutput(true);
-                }
-            });
-            finalPromptInput.addEventListener('input', () => {
-                generateBtn.disabled = finalPromptInput.value.trim() === '';
-            });
-            clearBtn.addEventListener('click', () => {
-                document.querySelectorAll('.pg-prompt-tag.active').forEach(tag => {
-                    tag.classList.remove('active', tag.dataset.ringColor);
-                });
-                selectedTags.clear();
-                pgUpdateOutput(true);
-
-                gallery.innerHTML = '';
-                gallery.classList.add('hidden');
-                placeholderText.classList.remove('hidden');
-            });
-
-            // --- 绑定新的事件 ---
-            inspireBtn.addEventListener('click', getInspiration);
-            enrichBtn.addEventListener('click', enrichPrompt);
-
-            // --- 根据Gemini API密钥状态启用/禁用按钮 ---
-            const geminiApiKey = localStorage.getItem('gemini-api-key');
-            if (geminiApiKey) {
-                inspireBtn.disabled = false;
-                enrichBtn.disabled = false;
-            } else {
-                inspireBtn.disabled = true;
-                enrichBtn.disabled = true;
-                inspireBtn.title = "请先在AI对话页面设置API密钥";
-                enrichBtn.title = "请先在AI对话页面设置API密钥";
-            }
-
-            function pgSetupCopyButton(button, textarea) {
-                button.addEventListener('click', () => {
-                    if (!textarea.value) return;
-                    navigator.clipboard.writeText(textarea.value).then(() => {
-                        const originalIcon
-                            = button.innerHTML;
-                        button.innerHTML = `<svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
-                        setTimeout(() => { button.innerHTML = originalIcon; }, 2000);
-                    }).catch(err => console.error("Copy failed", err));
-
-                });
-            }
-
-            pgSetupCopyButton(document.getElementById('pg-copy-button-en'), finalPromptInput);
-            lightbox.addEventListener('click', () => {
-                lightbox.style.display = 'none';
-            });
-            function pgUpdateOutput(fromSelection = false) {
-                if (fromSelection) {
-                    const styleZh = selectedTags.get('style');
-                    if (!styleZh) {
-                        finalPromptInput.value = '';
-                    } else {
-                        const translate = (group) => (selectedTags.get(group) || []).map(key => promptData[group][key]);
-                        const styleEn = promptData.style[styleZh];
-                        const coreStyle = styleKeywords[styleEn];
-                        let promptEnParts = [];
-                        const qualityEn = translate('quality');
-                        promptEnParts.push(`(${(qualityEn.join(', ') || 'masterpiece, best quality')}, ${coreStyle})`);
-                        const sceneEn = translate('scene');
-                        if (sceneEn.length > 0) promptEnParts.push(`((${sceneEn.join(' and ')} scene:1.5))`);
-                        const temperamentEn = translate('temperament');
-                        const faceEn = translate('face');
-                        const hairEn = translate('hair');
-                        const clothingEn = translate('clothing');
-                        const dynamicsEn = translate('dynamics');
-                        const compositionEn = translate('composition');
-                        let characterDetailsEn = [...temperamentEn, ...faceEn, ...hairEn, ...dynamicsEn];
-                        let characterStr = `((${compositionEn.join(', ') || 'medium shot'} of a beautiful woman`;
-                        if (characterDetailsEn.length > 0) characterStr += ` with ${characterDetailsEn.join(' and ')}`;
-                        if (clothingEn.length > 0) characterStr += `, wearing ${clothingEn.join(' and ')}`;
-
-                        characterStr += `))`;
-                        promptEnParts.push(characterStr);
-                        const lightingEn = translate('lighting');
-                        if (lightingEn.length > 0) promptEnParts.push(`((${lightingEn.join(' and ')} lighting)):1.2`);
-                        const angleEn = translate('angle');
-                        const cameraEn = translate('camera');
-                        const colorMotionEn = translate('color_motion');
-                        const lensDetailsEn = [...angleEn, ...cameraEn, ...colorMotionEn];
-                        if (lensDetailsEn.length > 0) promptEnParts.push(`((${lensDetailsEn.join(', ')})):1.1`);
-                        finalPromptInput.value = promptEnParts.join(', ');
-                    }
-                }
-                generateBtn.disabled = finalPromptInput.value.trim() === '';
-            }
-
-            function showLoading(isLoading) {
-                generateBtn.disabled = isLoading;
-                if (isLoading) {
-                    generateBtn.classList.add('opacity-70');
-                    loader.classList.remove('hidden');
-                    placeholderText.classList.add('hidden');
-                    gallery.classList.add('hidden');
-                    errorMessage.textContent = '';
-                } else {
-                    generateBtn.disabled = finalPromptInput.value.trim() === '';
-                    loader.classList.add('hidden');
-                }
-            }
-
-            // --- 新增的辅助函数 ---
-            async function convertUrlToDataURL(url) {
-                const proxyUrl = `/.netlify/functions/image-proxy?url=${encodeURIComponent(url)}`;
-                try {
-                    const response = await fetch(proxyUrl);
-                    if (!response.ok) {
-                        throw new Error(`代理请求失败: ${response.status} ${response.statusText}`);
-                    }
-                    const blob = await response.blob();
-                    return new Promise((resolve, reject) => {
-                        const reader = new FileReader();
-                        reader.onloadend = () => resolve(reader.result);
-                        reader.onerror = reject;
-
-                        reader.readAsDataURL(blob);
-                    });
-                } catch (e) {
-                    console.error("通过代理获取图片失败", e);
-                    throw e;
-                }
-            }
-
-            async function downloadImageFromUrl(url, filename) {
-                try {
-                    const proxyUrl = `/.netlify/functions/image-proxy?url=${encodeURIComponent(url)}`;
-                    const response = await fetch(proxyUrl);
-                    const blob = await response.blob();
-                    const blobUrl = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = blobUrl;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(blobUrl);
-                    a.remove();
-                } catch (e) {
-                    console.error("下载失败:", e);
-                    window.open(url, '_blank');
-                }
-            }
-
-            async function addImageToGalleryFromUrl(imgSrc, buttonEl) {
-                const originalIconHTML = buttonEl.innerHTML;
-                buttonEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                buttonEl.disabled = true;
-                try {
-                    const dataUrl = await convertUrlToDataURL(imgSrc);
-
-                    // ---【新增的图片大小检查】---
-                    // 限制DataURL字符串长度不超过4MB，这是一个安全的大小，通常能存入localStorage
-                    const MAX_SIZE = 4 * 1024 * 1024;
-                    if (dataUrl.length > MAX_SIZE) {
-                        alert("图片文件过大，无法直接添加到图库。请您使用【下载】按钮保存图片，然后从“作品图库”页面手动上传。");
-                        // 恢复按钮初始状态
-                        buttonEl.innerHTML = originalIconHTML;
-                        buttonEl.disabled = false;
-                        return; // 提前结束函数，不再继续执行
-                    }
-                    // ---【检查结束】---
-
-                    const newImage = {
-                        id: Date.now() + Math.random(),
-                        name: `AI作品-${Date.now()}.png`,
-                        src: dataUrl,
-                        description: "AI生成于创意工坊"
-                    };
-                    imageDB.unshift(newImage);
-                    localStorage.setItem('imageDB', JSON.stringify(imageDB));
-                    buttonEl.innerHTML = '<i class="fas fa-check"></i>';
-                    buttonEl.style.backgroundColor = 'var(--success)';
-                    if (document.getElementById('gallery-grid')) {
-                        renderImageGallery();
-                    }
-                } catch (e) {
-                    console.error("添加到图库失败:", e);
-                    // 如果错误不是因为大小超限，而是其他网络等问题，会显示这个通用提示
-                    if (e.name === 'QuotaExceededError') {
-                        alert("添加到图库失败！浏览器存储空间已满。");
-                    } else {
-                        alert("添加到图库失败！请检查网络连接或查看控制台错误。");
-                    }
-                    buttonEl.innerHTML = '<i class="fas fa-times"></i>';
-                } finally {
-                    // 延时恢复按钮，让用户能看到成功或失败的反馈图标
-                    setTimeout(() => {
-                        // 仅在未成功添加时（即没有显示绿色对勾时）恢复按钮
-                        if (buttonEl.innerHTML.includes('fa-check') === false) {
-                            buttonEl.innerHTML = originalIconHTML;
-                            buttonEl.style.backgroundColor = 'var(--primary)';
-                            buttonEl.disabled = false;
-                        }
-                    }, 2000);
-                }
-            }
-
-            function pgDisplayGallery(imageUrls) {
-                const gallery = document.getElementById('pg-image-gallery');
-                const placeholderText = document.getElementById('pg-placeholder-text');
-
-                gallery.innerHTML = '';
-                gallery.classList.remove('hidden');
-                placeholderText.classList.add('hidden');
-
-                if (!imageUrls || imageUrls.length === 0) {
-                    showError("API 未能返回有效图片。");
-                    return;
-                }
-
-                let gridColsClass = 'grid-cols-1';
-                if (imageUrls.length === 2) gridColsClass = 'grid-cols-2';
-                if (imageUrls.length >= 3) gridColsClass = 'grid-cols-2 md:grid-cols-4';
-
-                if (imageUrls.length === 1) {
-                    gallery.className = `w-full h-full grid grid-cols-1 grid-rows-1 p-2`;
-                } else {
-                    gallery.className = `w-full h-full grid ${gridColsClass} gap-2 p-2`;
-                }
-
-                imageUrls.forEach((imgSrc, index) => {
-                    const container = document.createElement('div');
-                    container.className = 'relative group w-full h-full bg-black/30 rounded-lg overflow-hidden';
-
-                    const img = document.createElement('img');
-                    img.src = imgSrc;
-                    img.alt = `Generated Image ${index + 1}`;
-                    img.className = 'w-full h-full object-contain cursor-pointer transition-transform duration-300 group-hover:scale-105';
-                    img.addEventListener('click', () => {
-                        document.getElementById('pg-lightbox-image').src = imgSrc;
-                        document.getElementById('pg-lightbox').style.display = 'flex';
-                    });
-
-                    const actionsContainer = document.createElement('div');
-                    // ---【这里是唯一的修改】---
-                    // 添加了Tailwind的 group-hover 功能，让按钮在鼠标悬停在父元素(group)上时显示出来
-                    actionsContainer.className = 'card-actions opacity-0 group-hover:opacity-100 transition-opacity duration-300';
-
-                    const addBtn = document.createElement('button');
-                    addBtn.className = 'action-btn';
-                    addBtn.title = '添加到作品图库';
-                    addBtn.style.backgroundColor = 'var(--primary)';
-                    addBtn.innerHTML = '<i class="fas fa-plus"></i>';
-                    addBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        addImageToGalleryFromUrl(imgSrc, addBtn);
-                    });
-
-                    const downloadBtn = document.createElement('button');
-                    downloadBtn.className = 'action-btn download-btn';
-                    downloadBtn.title = '下载图片';
-                    const filename = `ai-creation-${Date.now()}-${index}.png`;
-                    downloadBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        downloadImageFromUrl(imgSrc, filename);
-                    });
-                    downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
-
-                    actionsContainer.appendChild(addBtn);
-                    actionsContainer.appendChild(downloadBtn);
-
-                    container.appendChild(img);
-                    container.appendChild(actionsContainer);
-                    gallery.appendChild(container);
-                });
-            }
-
-            function showError(message) {
-                errorMessage.textContent = message;
-                if (placeholderText) {
-                    placeholderText.classList.remove('hidden');
-                }
-                if (gallery) {
-                    gallery.classList.add('hidden');
-                }
-            }
-
-            async function pollForLiblibResult(generateUuid) {
-                const maxAttempts = 40;
-                const interval = 3000;
-                for (let i = 0; i < maxAttempts; i++) {
-                    showError(`正在向 LiblibAI 查询结果... (${i * 3}秒)`);
-                    await new Promise(resolve => setTimeout(resolve, interval));
-                    try {
-                        const response = await fetch(`/api/liblib-image`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-
-                            body: JSON.stringify({ generateUuid: generateUuid })
-                        });
-                        if (!response.ok) continue;
-                        const result = await response.json();
-                        if (result.data && result.data.generateStatus === 5) {
-                            if (result.data.images && result.data.images.length > 0) {
-                                return result.data.images.map(img => img.imageUrl);
-                            } else { throw new Error("LiblibAI任务成功但未返回图片。"); }
-                        } else if (result.data && result.data.generateStatus < 5) {
-                            console.log(`Polling Liblib... status: ${result.data.generateStatus}`);
-                        } else { throw new Error(result.data.generateMsg || "Liblib任务失败。"); }
-                    } catch (error) {
-                        throw error;
-                    }
-                }
-                throw new Error("Liblib任务超时，请稍后再试。");
-            }
-
-            generateBtn.addEventListener("click", async () => {
+        // AI绘画导航点击事件 (确保从图库切换回绘画页面)
+        document.querySelector('.sidebar .nav-links a:first-child').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('.sidebar .nav-links a.active').classList.remove('active');
+            e.currentTarget.classList.add('active');
+
+            mainContent.classList.remove('hidden');
+            gallerySection.classList.add('hidden');
+        });
+
+
+        // 提交表单
+        if (textToImageForm) {
+            textToImageForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
                 showLoading(true);
-                const englishPrompt = finalPromptInput.value.trim();
-                const negativePrompt = document.getElementById("pg-negative-prompt").value;
-                const selectedApi = apiSelector.value;
-
-                const imageCount = parseInt(imageCountSelector.value, 10);
-
-                if (!englishPrompt) {
-                    showError("指令输入框不能为空！");
-                    showLoading(false);
-                    return;
-
-                }
+                generatedImagesContainer.innerHTML = ''; // 清空上次生成结果
 
                 try {
-                    let imageUrls = [];
-                    if (selectedApi === 'liblib') {
-                        const initialPayload = {
+                    const prompt = promptInput.value.trim();
+                    const negativePrompt = negativePromptInput.value.trim();
+                    const imageCount = parseInt(imageCountInput.value, 10);
 
-                            generateParams: {
-                                prompt: englishPrompt, negativePrompt: negativePrompt,
-                                width: 1024, height: 1024, imgCount: imageCount, seed: -1,
+                    if (!prompt) {
+                        throw new Error("提示词不能为空！");
+                    }
 
-                                sampler: 15, steps: 20, cfgScale: 7
-                            }
-                        };
-                        const initialResponse = await fetch(`/api/liblib-image`, {
+                    // 翻译提示词
+                    let englishPrompt = prompt;
+                    if (!/^[a-zA-Z0-9\s.,!?'"()-]+$/.test(prompt)) { // 简单判断是否为中文或包含非英文
+                        showInfo('正在翻译提示词，请稍候...');
+                        const translateResponse = await fetch('/api/translate', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(initialPayload)
-
+                            body: JSON.stringify({ text: prompt, targetLang: 'en' })
                         });
-                        if (!initialResponse.ok) {
-                            const err = await initialResponse.json();
-                            throw new Error(err.error || `提交任务失败: ${initialResponse.status}`);
+                        if (!translateResponse.ok) {
+                            const err = await translateResponse.json();
+                            throw new Error(err.error || `翻译失败: ${translateResponse.status}`);
                         }
-                        const initialResult = await initialResponse.json();
-                        if (initialResult.code !== 0 || !initialResult.data.generateUuid) {
-                            throw new Error(initialResult.msg || "未能获取任务UUID。");
-                        }
-                        const generateUuid = initialResult.data.generateUuid;
-                        imageUrls = await pollForLiblibResult(generateUuid);
+                        const translateResult = await translateResponse.json();
+                        englishPrompt = translateResult.translatedText;
+                        showSuccess('提示词翻译成功！');
+                    }
 
-                    } else if (selectedApi === 'jimeng') {
+                    let imageUrls = [];
+                    // 这里模拟调用API，实际应该替换为你的后端API调用
+                    // 如果是生产环境，你需要确保API密钥安全，不要直接暴露在前端
+                    // 这里使用一个占位符，模拟API调用
+                    // 实际项目中应改为 fetch('/api/your-image-generation-endpoint', ...)
+                    // 并在后端处理与即梦模型的交互和API Key
+                    // 为了演示，这里我们直接模拟生成图片URL
+                    // for (let i = 0; i < imageCount; i++) {
+                    //     imageUrls.push(`https://via.placeholder.com/512?text=AI+Image+${i+1}`);
+                    // }
+
+                    // 实际集成即梦模型API (这里只是一个示例结构，需要你的后端实现 /api/jimeng-image)
+                    {
                         const payload = {
                             prompt: englishPrompt,
                             negativePrompt: negativePrompt,
-
                             n: imageCount
                         };
                         const response = await fetch(`/api/jimeng-image`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify(payload)
-
                         });
                         if (!response.ok) {
                             const err = await response.json();
@@ -1826,6 +726,16 @@ margin-bottom: 15px; color: var(--text-light);">${game.name}</h3><p style="color
                 }
             });
         }
+
+        // 确保在页面加载时渲染我的图库（如果用户导航到我的图库页面）
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始加载时，如果需要显示“我的图库”，取消对 mainContent 和 gallerySection 的 hidden 类。
+            // 默认情况下，AI绘画页面是激活的，所以我们让mainContent显示，gallerySection隐藏。
+            // 如果你想让我的图库成为默认首页，你需要调整下面的 hidden/remove 方法。
+            mainContent.classList.remove('hidden'); // 确保主内容区默认显示
+            gallerySection.classList.add('hidden'); // 确保图库区默认隐藏
+            renderMyGallery(); // 初始渲染图库，即使它被隐藏，数据也会加载
+        });
     </script>
 </body>
 
