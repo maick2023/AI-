@@ -1784,7 +1784,6 @@
                 placeholderText.classList.remove('hidden');
             });
 
-
             enrichBtn.addEventListener('click', async () => {
                 const currentPrompt = finalPromptInput.value.trim();
                 if (!currentPrompt) {
@@ -1796,42 +1795,50 @@
                 enrichBtn.innerHTML = '<div class="pg-spinner-sm inline-block mr-2"></div> 丰富中...';
 
                 try {
-                    // 注意这里的变化：我们给请求体增加了一个'type'字段
+                    // ---【这是关键修改 1：构建Google能识别的请求体】---
+                    // 我们不再发送 {type: 'enrich'}，而是直接构建Google API需要的格式
                     const payload = {
-                        type: 'enrich', // 告诉后端这是“丰富”请求
-                        prompt: `Please enrich and expand the following creative prompt with more vivid details, focusing on atmosphere, lighting, and character emotion. Keep the core subject but make it more poetic and descriptive. The prompt is: "${currentPrompt}"`
+                        contents: [{
+                            parts: [{
+                                text: `Please enrich and expand the following creative prompt with more vivid details, focusing on atmosphere, lighting, and character emotion. Keep the core subject but make it more poetic and descriptive. The prompt is: "${currentPrompt}"`
+                            }]
+                        }]
                     };
 
-                    // 直接使用你已有的gemini函数
+                    // 直接使用你已有的gemini函数，它会把上面的payload转发给Google
                     const response = await fetch(`/.netlify/functions/gemini`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(payload)
                     });
 
-                    if (!response.ok) {
-                        const errorResult = await response.json();
-                        throw new Error(errorResult.error || `API 请求失败: ${response.status}`);
-                    }
-
                     const result = await response.json();
 
-                    // 注意：我们让后端返回的字段叫 'text'，和聊天功能保持一致
-                    if (result.text) {
-                        finalPromptInput.value = result.text;
-                        pgUpdateOutput();
+                    if (!response.ok) {
+                        // 如果Google返回错误，显示更详细的信息
+                        const errorMessage = result.error?.message || `API 请求失败: ${response.status}`;
+                        throw new Error(errorMessage);
+                    }
+
+                    // ---【这是关键修改 2：正确解析Google返回的结果】---
+                    // 你的 gemini.js 直接返回Google的原始数据，所以我们需要这样解析
+                    if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                        const enrichedText = result.candidates[0].content.parts[0].text;
+                        finalPromptInput.value = enrichedText.trim();
+                        pgUpdateOutput(); // 更新UI
                     } else {
-                        throw new Error("AI未能返回有效内容。");
+                        throw new Error("AI未能返回有效内容，或返回了非预期的格式。");
                     }
 
                 } catch (error) {
                     console.error("丰富提示词失败:", error);
-                    alert(`请求出错: ${error.message}`);
+                    alert(`请求出错: ${error.message}`); // 现在会显示更详细的错误信息
                 } finally {
                     enrichBtn.disabled = false;
                     enrichBtn.innerHTML = '✨ 丰富';
                 }
             });
+
 
             // 提示：你可以用类似的方法实现 inspireBtn (随机灵感) 的功能！
 
