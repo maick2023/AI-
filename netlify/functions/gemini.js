@@ -1,59 +1,65 @@
-// 文件路径: netlify/functions/gemini.js
+// /netlify/functions/gemini.js
 
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const fetch = require('node-fetch');
 
-exports.handler = async function (event, context) {
+exports.handler = async (event) => {
+  // 仅允许 POST 请求
   if (event.httpMethod !== 'POST') {
-    return { statusCode: 405, body: 'Method Not Allowed' };
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: { message: 'This function only accepts POST requests.' } }),
+      headers: { 'Content-Type': 'application/json' },
+    };
   }
 
-  const API_KEY = process.env.GEMINI_API_KEY;
-  if (!API_KEY) {
-    return { statusCode: 500, body: JSON.stringify({ error: "API Key not configured." }) };
+  // 从环境变量中获取API密钥
+  const { GEMINI_API_KEY } = process.env;
+  if (!GEMINI_API_KEY) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: { message: 'GEMINI_API_KEY is not configured on the server.' } }),
+      headers: { 'Content-Type': 'application/json' },
+    };
   }
 
-  const genAI = new GoogleGenerativeAI(API_KEY);
-  const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+  // ---【这里是唯一的修改】---
+  // 将模型从 'gemini-pro' 更新为 'gemini-1.5-flash-latest'
+  const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
 
   try {
-    const body = JSON.parse(event.body);
-    let aiResponseText = '';
+    const requestBody = event.body;
 
-    // --- 核心逻辑：根据类型判断任务 ---
-    if (body.type === 'enrich') {
-      // 这是“丰富提示词”的请求
-      if (!body.prompt) {
-        return { statusCode: 400, body: JSON.stringify({ error: "Prompt is required for enrichment." }) };
-      }
-      const result = await model.generateContent(body.prompt);
-      const response = await result.response;
-      aiResponseText = response.text();
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: requestBody,
+    });
 
-    } else {
-      // 这是默认的“聊天”请求
-      if (!body.contents) {
-        return { statusCode: 400, body: JSON.stringify({ error: "Chat history 'contents' is required." }) };
-      }
-      const chat = model.startChat({ history: body.contents.slice(0, -1) }); // 获取除最后一个问题外的历史记录
-      const lastUserMessage = body.contents[body.contents.length - 1].parts[0].text;
+    const responseData = await response.json();
 
-      const result = await chat.sendMessage(lastUserMessage);
-      const response = await result.response;
-      aiResponseText = response.text();
+    if (!response.ok) {
+      console.error('Google API Error:', responseData);
+      return {
+        statusCode: response.status,
+        body: JSON.stringify(responseData),
+        headers: { 'Content-Type': 'application/json' },
+      };
     }
 
     return {
       statusCode: 200,
+      body: JSON.stringify(responseData),
       headers: { 'Content-Type': 'application/json' },
-      // 我们统一返回 'text' 字段，前端代码更简单
-      body: JSON.stringify({ text: aiResponseText.trim() }),
     };
 
   } catch (error) {
-    console.error("Gemini API Error:", error);
+    console.error('Proxy Error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: error.message || "An error occurred with the AI." }),
+      body: JSON.stringify({ error: { message: `An internal server error occurred: ${error.message}` } }),
+      headers: { 'Content-Type': 'application/json' },
     };
   }
 };
