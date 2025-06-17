@@ -1260,7 +1260,7 @@
             return messageElement;
         }
 
-        // --- AI Prompt Generator ---
+
         function initPromptGenerator() {
             const promptData = {
                 style: {
@@ -1784,9 +1784,6 @@
                 placeholderText.classList.remove('hidden');
             });
 
-            // 在 initPromptGenerator 函数中找到 enrichBtn
-            const enrichBtn = document.getElementById('pg-enrich-button');
-            const finalPromptInput = document.getElementById('pg-final-prompt-input');
 
             enrichBtn.addEventListener('click', async () => {
                 const currentPrompt = finalPromptInput.value.trim();
