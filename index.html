@@ -5,10 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI创意工坊</title>
+    <!-- Font Awesome for original site icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Tailwind CSS for the prompt generator -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for the prompt generator -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Original Site Styles */
         :root {
             --primary: #6C63FF;
             --secondary: #4A44B6;
@@ -171,24 +175,22 @@
             box-shadow: 0 20px 40px rgba(108, 99, 255, 0.35);
         }
 
-        .card-media-container {
+        .image-card .card-img {
             height: 250px;
             overflow: hidden;
             position: relative;
             cursor: pointer;
-            background-color: #0d0d1a;
         }
 
-        .card-media-container img,
-        .card-media-container video {
+        .image-card .card-img img,
+        .video-card .card-img video {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
             transition: transform 0.5s ease;
         }
 
-        .card:hover .card-media-container img,
-        .card:hover .card-media-container video {
+        .image-card:hover .card-img img {
             transform: scale(1.1);
         }
 
@@ -196,37 +198,25 @@
             padding: 20px;
         }
 
-        .card-info h3 {
+        .image-card .card-info h3 {
             margin-bottom: 8px;
             font-size: 1.4rem;
             color: var(--text-light);
-            word-break: break-all;
         }
 
-        .card-info p {
+        .image-card .card-info p {
             color: var(--text-gray);
             font-size: 0.95rem;
             margin-bottom: 15px;
         }
 
-        .card-actions {
+        .delete-btn {
             position: absolute;
             top: 15px;
             right: 15px;
-            display: flex;
-            gap: 10px;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card:hover .card-actions {
-            opacity: 1;
-        }
-
-        .action-btn {
             width: 36px;
             height: 36px;
+            background: rgba(249, 65, 68, 0.8);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -234,27 +224,17 @@
             color: white;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-decoration: none;
+            z-index: 10;
+            opacity: 0;
         }
 
-        .action-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .delete-btn {
-            background: rgba(249, 65, 68, 0.8);
+        .card:hover .delete-btn {
+            opacity: 1;
         }
 
         .delete-btn:hover {
             background: var(--danger);
-        }
-
-        .download-btn {
-            background: rgba(76, 201, 240, 0.8);
-        }
-
-        .download-btn:hover {
-            background: var(--success);
+            transform: scale(1.1);
         }
 
         .btn {
@@ -386,6 +366,7 @@
             }
         }
 
+        /* Styles for Prompt Generator */
         #prompt-generator {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             color: #d1d5db;
@@ -461,6 +442,63 @@
             }
         }
 
+        /* Styles for Video Generator */
+        .video-gen-container {
+            @apply grid grid-cols-1 lg:grid-cols-3 gap-8;
+        }
+
+        .video-gen-main {
+            @apply lg:col-span-2 bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700 flex flex-col;
+        }
+
+        .video-gen-settings {
+            @apply bg-gray-900/70 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-700;
+        }
+
+        .image-upload-box {
+            @apply w-full aspect-video bg-gray-800 border-2 border-dashed border-gray-600 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-indigo-500 transition-colors;
+        }
+
+        .image-upload-box img {
+            @apply w-full h-full object-contain;
+        }
+
+        .setting-group-title {
+            @apply text-lg font-semibold text-gray-300 mb-3 border-b border-gray-700 pb-2;
+        }
+
+        .setting-button {
+            @apply w-full bg-gray-700 text-gray-300 p-2 rounded-lg transition-colors hover:bg-gray-600;
+        }
+
+        .setting-button.active {
+            @apply bg-indigo-600 text-white;
+        }
+
+        .toggle-switch {
+            @apply relative inline-flex items-center cursor-pointer;
+        }
+
+        .toggle-switch input {
+            @apply sr-only peer;
+        }
+
+        .toggle-switch-bg {
+            @apply w-11 h-6 bg-gray-600 rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600;
+        }
+
+        .progress-bar-container {
+            @apply w-full bg-gray-700 rounded-full h-10 overflow-hidden relative flex items-center justify-center;
+        }
+
+        .progress-bar {
+            @apply bg-indigo-600 h-full rounded-full transition-all duration-500 ease-linear absolute top-0 left-0;
+        }
+
+        .progress-text {
+            @apply relative text-sm font-bold text-white z-10;
+        }
+
         .music-card {
             display: flex;
             align-items: center;
@@ -488,18 +526,18 @@
             flex-grow: 1;
         }
 
-        .music-card h3 {
+        .music-card .music-info h3 {
             font-size: 1.4rem;
             margin-bottom: 5px;
             color: var(--text-light);
         }
 
-        .music-card .artist {
+        .music-card .music-info .artist {
             color: var(--text-gray);
             margin-bottom: 10px;
         }
 
-        .music-card .duration {
+        .music-card .music-info .duration {
             color: var(--text-gray);
             font-size: 0.9rem;
         }
@@ -547,11 +585,16 @@
 </head>
 
 <body>
+    <!-- 导航栏 -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo" onclick="showPage('home')"><i class="fas fa-robot"></i><span>AI创意工坊</span></a>
+            <a href="#" class="logo" onclick="showPage('home')">
+                <i class="fas fa-robot"></i>
+                <span>AI创意工坊</span>
+            </a>
             <ul class="nav-links">
                 <li><a onclick="showPage('prompt-generator')"><i class="fas fa-magic"></i> AI绘画</a></li>
+                <li><a onclick="showPage('video-generator')"><i class="fas fa-video"></i> AI视频</a></li>
                 <li><a onclick="showPage('gallery')"><i class="fas fa-images"></i> 作品图库</a></li>
                 <li><a onclick="showPage('videos')"><i class="fas fa-film"></i> 视频集库</a></li>
                 <li><a onclick="showPage('music')"><i class="fas fa-music"></i> 音乐库</a></li>
@@ -561,16 +604,19 @@
         </div>
     </nav>
 
+    <!-- 主内容区 -->
     <div class="main-content">
+        <!-- 首页 -->
         <div id="home" class="page active">
             <div class="page-title">
                 <h1>AI创意工坊</h1>
-                <p>一个集成了AI绘画、作品管理与展示的创意空间</p>
+                <p>一个集成了AI绘画、AI视频、作品管理与展示的创意空间</p>
             </div>
+
             <div class="content-grid">
-                <div class="card" onclick="showPage('prompt-generator')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0?q=80&w=1974" alt="AI绘画">
+                <div class="card image-card" onclick="showPage('prompt-generator')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1599420186946-7b6fb4e297f0?q=80&w=1974" alt="AI绘画">
                     </div>
                     <div class="card-info">
                         <h3>AI绘画</h3>
@@ -578,9 +624,19 @@
                         <div class="btn">开始创作</div>
                     </div>
                 </div>
-                <div class="card" onclick="showPage('gallery')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=1974" alt="作品图库">
+                <div class="card image-card" onclick="showPage('video-generator')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?q=80&w=2071" alt="AI视频">
+                    </div>
+                    <div class="card-info">
+                        <h3>AI视频</h3>
+                        <p>将您的图片转化为生动的动态视频</p>
+                        <div class="btn">进入视频创作</div>
+                    </div>
+                </div>
+                <div class="card image-card" onclick="showPage('gallery')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1682687220063-4742bd7fd538?q=80&w=1974" alt="作品图库">
                     </div>
                     <div class="card-info">
                         <h3>作品图库</h3>
@@ -588,9 +644,9 @@
                         <div class="btn btn-outline">浏览图库</div>
                     </div>
                 </div>
-                <div class="card" onclick="showPage('videos')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1574717024453-354056aafa98?q=80&w=1974" alt="视频集库">
+                <div class="card image-card" onclick="showPage('videos')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1574717024453-354056aafa98?q=80&w=1974" alt="视频集库">
                     </div>
                     <div class="card-info">
                         <h3>视频集库</h3>
@@ -598,9 +654,9 @@
                         <div class="btn btn-outline">浏览视频</div>
                     </div>
                 </div>
-                <div class="card" onclick="showPage('music')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070" alt="音乐库">
+                <div class="card image-card" onclick="showPage('music')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070" alt="音乐库">
                     </div>
                     <div class="card-info">
                         <h3>音乐库</h3>
@@ -608,9 +664,9 @@
                         <div class="btn btn-outline">进入音乐库</div>
                     </div>
                 </div>
-                <div class="card" onclick="showPage('games')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1550745165-9bc0b252726a?q=80&w=2070" alt="游戏中心">
+                <div class="card image-card" onclick="showPage('games')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726a?q=80&w=2070" alt="游戏中心">
                     </div>
                     <div class="card-info">
                         <h3>游戏中心</h3>
@@ -618,9 +674,9 @@
                         <div class="btn btn-outline">进入游戏</div>
                     </div>
                 </div>
-                <div class="card" onclick="showPage('chat')">
-                    <div class="card-media-container"><img
-                            src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071" alt="AI对话">
+                <div class="card image-card" onclick="showPage('chat')">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071" alt="AI对话">
                     </div>
                     <div class="card-info">
                         <h3>AI对话</h3>
@@ -631,8 +687,94 @@
             </div>
         </div>
 
+        <!-- AI视频创作页面 -->
+        <div id="video-generator" class="page">
+            <div class="page-title">
+                <h1>AI视频创作中心</h1>
+                <p>选择或上传一张图片，结合描述，为其注入生命的动态</p>
+            </div>
+            <div class="video-gen-container">
+                <main class="video-gen-main">
+                    <div>
+                        <h3 class="pg-category-title mb-3">图像上传</h3>
+                        <div class="image-upload-box" id="video-gen-upload-box">
+                            <div id="video-gen-upload-placeholder" class="p-4">
+                                <i class="fas fa-cloud-upload-alt text-4xl text-gray-500"></i>
+                                <p class="mt-2 text-gray-400">点击或拖动上传图片</p>
+                                <p class="text-xs text-gray-500">没有合适的图片？<span class="text-indigo-400 hover:underline"
+                                        id="video-gen-load-gallery">从图库选择</span></p>
+                            </div>
+                            <img id="video-gen-preview" class="hidden" src="" alt="Image preview" />
+                        </div>
+                        <input type="file" id="video-gen-image-upload" class="hidden" accept="image/*">
+                    </div>
+                    <div class="mt-6">
+                        <h3 class="pg-category-title mb-3">创意描述 (选填)</h3>
+                        <textarea id="video-gen-prompt" rows="4"
+                            class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-gray-300 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+                            placeholder="结合图片，描述您想生成的画面和动作。例如：海浪拍打着沙滩，粉色的月亮在天空中缓缓升起。"></textarea>
+                    </div>
+                </main>
+                <aside class="video-gen-settings space-y-6">
+                    <div>
+                        <h3 class="setting-group-title">视频模型</h3>
+                        <button class="setting-button active w-full flex justify-between items-center">
+                            <span>Stable Video Diffusion</span>
+                            <i class="fas fa-cog text-gray-400"></i>
+                        </button>
+                    </div>
+                    <div>
+                        <h3 class="setting-group-title">基础设置</h3>
+                        <div class="space-y-3">
+                            <p class="text-sm text-gray-400">生成时长</p>
+                            <div class="grid grid-cols-2 gap-2" id="video-duration-buttons">
+                                <button class="setting-button" data-duration="5">5s</button>
+                                <button class="setting-button active" data-duration="10">10s</button>
+                            </div>
+                            <p class="text-sm text-gray-400 mt-2">视频比例</p>
+                            <button class="setting-button active flex justify-between items-center">
+                                <span><i class="fas fa-arrows-alt-h mr-2"></i>自动匹配</span>
+                                <i class="fas fa-sliders-h text-gray-400"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <label for="inspiration-mode" class="text-sm text-gray-300">灵感模式</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="inspiration-mode" class="peer" checked>
+                                <div class="toggle-switch-bg"></div>
+                            </label>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <label for="sound-effects" class="text-sm text-gray-300">视频音效</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="sound-effects" class="peer">
+                                <div class="toggle-switch-bg"></div>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="video-gen-button-container">
+                        <button id="video-generate-btn"
+                            class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-lg shadow-lg hover:shadow-indigo-500/50 disabled:opacity-50"
+                            disabled>
+                            <i class="fas fa-film mr-2"></i>
+                            生成视频
+                        </button>
+                    </div>
+                </aside>
+            </div>
+            <div id="video-gen-gallery-container" class="pg-section-container mt-8 hidden">
+                <h2 class="text-2xl font-bold text-indigo-400">视频成果</h2>
+                <div id="video-output-gallery" class="mt-4 w-full grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Generated videos will appear here -->
+                </div>
+            </div>
+        </div>
+
         <div id="prompt-generator" class="page">
             <div class="space-y-8">
+                <!-- Builder Section -->
                 <div id="pg-builder-container" class="pg-section-container">
                     <div class="space-y-6">
                         <div>
@@ -705,54 +847,51 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Prompt Input Section -->
                 <div class="pg-section-container">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-bold text-indigo-400">最终指令 (可编辑)</h2>
-                        <div class="flex items-center space-x-4"><button id="pg-inspire-button" class="pg-gemini-button"
-                                disabled>✨ 随机灵感</button><button id="pg-enrich-button" class="pg-gemini-button"
-                                title="使用AI丰富细节" disabled>✨ 丰富</button><button id="pg-clear-button"
-                                class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button></div>
+                        <div class="flex items-center space-x-4">
+                            <button id="pg-inspire-button" class="pg-gemini-button">✨ 随机灵感</button>
+                            <button id="pg-enrich-button" class="pg-gemini-button" title="使用Gemini丰富细节">✨ 丰富</button>
+                            <button id="pg-clear-button"
+                                class="text-sm text-red-400 hover:text-red-300 font-semibold">彻底清除</button>
+                        </div>
                     </div>
-                    <div class="relative"><textarea id="pg-final-prompt-input" rows="6"
+                    <div class="relative">
+                        <textarea id="pg-final-prompt-input" rows="6"
                             class="w-full p-3 bg-gray-800 rounded-lg border border-gray-600 text-green-400 font-mono focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                            placeholder="可直接在此输入，或通过上方引导模式构建..."></textarea><button id="pg-copy-button-en"
-                            class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="复制英文指令"><svg
-                                class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            placeholder="可直接在此输入，或通过上方引导模式构建..."></textarea>
+                        <button id="pg-copy-button-en"
+                            class="absolute top-3 right-3 text-gray-400 hover:text-white transition" title="复制英文指令">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
                                 </path>
-                            </svg></button></div>
+                            </svg>
+                        </button>
+                    </div>
                     <div class="mt-4">
-                        <h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3><input id="pg-negative-prompt"
-                            type="text"
+                        <h3 class="font-semibold mb-2 text-gray-300">负面提示词</h3>
+                        <input id="pg-negative-prompt" type="text"
                             class="w-full p-2 bg-gray-800 rounded-lg border border-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition text-gray-300 font-mono"
-                            value="ng_deepnegative_v1_75t,(badhandv4:1.2),EasyNegative,(worst quality:2),">
+                            value="ng_deepnegative_v1_75t, (worst quality, low quality:1.4), (bad anatomy), (inaccurate limb:1.2), bad hands, extra fingers, (realistic, 3d:1.3), man, boy, blurry, simple background, text, watermark">
                     </div>
                 </div>
+
+                <!-- Gallery Section -->
                 <div class="pg-section-container">
                     <h2 class="text-2xl font-bold text-indigo-400">创作画廊</h2>
-                    <div class="flex flex-wrap items-center gap-4 mt-4">
-                        <label for="api-selector" class="text-gray-300 font-semibold">选择API引擎:</label>
-                        <select id="api-selector"
-                            class="flex-grow bg-gray-700 text-white rounded-lg p-2 border border-gray-600 focus:ring-2 focus:ring-indigo-500">
-                            <option value="liblib" selected>LiblibAI (推荐)</option>
-                            <option value="jimeng">即梦API</option>
-                        </select>
-                        <select id="image-count-selector"
-                            class="bg-gray-700 text-white rounded-lg p-2 border border-gray-600 focus:ring-2 focus:ring-indigo-500">
-                            <option value="1">生成1张</option>
-                            <option value="2">生成2张</option>
-                            <option value="3">生成3张</option>
-                            <option value="4" selected>生成4张</option>
-                        </select>
-                    </div>
                     <button id="pg-generate-button"
-                        class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50"><svg
-                            class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-full mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-xl shadow-lg hover:shadow-indigo-500/50">
+                        <svg class="w-7 h-7 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
                             </path>
-                        </svg>生成杰作</button>
+                        </svg>
+                        生成杰作 (一次4张)
+                    </button>
                     <div id="pg-gallery-container"
                         class="mt-4 w-full aspect-video bg-gray-900 rounded-lg flex items-center justify-center border-2 border-dashed border-gray-700 min-h-[300px]">
                         <div id="pg-placeholder-text" class="text-gray-500 text-center">
@@ -768,20 +907,29 @@
             </div>
         </div>
 
+        <!-- 作品图库页面 -->
         <div id="gallery" class="page">
             <div class="page-title">
                 <h1>作品图库</h1>
                 <p>管理并展示您所有的AI生成图片作品</p>
             </div>
+
             <div class="upload-section">
-                <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
                 <h2>上传新图片</h2>
                 <p class="upload-text">支持JPG、PNG格式，最大10MB</p>
-                <input type="file" id="image-upload" class="file-input" accept="image/*" multiple>
-                <button class="btn" id="image-upload-button"><i class="fas fa-upload"></i> 选择图片</button>
+                <input type="file" id="image-upload" class="file-input" accept="image/*">
+                <button class="btn" id="image-upload-button">
+                    <i class="fas fa-upload"></i> 选择图片
+                </button>
                 <div id="upload-status" style="margin-top: 15px; color: var(--primary);"></div>
             </div>
-            <div class="content-grid" id="gallery-grid"></div>
+
+            <div class="content-grid" id="gallery-grid">
+                <!-- 图片将通过JavaScript动态添加 -->
+            </div>
         </div>
 
         <div id="videos" class="page">
@@ -790,342 +938,458 @@
                 <p>管理并展示您所有的AI生成视频作品</p>
             </div>
             <div class="upload-section">
-                <div class="upload-icon"><i class="fas fa-video"></i></div>
+                <div class="upload-icon">
+                    <i class="fas fa-video"></i>
+                </div>
                 <h2>上传新视频</h2>
                 <p class="upload-text">支持MP4格式，最大50MB</p>
-                <input type="file" id="video-upload" class="file-input" accept="video/*" multiple>
-                <button class="btn" id="video-upload-button"><i class="fas fa-upload"></i> 选择视频</button>
+                <input type="file" id="video-upload" class="file-input" accept="video/*">
+                <button class="btn" id="video-upload-button">
+                    <i class="fas fa-upload"></i> 选择视频
+                </button>
                 <div id="video-upload-status" style="margin-top: 15px; color: var(--primary);"></div>
             </div>
-            <div class="content-grid" id="videos-grid"></div>
+            <div class="content-grid" id="videos-grid">
+                <!-- Videos will be dynamically added here -->
+            </div>
         </div>
-
         <div id="games" class="page">
             <div class="page-title">
                 <h1>游戏中心</h1>
                 <p>体验我们集成的小游戏</p>
             </div>
-            <div class="content-grid" id="games-grid"></div>
+            <div class="content-grid" id="games-grid">
+                <!-- Games will be dynamically added here -->
+            </div>
         </div>
-
         <div id="music" class="page">
             <div class="page-title">
                 <h1>音乐库</h1>
                 <p>管理并展示您所有的音乐作品</p>
             </div>
+
             <div class="upload-section">
-                <div class="upload-icon"><i class="fas fa-music"></i></div>
+                <div class="upload-icon">
+                    <i class="fas fa-music"></i>
+                </div>
                 <h2>上传新音乐</h2>
                 <p class="upload-text">支持MP3格式，最大20MB</p>
-                <input type="file" id="music-upload" class="file-input" accept="audio/*" multiple>
-                <button class="btn" id="music-upload-button"><i class="fas fa-upload"></i> 选择音乐</button>
+                <input type="file" id="music-upload" class="file-input" accept="audio/*">
+                <button class="btn" id="music-upload-button">
+                    <i class="fas fa-upload"></i> 选择音乐
+                </button>
                 <div id="music-upload-status" style="margin-top: 15px; color: var(--primary);"></div>
             </div>
-            <div id="music-grid"></div>
-        </div>
 
+            <div id="music-grid">
+                <!-- Music will be dynamically added here -->
+            </div>
+        </div>
         <div id="chat" class="page">
             <div class="page-title">
                 <h1>AI对话助手</h1>
-                <p>与您的私人AI助手进行实时对话</p>
+                <p>与Gemini AI进行实时对话，获取创意灵感</p>
             </div>
             <div class="chat-container" style="max-width: 800px; margin: auto;">
                 <div class="chat-header"
                     style="background: linear-gradient(90deg, var(--primary), var(--secondary)); padding: 15px; text-align: center; position: relative;">
                     <h3 style="font-size: 1.5rem; display: flex; align-items: center; justify-content: center;"><i
-                            class="fas fa-robot" style="margin-right: 10px;"></i> AI助手</h3>
+                            class="fas fa-robot" style="margin-right: 10px;"></i> Gemini AI助手</h3>
                     <button id="api-settings-btn"
                         style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); background: rgba(255,255,255,0.1); border:none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer;"><i
                             class="fas fa-cog"></i></button>
                 </div>
                 <div class="chat-messages" id="chat-messages"
-                    style="height: 400px; padding: 20px; overflow-y: auto; background: rgba(26, 26, 46, 0.5);"></div>
+                    style="height: 400px; padding: 20px; overflow-y: auto; background: rgba(26, 26, 46, 0.5);">
+                </div>
                 <div class="chat-input" style="display: flex; padding: 15px; background: rgba(26, 26, 46, 0.9);">
                     <input type="text" id="chat-input" placeholder="请先设置API密钥..."
                         style="flex: 1; padding: 15px; border: none; border-radius: 50px 0 0 50px; background: rgba(255, 255, 255, 0.08); color: white; font-size: 1rem; outline: none;"
                         disabled>
                     <button id="send-btn"
                         style="background: var(--primary); color: white; border: none; padding: 0 30px; border-radius: 0 50px 50px 0; cursor: pointer; font-size: 1rem;"
-                        disabled><i class="fas fa-paper-plane"></i></button>
+                        disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="pg-lightbox"><img id="pg-lightbox-image" src="" alt="Enlarged image" /></div>
-    <div id="image-preview-modal" class="modal">
-        <div class="modal-content" style="background: transparent; box-shadow: none;"><button class="close-modal"
-                onclick="closePreviewModal()">&times;</button><img id="preview-image" class="image-preview" src=""
-                alt="预览图片"></div>
+    <div id="pg-lightbox">
+        <img id="pg-lightbox-image" src="" alt="Enlarged image" />
     </div>
-    <div id="music-player-modal" class="modal">
-        <div class="modal-content"><button class="close-modal" onclick="closeMusicPlayer()">&times;</button>
-            <h2 id="music-title" class="text-2xl font-bold text-indigo-400 mb-4"></h2><audio id="audio-player" controls
-                class="w-full"></audio>
+
+    <div id="image-preview-modal" class="modal">
+        <div class="modal-content" style="background: transparent; box-shadow: none;">
+            <button class="close-modal" onclick="closePreviewModal()">&times;</button>
+            <img id="preview-image" class="image-preview" src="" alt="预览图片">
         </div>
     </div>
+
+    <div id="gallery-selection-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal"
+                onclick="document.getElementById('gallery-selection-modal').style.display='none'">&times;</button>
+            <h2 class="text-2xl font-bold text-indigo-400 mb-4">从图库中选择一张图片</h2>
+            <div id="gallery-modal-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto">
+                <!-- Gallery images will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <div id="music-player-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeMusicPlayer()">&times;</button>
+            <h2 id="music-title" class="text-2xl font-bold text-indigo-400 mb-4"></h2>
+            <audio id="audio-player" controls class="w-full"></audio>
+        </div>
+    </div>
+
     <div id="api-modal" class="modal">
-        <div class="modal-content"><button class="close-modal"
+        <div class="modal-content">
+            <button class="close-modal"
                 onclick="document.getElementById('api-modal').style.display='none'">&times;</button>
-            <h2 style="margin-bottom: 25px; color: var(--primary);">设置AI对话API密钥</h2>
-            <div class="form-group" style="text-align: left;"><label for="api-key"
-                    style="display: block; margin-bottom: 8px;">API密钥</label><input type="password" id="api-key"
-                    class="form-control" placeholder="在此输入您的API密钥"></div><button class="btn"
-                style="width:100%; margin-top: 20px;" onclick="saveApiKey()"><i class="fas fa-save"></i>
-                保存API密钥</button>
+            <h2 style="margin-bottom: 25px; color: var(--primary);">设置Gemini API密钥</h2>
+            <div class="form-group" style="text-align: left;">
+                <label for="api-key" style="display: block; margin-bottom: 8px;">Gemini API密钥</label>
+                <input type="password" id="api-key" class="form-control" placeholder="在此输入您的Gemini API密钥">
+            </div>
+            <button class="btn" style="width:100%; margin-top: 20px;" onclick="saveApiKey()">
+                <i class="fas fa-save"></i> 保存API密钥
+            </button>
         </div>
     </div>
 
     <footer>
         <div class="copyright">
-            <p>&copy; 2024 AI创意工坊 | 使用localStorage存储所有内容</p>
+            <p>&copy; 2023 AI创意工坊 | 使用localStorage存储所有内容</p>
         </div>
     </footer>
 
     <script>
-        // --- Database Setup ---
         let imageDB = JSON.parse(localStorage.getItem('imageDB')) || [];
         let videoDB = JSON.parse(localStorage.getItem('videoDB')) || [];
         let musicDB = JSON.parse(localStorage.getItem('musicDB')) || [];
 
-        // --- Page Navigation ---
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0, 0);
         }
 
-        // --- App Initialization ---
         document.addEventListener('DOMContentLoaded', function () {
             initImageGallery();
-            initVideoGallery();
+            initVideoGenerator();
             initPromptGenerator();
+            initVideoGallery();
             initMusicGallery();
             initChat();
             initGames();
         });
 
-        // --- Generic File Reader ---
-        function readFileAsDataURL(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = (error) => reject(error);
-                reader.readAsDataURL(file);
-            });
-        }
+        // --- Image Gallery Logic ---
+        const galleryGrid = document.getElementById('gallery-grid');
+        const imageUpload = document.getElementById('image-upload');
+        const imageUploadButton = document.getElementById('image-upload-button');
+        const uploadStatus = document.getElementById('upload-status');
 
-        // --- Image Gallery ---
         function initImageGallery() {
-            const grid = document.getElementById('gallery-grid');
-            const uploader = document.getElementById('image-upload');
-            const uploadBtn = document.getElementById('image-upload-button');
-            const statusEl = document.getElementById('upload-status');
+            imageUploadButton.addEventListener('click', () => imageUpload.click());
 
-            uploadBtn.addEventListener('click', () => uploader.click());
-
-            uploader.addEventListener('change', async (e) => {
-                const files = e.target.files;
-                if (!files.length) return;
-
-                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
-                statusEl.style.color = 'var(--primary)';
-
-                for (const file of files) {
-                    if (!file.type.match('image.*') || file.size > 10 * 1024 * 1024) {
-                        alert(`文件 "${file.name}" 不合格（必须是小于10MB的图片），已跳过。`);
-                        continue;
-                    }
-                    try {
-                        const fileSrc = await readFileAsDataURL(file);
-                        const newImage = { id: Date.now() + Math.random(), name: file.name, src: fileSrc, description: "本地上传的作品" };
-                        imageDB.unshift(newImage);
-                    } catch (error) {
-                        alert(`读取文件 "${file.name}" 失败，请重试。`);
-                    }
+            imageUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file || !file.type.match('image.*') || file.size > 10 * 1024 * 1024) {
+                    uploadStatus.textContent = '错误：请选择小于10MB的图片文件';
+                    uploadStatus.style.color = 'var(--accent)';
+                    return;
                 }
-
-                localStorage.setItem('imageDB', JSON.stringify(imageDB));
-                statusEl.textContent = `上传完成！`;
-                renderImageGallery();
-                uploader.value = '';
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const newImage = { id: Date.now(), name: file.name, src: e.target.result, description: "本地上传的作品" };
+                    imageDB.push(newImage);
+                    localStorage.setItem('imageDB', JSON.stringify(imageDB));
+                    uploadStatus.textContent = `上传成功：${file.name}`;
+                    uploadStatus.style.color = 'var(--primary)';
+                    renderImageGallery();
+                };
+                reader.readAsDataURL(file);
             });
             renderImageGallery();
         }
 
         function renderImageGallery() {
-            const grid = document.getElementById('gallery-grid');
-            grid.innerHTML = '';
-            if (!imageDB.length) {
-                grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">图库为空，快去创作或上传吧！</p>';
+            galleryGrid.innerHTML = '';
+            if (imageDB.length === 0) {
+                galleryGrid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">图库为空，快去创作或上传吧！</p>';
                 return;
             }
             imageDB.forEach(image => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-media-container" onclick="previewImage('${image.src}')">
-                        <img src="${image.src}" alt="${image.name}">
-                    </div>
-                    <div class="card-info">
-                        <h3>${image.name.length > 20 ? image.name.slice(0, 20) + '...' : image.name}</h3>
-                        <p>${image.description}</p>
-                    </div>
-                    <div class="card-actions">
-                         <a href="${image.src}" download="${image.name}" class="action-btn download-btn" title="下载图片">
-                            <i class="fas fa-download"></i>
-                         </a>
-                         <div class="action-btn delete-btn" onclick="deleteItem('image', ${image.id}, event)" title="删除图片">
-                            <i class="fas fa-trash"></i>
-                         </div>
-                    </div>
+                const imageCard = document.createElement('div');
+                imageCard.className = 'card image-card';
+                imageCard.innerHTML = `
+                    <div class="card-img" onclick="previewImage('${image.src}', '${image.name}')"> <img src="${image.src}" alt="${image.name}"> </div>
+                    <div class="card-info"> <h3>${image.name.slice(0, 20)}...</h3> <p>${image.description}</p> </div>
+                    <div class="delete-btn" onclick="deleteImage(${image.id}, event)"> <i class="fas fa-trash"></i> </div>
                 `;
-                grid.appendChild(card);
+                galleryGrid.appendChild(imageCard);
             });
         }
 
-        function previewImage(src) {
-            document.getElementById('preview-image').src = src;
+        function previewImage(src, title) {
+            const previewImg = document.getElementById('preview-image');
+            previewImg.src = src;
+            previewImg.alt = title;
             document.getElementById('image-preview-modal').style.display = 'flex';
         }
+
         function closePreviewModal() {
             document.getElementById('image-preview-modal').style.display = 'none';
         }
 
-        // --- Video Gallery ---
+        function deleteImage(id, event) {
+            event.stopPropagation();
+            if (confirm('确定要删除这张图片吗？')) {
+                imageDB = imageDB.filter(image => image.id !== id);
+                localStorage.setItem('imageDB', JSON.stringify(imageDB));
+                renderImageGallery();
+            }
+        }
+
+        // --- Video Gallery & Generation Logic ---
         function initVideoGallery() {
-            const grid = document.getElementById('videos-grid');
-            const uploader = document.getElementById('video-upload');
-            const uploadBtn = document.getElementById('video-upload-button');
-            const statusEl = document.getElementById('video-upload-status');
+            const videoUploadButton = document.getElementById('video-upload-button');
+            const videoUpload = document.getElementById('video-upload');
+            const videoUploadStatus = document.getElementById('video-upload-status');
 
-            uploadBtn.addEventListener('click', () => uploader.click());
+            if (videoUploadButton) {
+                videoUploadButton.addEventListener('click', () => videoUpload.click());
+            }
 
-            uploader.addEventListener('change', async (e) => {
-                const files = e.target.files;
-                if (!files.length) return;
-
-                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
-                statusEl.style.color = 'var(--primary)';
-
-                for (const file of files) {
-                    if (!file.type.match('video.*') || file.size > 50 * 1024 * 1024) {
-                        alert(`文件 "${file.name}" 不合格（必须是小于50MB的视频），已跳过。`);
-                        continue;
+            if (videoUpload) {
+                videoUpload.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file || !file.type.match('video.*') || file.size > 50 * 1024 * 1024) {
+                        videoUploadStatus.textContent = '错误：请选择小于50MB的视频文件';
+                        videoUploadStatus.style.color = 'var(--accent)';
+                        return;
                     }
-                    try {
-                        const fileSrc = await readFileAsDataURL(file);
-                        const newVideo = { id: Date.now() + Math.random(), name: file.name, src: fileSrc, description: "本地上传的视频", type: file.type };
-                        videoDB.unshift(newVideo);
-                    } catch (error) {
-                        alert(`读取文件 "${file.name}" 失败，请重试。`);
-                    }
-                }
-
-                localStorage.setItem('videoDB', JSON.stringify(videoDB));
-                statusEl.textContent = `上传完成！`;
-                renderVideoGallery();
-                uploader.value = '';
-            });
+                    const newVideo = { id: Date.now(), name: file.name, src: URL.createObjectURL(file), thumbnail: 'https://images.unsplash.com/photo-1574717024453-354056aafa98?q=80&w=1974' };
+                    videoDB.push(newVideo);
+                    localStorage.setItem('videoDB', JSON.stringify(videoDB));
+                    videoUploadStatus.textContent = `上传成功：${file.name}`;
+                    videoUploadStatus.style.color = 'var(--primary)';
+                    renderVideoGallery();
+                });
+            }
             renderVideoGallery();
         }
 
         function renderVideoGallery() {
-            const grid = document.getElementById('videos-grid');
-            grid.innerHTML = '';
-            if (!videoDB.length) {
-                grid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">视频集库为空，快去上传吧。</p>';
+            const videosGrid = document.getElementById('videos-grid');
+            videosGrid.innerHTML = '';
+            if (videoDB.length === 0) {
+                videosGrid.innerHTML = '<p style="text-align:center; grid-column:1/-1; color:var(--text-gray);">视频集库为空，请先在AI视频页面生成视频。</p>';
                 return;
             }
             videoDB.forEach(video => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="card-media-container">
-                        <video loop muted controls class="w-full h-full object-cover">
-                            <source src="${video.src}" type="${video.type || 'video/mp4'}">
+                const videoCard = document.createElement('div');
+                videoCard.className = 'card image-card';
+                videoCard.innerHTML = `
+                    <div class="card-img">
+                        <video loop muted onmouseover="this.play()" onmouseout="this.pause(); this.currentTime=0;" class="w-full h-full object-cover">
+                            <source src="${video.src}" type="video/mp4">
                         </video>
                     </div>
                     <div class="card-info">
-                        <h3>${video.name.length > 20 ? video.name.slice(0, 20) + '...' : video.name}</h3>
-                        <p>${video.description}</p>
+                        <h3>${video.name}</h3>
+                        <p>AI生成的视频</p>
                     </div>
-                    <div class="card-actions">
-                         <a href="${video.src}" download="${video.name}" class="action-btn download-btn" title="下载视频">
-                            <i class="fas fa-download"></i>
-                         </a>
-                         <div class="action-btn delete-btn" onclick="deleteItem('video', ${video.id}, event)" title="删除视频">
-                            <i class="fas fa-trash"></i>
-                         </div>
-                    </div>
+                    <div class="delete-btn" onclick="deleteVideo(${video.id}, event)"> <i class="fas fa-trash"></i> </div>
                 `;
-                grid.appendChild(card);
+                videosGrid.appendChild(videoCard);
             });
         }
 
-        // --- Universal Delete Function ---
-        function deleteItem(dbKey, id, event) {
+        function deleteVideo(id, event) {
             event.stopPropagation();
-            if (!confirm('确定要删除这个项目吗？此操作不可恢复。')) return;
-
-            let db = [];
-            let renderFunc = () => { };
-            let storageKey = `${dbKey}DB`;
-
-            if (dbKey === 'image') {
-                imageDB = imageDB.filter(item => item.id !== id);
-                db = imageDB;
-                renderFunc = renderImageGallery;
-            } else if (dbKey === 'video') {
-                videoDB = videoDB.filter(item => item.id !== id);
-                db = videoDB;
-                renderFunc = renderVideoGallery;
-            } else if (dbKey === 'music') {
-                musicDB = musicDB.filter(item => item.id !== id);
-                db = musicDB;
-                renderFunc = renderMusic;
+            if (confirm('确定要删除这个视频吗？')) {
+                videoDB = videoDB.filter(video => video.id !== id);
+                localStorage.setItem('videoDB', JSON.stringify(videoDB));
+                renderVideoGallery();
             }
-
-            localStorage.setItem(storageKey, JSON.stringify(db));
-            renderFunc();
         }
 
-        // --- Music Gallery ---
+        function initVideoGenerator() {
+            const uploadBox = document.getElementById('video-gen-upload-box');
+            const fileInput = document.getElementById('video-gen-image-upload');
+            const previewImg = document.getElementById('video-gen-preview');
+            const placeholder = document.getElementById('video-gen-upload-placeholder');
+            let generateBtn = document.getElementById('video-generate-btn');
+            const loadGalleryLink = document.getElementById('video-gen-load-gallery');
+            const gallerySelectionModal = document.getElementById('gallery-selection-modal');
+            const galleryModalGrid = document.getElementById('gallery-modal-grid');
+            const durationButtonsContainer = document.getElementById('video-duration-buttons');
+            const buttonContainer = document.getElementById('video-gen-button-container');
+            let selectedImageDataUrl = null;
+            let selectedDuration = 10;
+
+            uploadBox.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', handleFileSelect);
+
+            loadGalleryLink.addEventListener('click', (e) => {
+                e.stopPropagation();
+                galleryModalGrid.innerHTML = '';
+                if (imageDB.length === 0) {
+                    galleryModalGrid.innerHTML = '<p class="col-span-full text-center">您的作品图库是空的。</p>';
+                } else {
+                    imageDB.forEach(image => {
+                        const img = document.createElement('img');
+                        img.src = image.src;
+                        img.className = 'w-full h-full object-cover rounded-md cursor-pointer hover:opacity-70 transition-opacity';
+                        img.onclick = () => {
+                            selectImageFromGallery(image.src);
+                        };
+                        galleryModalGrid.appendChild(img);
+                    });
+                }
+                gallerySelectionModal.style.display = 'flex';
+            });
+
+            durationButtonsContainer.addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    durationButtonsContainer.querySelector('.active').classList.remove('active');
+                    e.target.classList.add('active');
+                    selectedDuration = parseInt(e.target.dataset.duration);
+                }
+            });
+
+            function selectImageFromGallery(src) {
+                selectedImageDataUrl = src;
+                previewImg.src = src;
+                previewImg.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+                document.getElementById('video-generate-btn').disabled = false;
+                gallerySelectionModal.style.display = 'none';
+            }
+
+            function handleFileSelect(event) {
+                const file = event.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        selectImageFromGallery(e.target.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            function showProgress(duration) {
+                buttonContainer.innerHTML = `
+                    <div class="progress-bar-container">
+                        <div id="video-progress-bar" class="progress-bar" style="width: 0%"></div>
+                         <span id="progress-text" class="progress-text">正在准备... 0%</span>
+                    </div>
+                `;
+
+                const progressBar = document.getElementById('video-progress-bar');
+                const progressText = document.getElementById('progress-text');
+                let progress = 0;
+                const intervalTime = (duration * 1000) / 100;
+
+                return setInterval(() => {
+                    progress++;
+                    if (progress <= 100) {
+                        progressBar.style.width = `${progress}%`;
+                        progressText.textContent = `AI视频生成中... ${progress}%`;
+                    }
+                }, intervalTime);
+            }
+
+            function hideProgress(progressInterval) {
+                clearInterval(progressInterval);
+                buttonContainer.innerHTML = `
+                    <button id="video-generate-btn" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-4 rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 flex items-center justify-center text-lg shadow-lg hover:shadow-indigo-500/50 disabled:opacity-50" disabled>
+                        <i class="fas fa-film mr-2"></i>
+                        生成视频
+                    </button>
+                `;
+                generateBtn = document.getElementById('video-generate-btn');
+                generateBtn.addEventListener('click', generateVideo);
+                generateBtn.disabled = (selectedImageDataUrl === null);
+            }
+
+            async function generateVideo() {
+                if (!selectedImageDataUrl) {
+                    alert("请先上传一张图片！"); return;
+                }
+
+                const progressInterval = showProgress(selectedDuration);
+
+                try {
+                    await new Promise(res => setTimeout(res, selectedDuration * 1000));
+
+                    const videoResultUrl = 'https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4';
+
+                    const newVideo = { id: Date.now(), name: `AI视频-${Date.now()}.mp4`, src: videoResultUrl, thumbnail: selectedImageDataUrl };
+                    videoDB.push(newVideo);
+                    localStorage.setItem('videoDB', JSON.stringify(videoDB));
+
+                    alert('视频生成成功！已保存至视频集库。');
+                    renderVideoOutput(newVideo);
+                    renderVideoGallery();
+
+                } catch (err) {
+                    alert(`视频生成失败: ${err.message}`);
+                } finally {
+                    hideProgress(progressInterval);
+                }
+            }
+
+            generateBtn.addEventListener('click', generateVideo);
+
+            function renderVideoOutput(video) {
+                const galleryContainer = document.getElementById('video-gen-gallery-container');
+                const videoGallery = document.getElementById('video-output-gallery');
+                galleryContainer.classList.remove('hidden');
+
+                const videoCard = document.createElement('div');
+                videoCard.className = 'relative group w-full aspect-video rounded-lg overflow-hidden';
+                videoCard.innerHTML = `
+                    <video autoplay loop muted playsinline class="w-full h-full object-cover" src="${video.src}"></video>
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <p class="text-white text-lg font-bold">视频已生成</p>
+                    </div>
+                `;
+                videoGallery.prepend(videoCard);
+            }
+        }
+
         function initMusicGallery() {
             const musicGrid = document.getElementById('music-grid');
-            const uploader = document.getElementById('music-upload');
-            const uploadBtn = document.getElementById('music-upload-button');
-            const statusEl = document.getElementById('music-upload-status');
+            const musicUpload = document.getElementById('music-upload');
+            const musicUploadButton = document.getElementById('music-upload-button');
+            const musicUploadStatus = document.getElementById('music-upload-status');
 
-            uploadBtn.addEventListener('click', () => uploader.click());
+            musicUploadButton.addEventListener('click', () => musicUpload.click());
 
-            uploader.addEventListener('change', async (e) => {
-                const files = e.target.files;
-                if (!files.length) return;
-
-                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
-
-                for (const file of files) {
-                    if (!file.type.match('audio.*') || file.size > 20 * 1024 * 1024) {
-                        alert(`文件 "${file.name}" 不合格（必须是小于20MB的音频），已跳过。`);
-                        continue;
-                    }
-                    try {
-                        const fileSrc = await readFileAsDataURL(file);
-                        const newMusic = {
-                            id: Date.now() + Math.random(), name: file.name, src: fileSrc,
-                            thumbnail: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070",
-                            artist: "本地上传", duration: "未知"
-                        };
-                        musicDB.unshift(newMusic);
-                    } catch (error) {
-                        alert(`读取文件 "${file.name}" 失败，请重试。`);
-                    }
+            musicUpload.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (!file || !file.type.match('audio.*') || file.size > 20 * 1024 * 1024) {
+                    musicUploadStatus.textContent = '错误：请选择小于20MB的音频文件';
+                    musicUploadStatus.style.color = 'var(--accent)';
+                    return;
                 }
+                const newMusic = {
+                    id: Date.now(), name: file.name, src: URL.createObjectURL(file),
+                    thumbnail: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070",
+                    artist: "创作者", duration: "未知"
+                };
+                musicDB.push(newMusic);
                 localStorage.setItem('musicDB', JSON.stringify(musicDB));
-                statusEl.textContent = '上传完成！';
+                musicUploadStatus.textContent = `上传成功: ${file.name}`;
+                musicUploadStatus.style.color = 'var(--primary)';
                 renderMusic();
-                uploader.value = '';
             });
             renderMusic();
         }
@@ -1138,21 +1402,10 @@
                 return;
             }
             musicDB.forEach(music => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <div class="music-card">
-                        <div class="album-cover" onclick="playMusic('${music.src}', '${music.name}')"><img src="${music.thumbnail}" alt="${music.name}"></div>
-                        <div class="music-info">
-                            <h3>${music.name.length > 20 ? music.name.slice(0, 20) + '...' : music.name}</h3>
-                            <div class="artist">${music.artist}</div>
-                        </div>
-                        <div class="play-btn" onclick="playMusic('${music.src}', '${music.name}')"><i class="fas fa-play"></i></div>
-                        <div class="card-actions" style="opacity:1; right: 80px; top: 50%; transform: translateY(-50%);">
-                            <div class="action-btn delete-btn" onclick="deleteItem('music', ${music.id}, event)"><i class="fas fa-trash"></i></div>
-                        </div>
-                    </div>`;
-                musicGrid.appendChild(card);
+                const musicCard = document.createElement('div');
+                musicCard.className = 'card';
+                musicCard.innerHTML = `<div class="music-card"><div class="delete-btn" onclick="deleteMusic(${music.id}, event)"><i class="fas fa-trash"></i></div><div class="album-cover" onclick="playMusic('${music.src}', '${music.name}')"><img src="${music.thumbnail}" alt="${music.name}"></div><div class="music-info"><h3>${music.name}</h3><div class="artist">${music.artist}</div></div><div class="play-btn" onclick="playMusic('${music.src}', '${music.name}')"><i class="fas fa-play"></i></div></div>`;
+                musicGrid.appendChild(musicCard);
             });
         }
 
@@ -1160,6 +1413,7 @@
             const modal = document.getElementById('music-player-modal');
             const player = document.getElementById('audio-player');
             const musicTitle = document.getElementById('music-title');
+
             musicTitle.textContent = title;
             player.src = src;
             modal.style.display = 'flex';
@@ -1173,7 +1427,15 @@
             document.getElementById('music-player-modal').style.display = 'none';
         }
 
-        // --- Games Page ---
+        function deleteMusic(id, event) {
+            event.stopPropagation();
+            if (confirm('确定要删除这首音乐吗？')) {
+                musicDB = musicDB.filter(music => music.id !== id);
+                localStorage.setItem('musicDB', JSON.stringify(musicDB));
+                renderMusic();
+            }
+        }
+
         function initGames() {
             const gamesDB = [{ id: 1, name: "益智解谜", description: "挑战您的逻辑思维能力，解决复杂的谜题关卡", link: "#", icon: "fa-puzzle-piece" }, { id: 2, name: "跑酷冒险", description: "在奇幻世界中奔跑跳跃，收集金币避开障碍", link: "#", icon: "fa-running" }, { id: 3, name: "策略棋类", description: "与AI对战，测试您的策略和战术能力", link: "#", icon: "fa-chess" }];
             const gamesGrid = document.getElementById('games-grid');
@@ -1185,20 +1447,41 @@
             });
         }
 
-        // --- AI Chat ---
+        function addMessage(text, sender, targetId = 'chat-messages') {
+            const messageContainer = document.getElementById(targetId);
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', `${sender}-message`);
+            messageElement.style.cssText = `background: ${sender === 'user' ? 'rgba(108, 99, 255, 0.25)' : 'rgba(42, 42, 60, 0.9)'}; align-self: ${sender === 'user' ? 'flex-end' : 'flex-start'}; border-bottom-${sender === 'user' ? 'right' : 'left'}-radius: 5px; padding: 15px; margin-bottom: 15px; border-radius: 20px; max-width: 80%;`;
+            messageElement.innerHTML = text; // Use innerHTML to render the spinner
+            messageContainer.appendChild(messageElement);
+            messageContainer.scrollTop = messageContainer.scrollHeight;
+            return messageElement;
+        }
+
         function initChat() {
             const chatInput = document.getElementById('chat-input');
             const sendBtn = document.getElementById('send-btn');
             const settingsBtn = document.getElementById('api-settings-btn');
             let chatHistory = [];
 
-            settingsBtn.addEventListener('click', () => { document.getElementById('api-modal').style.display = 'flex'; });
+            settingsBtn.addEventListener('click', () => {
+                document.getElementById('api-modal').style.display = 'flex';
+            });
 
             const apiKey = localStorage.getItem('gemini-api-key');
             if (apiKey) {
-                chatInput.disabled = false; sendBtn.disabled = false;
-                chatInput.placeholder = "输入您的问题..."; addMessage("您好！我已准备好回答您的问题。", 'ai');
-            } else { addMessage("请点击右上角的设置按钮，输入您的API密钥以开始对话。", 'ai'); }
+                chatInput.disabled = false;
+                sendBtn.disabled = false;
+                chatInput.placeholder = "输入您的问题...";
+                addMessage("您好！我已准备好回答您的问题。", 'ai');
+            } else {
+                addMessage("请点击右上角的设置按钮，输入您的Gemini API密钥以开始对话。", 'ai');
+            }
+
+            sendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
 
             async function sendMessage() {
                 const messageText = chatInput.value.trim();
@@ -1211,12 +1494,15 @@
                 const loadingMsg = addMessage("<div class='pg-spinner-sm'></div>", 'ai');
 
                 try {
+                    const apiKey = localStorage.getItem('gemini-api-key');
+                    if (!apiKey) throw new Error("API密钥未设置。");
+
                     const payload = { contents: chatHistory };
-                    const response = await fetch(`/api/gemini`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    if (!response.ok) {
-                        const errorResult = await response.json();
-                        throw new Error(errorResult.error?.message || `API请求失败: ${response.status}`);
-                    }
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+
+                    if (!response.ok) throw new Error(`API请求失败: ${response.status}`);
+
                     const result = await response.json();
                     loadingMsg.remove();
 
@@ -1224,20 +1510,22 @@
                         const aiResponse = result.candidates[0].content.parts[0].text;
                         addMessage(aiResponse, 'ai');
                         chatHistory.push({ role: "model", parts: [{ text: aiResponse }] });
-                    } else { throw new Error("无效的API响应格式。"); }
+                    } else {
+                        throw new Error("无效的API响应格式。");
+                    }
                 } catch (error) {
                     loadingMsg.remove();
                     addMessage(`请求出错: ${error.message}`, 'ai');
                 }
             }
-
-            sendBtn.addEventListener('click', sendMessage);
-            chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
         }
 
         function saveApiKey() {
             const apiKey = document.getElementById('api-key').value.trim();
-            if (!apiKey) { alert('请输入API密钥'); return; }
+            if (!apiKey) {
+                alert('请输入API密钥');
+                return;
+            }
             localStorage.setItem('gemini-api-key', apiKey);
             document.getElementById('api-modal').style.display = 'none';
 
@@ -1245,1002 +1533,337 @@
             const sendBtn = document.getElementById('send-btn');
             const chatMessages = document.getElementById('chat-messages');
 
-            chatInput.disabled = false; sendBtn.disabled = false;
-            chatInput.placeholder = "输入您的问题..."; chatMessages.innerHTML = '';
+            chatInput.disabled = false;
+            sendBtn.disabled = false;
+            chatInput.placeholder = "输入您的问题...";
+            chatMessages.innerHTML = '';
             addMessage("API密钥已保存！现在可以开始对话了。", 'ai');
         }
 
-        function addMessage(text, sender) {
-            const messageContainer = document.getElementById('chat-messages');
-            const messageElement = document.createElement('div');
-            messageElement.style.cssText = `background: ${sender === 'user' ? 'rgba(108, 99, 255, 0.25)' : 'rgba(42, 42, 60, 0.9)'}; align-self: ${sender === 'user' ? 'flex-end' : 'flex-start'}; border-bottom-${sender === 'user' ? 'right' : 'left'}-radius: 5px; padding: 15px; margin-bottom: 15px; border-radius: 20px; max-width: 80%;`;
-            messageElement.innerHTML = text;
-            messageContainer.appendChild(messageElement);
-            messageContainer.scrollTop = messageContainer.scrollHeight;
-            return messageElement;
-        }
+        // --- Prompt Generator Logic ---
+        function initPromptGenerator() {
+            const promptData = {
+                style: { "逼真写实": "photorealistic", "二次元动漫": "anime", "CG渲染": "cg render", "油画质感": "oil painting", "水墨国风": "ink wash painting", "复古港风": "hong kong retro", "赛博朋克": "cyberpunk", "蒸汽朋克": "steampunk", "水彩": "watercolor", "素描": "sketch" },
+                quality: { "杰作": "masterpiece", "最佳质量": "best quality", "极其精细": "ultra-detailed", "8K画质": "8k", "逼真细节": "photorealistic details", "复杂细节": "intricate details" },
+                temperament: { "清冷御姐": "cold and elegant lady", "纯欲少女": "pure and seductive girl", "元气少女": "energetic girl", "书卷气": "scholarly", "赛博魅影": "cyber phantom", "复古女郎": "retro lady" },
+                face: { "精致脸庞": "delicate face", "鹅蛋脸": "oval face", "心形脸": "heart-shaped face", "桃花眼": "peach blossom eyes", "蓝色眼眸": "blue eyes", "微笑": "smile", "红唇": "red lips", "长睫毛": "long eyelashes", "无辜表情": "innocent expression", "泪痣": "tear mole", "水光唇釉": "glossy lips", "雀斑": "freckles" },
+                hair: { "及腰长发": "waist-length long hair", "银色长发": "silver long hair", "双马尾": "twintails", "麻花辫": "braids", "蓬松卷发": "fluffy curly hair", "飘逸的": "flowing hair", "绸缎黑发": "silky black hair", "铂金渐变挑染": "platinum ombre highlights", "湿发": "wet hair" },
+                clothing: { "白色连衣裙": "white dress", "丝绸旗袍": "silk cheongsam", "JK校服": "JK uniform", "哥特式长裙": "gothic long dress", "机能风外套": "techwear jacket", "婚纱": "wedding dress", "缎面吊带裙": "satin slip dress", "牛仔喇叭裤": "denim flare pants", "宽大男友衬衫": "oversized boyfriend shirt", "荧光纹身": "fluorescent tattoo", "翡翠耳坠": "jade earrings", "皮夹克": "leather jacket" },
+                dynamics: { "回头看": "looking back", "奔跑中": "running", "跳舞": "dancing", "沉思": "pondering", "害羞地笑": "shyly smiling", "自信地凝视": "confidently gazing", "咬唇思索": "biting lip and pondering", "撩发回眸": "flicking hair and looking back", "抱膝远眺": "hugging knees and gazing into the distance", "湿发贴颈": "wet hair sticking to neck", "动态抓拍": "dynamic action shot" },
+                scene: { "樱花树下": "under a cherry blossom tree", "未来都市": "futuristic city", "巴洛克城堡": "baroque castle", "海边": "seaside", "雨中街头": "rainy street", "图书馆": "library", "极光雪原": "aurora snowfield", "薰衣草田": "lavender field", "霓虹街巷": "neon alley", "地铁隧道": "subway tunnel", "天台夜景": "rooftop night view", "复古咖啡馆": "retro cafe", "音乐节后台": "backstage at a music festival" },
+                lighting: { "电影感光效": "cinematic lighting", "黄金时刻": "golden hour", "伦勃朗光": "Rembrandt lighting", "霓虹灯光": "neon light", "体积光": "volumetric light", "戏剧性阴影": "dramatic shadows", "丁达尔效应": "Tyndall effect", "晨光": "morning light", "夕阳": "sunset light", "柔焦光晕": "soft focus halo", "菲林颗粒": "film grain", "发丝轮廓光": "rim light on hair" },
+                composition: { "全身像": "full body shot", "半身像": "medium shot", "大特写": "extreme close-up", "脸部特写": "close-up", "远景": "long shot", "建环镜头": "establishing shot", "黄金分割": "golden ratio composition", "对称构图": "symmetrical composition", "三分法构图": "rule of thirds", "引导线构图": "leading lines", "画中画构图": "frame within a frame", "牛仔景别": "cowboy shot" },
+                angle: { "低角度": "low angle shot", "高角度": "high angle shot", "鸟瞰视角": "bird's-eye view", "仰视视角": "worm's-eye view", "荷兰角": "dutch angle", "单点透视": "one-point perspective", "大气透视": "atmospheric perspective" },
+                camera: { "85mm f/1.2": "85mm f/1.2 lens", "35mm 电影感": "35mm cinematic", "鱼眼镜头": "fisheye lens", "哈苏色彩": "Hasselblad natural colors", "富士胶片色彩": "Fujifilm film color", "浅景深": "shallow depth of field", "大景深": "deep depth of field" },
+                color_motion: { "鲜艳色彩": "vibrant colors", "单色调": "monochromatic", "对比色": "contrasting colors", "高饱和度": "highly saturated colors", "动态模糊": "motion blur", "摇摄": "panning shot" }
+            };
 
-        // --- AI Prompt Generator ---
-        const promptCategories = {
-            style: {
-                "逼真写实": "photorealistic",
-                "二次元动漫": "anime",
-                "CG渲染": "cg render",
-                "油画质感": "oil painting",
-                "水墨国风": "ink wash painting",
-                "复古港风": "hong kong retro",
-                "赛博朋克": "cyberpunk",
-                "蒸汽朋克": "steampunk",
-                "水彩": "watercolor",
-                "素描": "sketch",
-                "奇幻": "fantasy art",
-                "科幻": "sci-fi art",
-                "卡通": "cartoon",
-                "像素艺术": "pixel art",
-                "印象派": "impressionist",
-                "超现实主义": "surrealism",
-                "抽象艺术": "abstract art",
-                "立体主义": "cubism",
-                "波普艺术": "pop art",
-                "极简主义": "minimalist",
-                "哥特式": "gothic art",
-                "巴洛克": "baroque art",
-                "新艺术运动": "art nouveau",
-                "现代艺术": "modern art",
-                "浮世绘": "ukiyo-e",
-                "卡通渲染": "toon render",
-                "点彩画": "pointillism",
-                "涂鸦艺术": "graffiti art",
-                "概念艺术": "concept art",
-                "漫画": "comic book art",
-                "卡通插画": "cartoon illustration",
-                "插画风": "illustration",
-                "矢量图": "vector art",
-                "故障艺术": "glitch art",
-                "低多边形": "low poly",
-                "剪纸": "paper cutting art",
-                "儿童插画": "children's illustration"
-            },
-            quality: {
-                "杰作": "masterpiece",
-                "最佳质量": "best quality",
-                "极其精细": "ultra-detailed",
-                "8K画质": "8k",
-                "逼真细节": "photorealistic details",
-                "复杂细节": "intricate details",
-                "高质量": "high quality",
-                "4K画质": "4k",
-                "超高分辨率": "high resolution",
-                "电影级别": "cinematic quality",
-                "专业级": "professional grade",
-                "艺术品级别": "artistic level",
-                "工作室品质": "studio quality",
-                "细节丰富": "rich details",
-                "精细纹理": "fine texture",
-                "完美": "perfect",
-                "获奖作品": "award-winning",
-                "高细节": "high detail",
-                "照片级": "photo-realistic",
-                "高清晰度": "high definition",
-                "史诗般": "epic",
-                "宏伟": "grand",
-                "令人惊叹": "stunning"
-            },
-            temperament: {
-                "清冷御姐": "cold and elegant lady",
-                "纯欲少女": "pure and seductive girl",
-                "元气少女": "energetic girl",
-                "书卷气": "scholarly",
-                "赛博魅影": "cyber phantom",
-                "复古女郎": "retro lady",
-                "高冷女神": "aloof goddess",
-                "温柔可人": "gentle and lovely",
-                "活泼开朗": "lively and cheerful",
-                "邻家女孩": "girl next door",
-                "霸气总裁": "domineering CEO",
-                "阳光少年": "sunny youth",
-                "文艺青年": "artistic youth",
-                "神秘莫测": "mysterious and unpredictable",
-                "沉稳内敛": "calm and reserved",
-                "慵懒随性": "lazy and casual",
-                "甜美可爱": "sweet and cute",
-                "性感迷人": "sexy and charming",
-                "酷飒": "cool and bold",
-                "飒爽英气": "valiant and spirited",
-                "精致优雅": "exquisite and elegant",
-                "古典美人": "classical beauty",
-                "未来战士": "futuristic warrior",
-                "哥特萝莉": "gothic lolita",
-                "田园牧歌": "pastoral charm",
-                "都市丽人": "urban fashionista",
-                "朋克叛逆": "punk rebellious",
-                "日系甜美": "Japanese sweet style",
-                "韩系时尚": "Korean trendy style",
-                "欧美复古": "European and American vintage",
-                "国风少年": "traditional Chinese style youth",
-                "仙气飘飘": "ethereal and graceful"
-            },
-            face: {
-                "精致脸庞": "delicate face",
-                "鹅蛋脸": "oval face",
-                "心形脸": "heart-shaped face",
-                "桃花眼": "peach blossom eyes",
-                "蓝色眼眸": "blue eyes",
-                "微笑": "smile",
-                "红唇": "red lips",
-                "长睫毛": "long eyelashes",
-                "无辜表情": "innocent expression",
-                "泪痣": "tear mole",
-                "水光唇釉": "glossy lips",
-                "雀斑": "freckles",
-                "瓜子脸": "melon seed face",
-                "方脸": "square face",
-                "圆脸": "round face",
-                "高鼻梁": "high nose bridge",
-                "小嘴": "small mouth",
-                "厚唇": "thick lips",
-                "薄唇": "thin lips",
-                "大眼睛": "big eyes",
-                "丹凤眼": "phoenix eyes",
-                "杏眼": "apricot eyes",
-                "柳叶眉": "willow leaf eyebrows",
-                "剑眉": "sword eyebrows",
-                "浓眉": "thick eyebrows",
-                "淡眉": "light eyebrows",
-                "酒窝": "dimples",
-                "美人尖": "widow's peak",
-                "法令纹": "nasolabial folds",
-                "面无表情": "expressionless face",
-                "严肃表情": "serious expression",
-                "开心大笑": "laughing happily",
-                "泪流满面": "face covered in tears",
-                "惊讶表情": "surprised expression",
-                "困倦表情": "sleepy expression",
-                "侧颜杀": "stunning profile",
-                "正脸特写": "front face close-up",
-                "痘痘": "acne",
-                "疤痕": "scar",
-                "白皙皮肤": "fair skin",
-                "小麦肤色": "wheatish skin tone",
-                "古铜肤色": "bronze skin tone",
-                "双眼皮": "double eyelids",
-                "单眼皮": "single eyelids",
-                "高光": "highlight",
-                "阴影": "shadow"
-            },
-            dynamics: {
-                "回头看": "looking back",
-                "奔跑中": "running",
-                "跳舞": "dancing",
-                "沉思": "pondering",
-                "害羞地笑": "shyly smiling",
-                "自信地凝视": "confidently gazing",
-                "咬唇思索": "biting lip and pondering",
-                "撩发回眸": "flicking hair and looking back",
-                "抱膝远眺": "hugging knees and gazing into the distance",
-                "湿发贴颈": "wet hair sticking to neck",
-                "动态抓拍": "dynamic action shot",
-                "行走中": "walking",
-                "跳跃": "jumping",
-                "站立": "standing",
-                "坐着": "sitting",
-                "躺着": "lying down",
-                "飞行": "flying",
-                "打斗": "fighting",
-                "阅读": "reading",
-                "绘画": "painting",
-                "唱歌": "singing",
-                "弹奏乐器": "playing an instrument",
-                "冥想": "meditating",
-                "挥手": "waving",
-                "指引方向": "pointing the way",
-                "双手合十": "hands clasped together",
-                "双手叉腰": "hands on hips",
-                "抱臂": "arms crossed",
-                "单膝跪地": "kneeling on one knee",
-                "敬礼": "saluting",
-                "举起双手": "hands raised",
-                "打电话": "talking on the phone",
-                "看书": "reading a book",
-                "喝咖啡": "drinking coffee",
-                "使用电脑": "using a computer",
-                "玩手机": "playing with phone",
-                "惊讶": "surprised",
-                "沮丧": "frustrated",
-                "兴奋": "excited",
-                "愤怒": "angry",
-                "悲伤": "sad",
-                "开怀大笑": "laughing heartily",
-                "小跑": "jogging",
-                "瑜伽姿势": "yoga pose",
-                "武术姿势": "martial arts stance",
-                "优雅的姿态": "graceful pose",
-                "慵懒的姿势": "languid pose",
-                "正在对话": "in conversation",
-                "正在思考": "deep in thought"
-            },
-            scene: {
-                "樱花树下": "under a cherry blossom tree",
-                "未来都市": "futuristic city",
-                "巴洛克城堡": "baroque castle",
-                "海边": "seaside",
-                "雨中街头": "rainy street",
-                "图书馆": "library",
-                "极光雪原": "aurora snowfield",
-                "薰衣草田": "lavender field",
-                "霓虹街巷": "neon alley",
-                "地铁隧道": "subway tunnel",
-                "天台夜景": "rooftop night view",
-                "复古咖啡馆": "retro cafe",
-                "音乐节后台": "backstage at a music festival",
-                "魔法森林": "enchanted forest",
-                "废弃工厂": "abandoned factory",
-                "宇宙飞船内部": "inside a spaceship",
-                "沙漠绿洲": "desert oasis",
-                "高山湖泊": "mountain lake",
-                "深海世界": "deep sea world",
-                "古老神庙": "ancient temple",
-                "中世纪村庄": "medieval village",
-                "童话小镇": "fairy tale town",
-                "蒸汽朋克城市": "steampunk city",
-                "末日废土": "post-apocalyptic wasteland",
-                "宁静的卧室": "cozy bedroom",
-                "繁华购物中心": "bustling shopping mall",
-                "艺术画廊": "art gallery",
-                "雪山之巅": "snowy mountain peak",
-                "热带雨林": "tropical rainforest",
-                "火山爆发旁": "next to a volcanic eruption",
-                "幽暗地牢": "dark dungeon",
-                "星空之下": "under a starry sky",
-                "迷雾沼泽": "misty swamp",
-                "古老遗迹": "ancient ruins",
-                "日式庭院": "Japanese garden",
-                "欧式街道": "European street",
-                "沙漠营地": "desert camp",
-                "冰洞": "ice cave",
-                "瀑布深潭": "waterfall pool",
-                "空中城堡": "floating castle",
-                "海底城市": "underwater city",
-                "赛博格斗场": "cyberpunk arena",
-                "秘密基地": "secret base"
-            },
-            hair: {
-                "及腰长发": "waist-length long hair",
-                "银色长发": "silver long hair",
-                "双马尾": "twintails",
-                "麻花辫": "braids",
-                "蓬松卷发": "fluffy curly hair",
-                "飘逸的": "flowing hair",
-                "绸缎黑发": "silky black hair",
-                "铂金渐变挑染": "platinum ombre highlights",
-                "湿发": "wet hair",
-                "短发": "short hair",
-                "齐肩发": "shoulder-length hair",
-                "波波头": "bob cut",
-                "长直发": "long straight hair",
-                "大波浪": "large waves",
-                "小卷发": "tight curls",
-                "马尾辫": "ponytail",
-                "丸子头": "bun hair",
-                "公主切": "hime cut",
-                "刘海": "bangs",
-                "中分": "middle part",
-                "侧分": "side part",
-                "挑染": "highlights",
-                "渐变色": "ombre hair",
-                "黑色头发": "black hair",
-                "棕色头发": "brown hair",
-                "金色头发": "blonde hair",
-                "红色头发": "red hair",
-                "蓝色头发": "blue hair",
-                "绿色头发": "green hair",
-                "粉色头发": "pink hair",
-                "紫色头发": "purple hair",
-                "灰色头发": "grey hair",
-                "白色头发": "white hair",
-                "编发": "braided hair",
-                "脏辫": "dreadlocks",
-                "莫西干头": "mohawk",
-                "寸头": "buzz cut",
-                "卷发": "curly hair",
-                "直发": "straight hair",
-                "柔顺的": "smooth hair",
-                "凌乱的": "messy hair",
-                "光泽的": "lustrous hair",
-                "爆炸头": "afro",
-                "发髻": "hair bun",
-                "长发及地": "floor-length hair",
-                "齐耳短发": "ear-length short hair",
-                "齐刘海": "blunt bangs",
-                "空气刘海": "airy bangs",
-                "八字刘海": "s-shaped bangs",
-                "内扣发型": "inward curl hairstyle",
-                "外翻发型": "outward flip hairstyle",
-                "玉米烫": "corn perm",
-                "羊毛卷": "wool roll perm",
-                "法式卷发": "french curls",
-                "复古卷发": "vintage curls",
-                "波浪卷发": "wavy hair",
-                "发带": "headband",
-                "发箍": "hair hoop",
-                "发夹": "hair clip",
-                "发网": "hairnet",
-                "蓬松发型": "voluminous hair",
-                "顺滑发质": "smooth hair texture",
-                "粗糙发质": "coarse hair texture"
-            },
-            clothing: {
-                "白色连衣裙": "white dress",
-                "丝绸旗袍": "silk cheongsam",
-                "JK校服": "JK uniform",
-                "哥特式长裙": "gothic long dress",
-                "机能风外套": "techwear jacket",
-                "婚纱": "wedding dress",
-                "缎面吊带裙": "satin slip dress",
-                "牛仔喇叭裤": "denim flare pants",
-                "宽大男友衬衫": "oversized boyfriend shirt",
-                "荧光纹身": "fluorescent tattoo",
-                "翡翠耳坠": "jade earrings",
-                "皮夹克": "leather jacket",
-                "T恤": "T-shirt",
-                "牛仔裤": "jeans",
-                "短裙": "skirt",
-                "长裤": "trousers",
-                "西装": "suit",
-                "衬衫": "shirt",
-                "毛衣": "sweater",
-                "卫衣": "hoodie",
-                "大衣": "coat",
-                "风衣": "trench coat",
-                "比基尼": "bikini",
-                "泳衣": "swimsuit",
-                "运动服": "sportswear",
-                "晚礼服": "evening gown",
-                "休闲装": "casual wear",
-                "睡衣": "pajamas",
-                "制服": "uniform",
-                "盔甲": "armor",
-                "斗篷": "cloak",
-                "围巾": "scarf",
-                "帽子": "hat",
-                "手套": "gloves",
-                "项链": "necklace",
-                "手镯": "bracelet",
-                "戒指": "ring",
-                "耳环": "earrings",
-                "眼镜": "glasses",
-                "墨镜": "sunglasses",
-                "背包": "backpack",
-                "手提包": "handbag",
-                "高跟鞋": "high heels",
-                "运动鞋": "sneakers",
-                "靴子": "boots",
-                "凉鞋": "sandals",
-                "袜裤": "stockings",
-                "蕾丝内衣": "lace lingerie",
-                "纹身": "tattoo",
-                "耳钉": "ear stud",
-                "鼻环": "nose ring",
-                "肚脐环": "belly button ring",
-                "手环": "wristband",
-                "腰带": "belt",
-                "领带": "tie",
-                "领结": "bow tie",
-                "吊带袜": "garter stockings",
-                "洛丽塔裙": "lolita dress",
-                "公主裙": "princess dress",
-                "旗袍": "cheongsam",
-                "和服": "kimono",
-                "水手服": "sailor uniform",
-                "皮革手套": "leather gloves",
-                "丝袜": "silk stockings",
-                "透明材质": "transparent material",
-                "薄纱": "sheer fabric",
-                "破洞牛仔裤": "ripped jeans",
-                "渔网袜": "fishnet stockings",
-                "工装裤": "cargo pants",
-                "棒球帽": "baseball cap"
-            },
-            lighting: {
-                "电影感光效": "cinematic lighting",
-                "黄金时刻": "golden hour",
-                "伦勃朗光": "Rembrandt lighting",
-                "霓虹灯光": "neon light",
-                "体积光": "volumetric light",
-                "戏剧性阴影": "dramatic shadows",
-                "丁达尔效应": "Tyndall effect",
-                "晨光": "morning light",
-                "夕阳": "sunset light",
-                "柔焦光晕": "soft focus halo",
-                "菲林颗粒": "film grain",
-                "发丝轮廓光": "rim light on hair",
-                "自然光": "natural light",
-                "柔和光": "soft lighting",
-                "硬光": "hard lighting",
-                "工作室光": "studio lighting",
-                "环境光": "ambient lighting",
-                "逆光": "backlight",
-                "侧光": "side light",
-                "顶光": "top light",
-                "底光": "underlight",
-                "月光": "moonlight",
-                "烛光": "candlelight",
-                "篝火光": "bonfire light",
-                "舞台灯光": "stage lighting",
-                "雨后光线": "post-rain light",
-                "雾中光线": "light in fog",
-                "穿透云层": "light piercing clouds",
-                "强对比度": "high contrast",
-                "低对比度": "low contrast",
-                "高光溢出": "blown out highlights",
-                "暗调": "low key lighting",
-                "高调": "high key lighting",
-                "闪烁的光": "flickering light",
-                "放射光": "radiant light",
-                "反射光": "reflected light",
-                "水下光线": "underwater lighting",
-                "神秘光线": "mysterious light",
-                "暖色调": "warm tones",
-                "冷色调": "cool tones",
-                "梦幻光效": "dreamy lighting",
-                "哥特式光线": "gothic lighting",
-                "明亮": "bright",
-                "昏暗": "dim",
-                "阴影": "shadows",
-                "光束": "light beams",
-                "剪影": "silhouette",
-                "散射光": "diffused light"
-            },
-            composition: {
-                "全身像": "full body shot",
-                "半身像": "medium shot",
-                "大特写": "extreme close-up",
-                "脸部特写": "close-up",
-                "远景": "long shot",
-                "建环镜头": "establishing shot",
-                "黄金分割": "golden ratio composition",
-                "对称构图": "symmetrical composition",
-                "三分法构图": "rule of thirds",
-                "引导线构图": "leading lines",
-                "画中画构图": "frame within a frame",
-                "牛仔景别": "cowboy shot",
-                "特写": "tight shot",
-                "近景": "close shot",
-                "中景": "medium shot",
-                "大远景": "extreme long shot",
-                "鸟瞰图": "aerial view",
-                "仰视": "low angle shot",
-                "俯视": "high angle shot",
-                "斜角构图": "dutch angle",
-                "对角线构图": "diagonal composition",
-                "C形构图": "C-shape composition",
-                "S形构图": "S-shape composition",
-                "螺旋构图": "spiral composition",
-                "三角形构图": "triangular composition",
-                "放射线构图": "radial composition",
-                "重复构图": "repetitive composition",
-                "空白构图": "negative space composition",
-                "景深构图": "depth of field composition",
-                "前景": "foreground",
-                "中景": "midground",
-                "背景": "background",
-                "肩部以上": "bust shot",
-                "膝盖以上": "knee shot",
-                "人物中心构图": "centered composition",
-                "失衡构图": "unbalanced composition",
-                "特写镜头": "macro shot",
-                "广角镜头": "wide angle shot",
-                "长焦镜头": "telephoto lens shot",
-                "鱼眼镜头": "fisheye lens",
-                "肖像模式": "portrait mode",
-                "水平构图": "horizontal composition",
-                "垂直构图": "vertical composition"
-            },
-            angle: {
-                "低角度": "low angle shot",
-                "高角度": "high angle shot",
-                "鸟瞰视角": "bird's-eye view",
-                "仰视视角": "worm's-eye view",
-                "荷兰角": "dutch angle",
-                "单点透视": "one-point perspective",
-                "大气透视": "atmospheric perspective",
-                "正常视角": "eye-level shot",
-                "背部视角": "from behind",
-                "过肩视角": "over the shoulder shot",
-                "主观视角": "first-person view",
-                "客观视角": "third-person view",
-                "多点透视": "multi-point perspective",
-                "两点透视": "two-point perspective",
-                "三点透视": "three-point perspective",
-                "广角透视": "wide-angle perspective",
-                "长焦透视": "telephoto perspective",
-                "对称视角": "symmetrical view",
-                "不对称视角": "asymmetrical view",
-                "倾斜视角": "tilted angle",
-                "俯瞰": "overhead shot",
-                "平行视角": "parallel perspective",
-                "水下视角": "underwater view",
-                "通过...看": "view through...",
-                "倒影视角": "reflection view",
-                "螺旋视角": "spiral view"
-            },
-            camera: {
-                "85mm f/1.2": "85mm f/1.2 lens",
-                "35mm 电影感": "35mm cinematic",
-                "鱼眼镜头": "fisheye lens",
-                "哈苏色彩": "Hasselblad natural colors",
-                "富士胶片色彩": "Fujifilm film color",
-                "浅景深": "shallow depth of field",
-                "大景深": "deep depth of field",
-                "50mm 标准镜头": "50mm standard lens",
-                "24mm 广角镜头": "24mm wide-angle lens",
-                "135mm 长焦镜头": "135mm telephoto lens",
-                "微距镜头": "macro lens",
-                "变焦镜头": "zoom lens",
-                "定焦镜头": "prime lens",
-                "移轴镜头": "tilt-shift lens",
-                "徕卡色彩": "Leica colors",
-                "蔡司镜头": "Zeiss lens",
-                "尼康色彩": "Nikon colors",
-                "佳能色彩": "Canon colors",
-                "柔焦效果": "soft focus",
-                "虚化背景": "bokeh background",
-                "前景清晰": "sharp foreground",
-                "长曝光": "long exposure",
-                "高速快门": "fast shutter speed",
-                "慢门": "slow shutter speed",
-                "曝光过度": "overexposed",
-                "曝光不足": "underexposed",
-                "高ISO": "high ISO",
-                "低ISO": "low ISO",
-                "闪光灯": "flash photography",
-                "自然景深": "natural depth of field",
-                "电影胶片": "cinematic film",
-                "老式相机": "vintage camera look",
-                "胶片颗粒感": "film grain",
-                "高动态范围 (HDR)": "high dynamic range (HDR)",
-                "低光摄影": "low light photography",
-                "纪实摄影": "documentary photography",
-                "肖像摄影": "portrait photography",
-                "风光摄影": "landscape photography",
-                "街头摄影": "street photography",
-                "广角": "wide angle",
-                "长焦": "telephoto",
-                "失真": "distortion"
-            },
-            color_motion: {
-                "鲜艳色彩": "vibrant colors",
-                "单色调": "monochromatic",
-                "对比色": "contrasting colors",
-                "高饱和度": "highly saturated colors",
-                "动态模糊": "motion blur",
-                "摇摄": "panning shot",
-                "柔和色彩": "soft colors",
-                "低饱和度": "desaturated colors",
-                "暖色调": "warm colors",
-                "冷色调": "cool colors",
-                "复古色彩": "vintage colors",
-                "赛博朋克色彩": "cyberpunk colors",
-                "霓虹色彩": "neon colors",
-                "柔和渐变": "soft gradient",
-                "色彩斑斓": "colorful",
-                "黑白": "black and white",
-                "色彩分离": "color separation",
-                "色调分离": "tonal separation",
-                "光线追踪": "ray tracing",
-                "光线散射": "light scattering",
-                "景深模糊": "depth of field blur",
-                "径向模糊": "radial blur",
-                "缩放模糊": "zoom blur",
-                "快门速度效应": "shutter speed effect",
-                "拖影": "ghosting effect",
-                "粒子效果": "particle effect",
-                "光效": "light effect",
-                "色彩飞溅": "color splash",
-                "电影调色": "cinematic color grading",
-                "漫画色彩": "comic book colors",
-                "模糊背景": "blurred background",
-                "模糊前景": "blurred foreground",
-                "失真色彩": "distorted colors"
-            }
-        };
+            const styleKeywords = {
+                'photorealistic': '1girl',
+                'anime': 'anime style, anime artwork, key visual, 1girl',
+                'cg render': 'cgstation, 3d render, octane render, 1girl',
+                'oil painting': 'oil painting, impressionistic, thick brush strokes, 1girl',
+                'ink wash painting': 'Chinese ink painting, guofeng, traditional art, 1girl',
+                'hong kong retro': 'cinematic film still, Hong Kong movie style, 1990s, kodak portra 400, 1girl',
+                'cyberpunk': 'cyberpunk, futuristic, neon, night city, cinematic, 1girl',
+                'steampunk': 'steampunk, victorian, gears, brass, 1girl',
+                'watercolor': 'watercolor painting, vibrant, soft edges, paper texture, 1girl',
+                'sketch': 'graphite pencil sketch, detailed, black and white, hatching, 1girl',
+                'default': '1girl'
+            };
 
-        const styleKeywords = { 'photorealistic': '1girl', 'anime': 'anime style, anime artwork, key visual, 1girl', 'cg render': 'cgstation, 3d render, octane render, 1girl', 'oil painting': 'oil painting, impressionistic, thick brush strokes, 1girl', 'ink wash painting': 'Chinese ink painting, guofeng, traditional art, 1girl', 'hong kong retro': 'cinematic film still, Hong Kong movie style, 1990s, kodak portra 400, 1girl', 'cyberpunk': 'cyberpunk, futuristic, neon, night city, cinematic, 1girl', 'steampunk': 'steampunk, victorian, gears, brass, 1girl', 'watercolor': 'watercolor painting, vibrant, soft edges, paper texture, 1girl', 'sketch': 'graphite pencil sketch, detailed, black and white, hatching, 1girl', 'default': '1girl' };
-        const colors = [{ bg: 'bg-red-200', text: 'text-red-800', ring: 'ring-red-400' }, { bg: 'bg-yellow-200', text: 'text-yellow-800', ring: 'ring-yellow-400' }, { bg: 'bg-green-200', text: 'text-green-800', ring: 'ring-green-400' }, { bg: 'bg-blue-200', text: 'text-blue-800', ring: 'ring-blue-400' }, { bg: 'bg-indigo-200', text: 'text-indigo-800', ring: 'ring-indigo-400' }, { bg: 'bg-purple-200', text: 'text-purple-800', ring: 'ring-purple-400' }, { bg: 'bg-pink-200', text: 'text-pink-800', ring: 'ring-pink-400' }, { bg: 'bg-teal-200', text: 'text-teal-800', ring: 'ring-teal-400' }, { bg: 'bg-orange-200', text: 'text-orange-800', ring: 'ring-orange-400' }];
+            const colors = [
+                { bg: 'bg-red-200', text: 'text-red-800', ring: 'ring-red-400' }, { bg: 'bg-yellow-200', text: 'text-yellow-800', ring: 'ring-yellow-400' },
+                { bg: 'bg-green-200', text: 'text-green-800', ring: 'ring-green-400' }, { bg: 'bg-blue-200', text: 'text-blue-800', ring: 'ring-blue-400' },
+                { bg: 'bg-indigo-200', text: 'text-indigo-800', ring: 'ring-indigo-400' }, { bg: 'bg-purple-200', text: 'text-purple-800', ring: 'ring-purple-400' },
+                { bg: 'bg-pink-200', text: 'text-pink-800', ring: 'ring-pink-400' }, { bg: 'bg-teal-200', text: 'text-teal-800', ring: 'ring-teal-400' },
+                { bg: 'bg-orange-200', text: 'text-orange-800', ring: 'ring-orange-400' },
+            ];
 
-        const selectedTags = new Map();
-        const finalPromptInput = document.getElementById('pg-final-prompt-input');
-        const generateBtn = document.getElementById('pg-generate-button');
-        const clearBtn = document.getElementById('pg-clear-button');
-        const inspireBtn = document.getElementById('pg-inspire-button');
-        const enrichBtn = document.getElementById('pg-enrich-button');
-        const gallery = document.getElementById('pg-image-gallery');
-        const placeholderText = document.getElementById('pg-placeholder-text');
-        const loader = document.getElementById('pg-loader');
-        const errorMessage = document.getElementById('pg-error-message');
-        const lightbox = document.getElementById('pg-lightbox');
-        const lightboxImage = document.getElementById('pg-lightbox-image');
-        const apiSelector = document.getElementById('api-selector');
-        const imageCountSelector = document.getElementById('image-count-selector');
+            const selectedTags = new Map();
+            const finalPromptInput = document.getElementById('pg-final-prompt-input');
+            const copyBtnEn = document.getElementById('pg-copy-button-en');
+            const generateBtn = document.getElementById('pg-generate-button');
+            const clearBtn = document.getElementById('pg-clear-button');
+            const inspireBtn = document.getElementById('pg-inspire-button');
+            const enrichBtn = document.getElementById('pg-enrich-button');
+            const gallery = document.getElementById('pg-image-gallery');
+            const placeholderText = document.getElementById('pg-placeholder-text');
+            const loader = document.getElementById('pg-loader');
+            const errorMessage = document.getElementById('pg-error-message');
+            const lightbox = document.getElementById('pg-lightbox');
+            const lightboxImage = document.getElementById('pg-lightbox-image');
 
-        for (const group in promptData) {
-            const container = document.querySelector(`div[data-group="${group}"]`);
-            if (container) {
-                Object.keys(promptData[group]).forEach((tagText, index) => {
-                    const tagEl = document.createElement('span');
-                    tagEl.className = 'pg-prompt-tag';
-                    tagEl.textContent = tagText;
-                    tagEl.dataset.value = tagText;
-                    tagEl.dataset.group = group;
-                    const color = colors[index % colors.length];
-                    tagEl.classList.add(color.bg, color.text);
-                    tagEl.dataset.ringColor = color.ring;
-                    container.appendChild(tagEl);
-                });
-            }
-        }
+            for (const group in promptData) {
+                const container = document.querySelector(`div[data-group="${group}"]`);
+                if (container) {
+                    Object.keys(promptData[group]).forEach((tagText, index) => {
+                        const tagEl = document.createElement('span');
+                        tagEl.className = 'pg-prompt-tag';
+                        tagEl.textContent = tagText;
+                        tagEl.dataset.value = tagText;
+                        tagEl.dataset.group = group;
 
-        pgUpdateOutput();
+                        const color = colors[index % colors.length];
+                        tagEl.classList.add(color.bg, color.text);
+                        tagEl.dataset.ringColor = color.ring;
 
-        document.getElementById('pg-builder-container').addEventListener('click', (e) => {
-            if (e.target.classList.contains('pg-prompt-tag')) {
-                const { value, group, ringColor } = e.target.dataset;
-                if (group === 'style') {
-                    const currentActive = document.querySelector(`[data-group="style"].active`);
-                    if (currentActive) {
-                        currentActive.classList.remove('active', currentActive.dataset.ringColor);
-                    }
-                    if (currentActive?.dataset.value !== value) {
-                        e.target.classList.add('active', ringColor);
-                        selectedTags.set('style', value);
-                    } else {
-                        selectedTags.delete('style');
-                    }
-                } else {
-                    const currentGroupTags = new Set(selectedTags.get(group) || []);
-                    if (currentGroupTags.has(value)) {
-                        currentGroupTags.delete(value);
-                        e.target.classList.remove('active', ringColor);
-                    } else {
-                        currentGroupTags.add(value);
-                        e.target.classList.add('active', ringColor);
-                    }
-                    selectedTags.set(group, Array.from(currentGroupTags));
-                }
-                pgUpdateOutput(true);
-            }
-        });
-
-        finalPromptInput.addEventListener('input', () => {
-            generateBtn.disabled = finalPromptInput.value.trim() === '';
-        });
-
-        clearBtn.addEventListener('click', () => {
-            document.querySelectorAll('.pg-prompt-tag.active').forEach(tag => {
-                tag.classList.remove('active', tag.dataset.ringColor);
-            });
-            selectedTags.clear();
-            pgUpdateOutput(true);
-            gallery.innerHTML = '';
-            gallery.classList.add('hidden');
-            placeholderText.classList.remove('hidden');
-        });
-
-        inspireBtn.addEventListener('click', () => alert("此功能正在开发中。"));
-        enrichBtn.addEventListener('click', () => alert("此功能正在开发中。"));
-
-        function pgSetupCopyButton(button, textarea) {
-            button.addEventListener('click', () => {
-                if (!textarea.value) return;
-                navigator.clipboard.writeText(textarea.value).then(() => {
-                    const originalIcon = button.innerHTML;
-                    button.innerHTML = `<svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
-                    setTimeout(() => { button.innerHTML = originalIcon; }, 2000);
-                }).catch(err => console.error("Copy failed", err));
-            });
-        }
-
-        pgSetupCopyButton(document.getElementById('pg-copy-button-en'), finalPromptInput);
-
-        lightbox.addEventListener('click', () => {
-            lightbox.style.display = 'none';
-        });
-
-        function pgUpdateOutput(fromSelection = false) {
-            if (fromSelection) {
-                const styleZh = selectedTags.get('style');
-                if (!styleZh) {
-                    finalPromptInput.value = '';
-                } else {
-                    const translate = (group) => (selectedTags.get(group) || []).map(key => promptData[group][key]);
-                    const styleEn = promptData.style[styleZh];
-                    const coreStyle = styleKeywords[styleEn];
-                    let promptEnParts = [];
-                    const qualityEn = translate('quality');
-                    promptEnParts.push(`(${(qualityEn.join(', ') || 'masterpiece, best quality')}, ${coreStyle})`);
-                    const sceneEn = translate('scene');
-                    if (sceneEn.length > 0) promptEnParts.push(`((${sceneEn.join(' and ')} scene:1.5))`);
-                    const temperamentEn = translate('temperament');
-                    const faceEn = translate('face');
-                    const hairEn = translate('hair');
-                    const clothingEn = translate('clothing');
-                    const dynamicsEn = translate('dynamics');
-                    const compositionEn = translate('composition');
-                    let characterDetailsEn = [...temperamentEn, ...faceEn, ...hairEn, ...dynamicsEn];
-                    let characterStr = `((${compositionEn.join(', ') || 'medium shot'} of a beautiful woman`;
-                    if (characterDetailsEn.length > 0) characterStr += ` with ${characterDetailsEn.join(' and ')}`;
-                    if (clothingEn.length > 0) characterStr += `, wearing ${clothingEn.join(' and ')}`;
-                    characterStr += `))`;
-                    promptEnParts.push(characterStr);
-                    const lightingEn = translate('lighting');
-                    if (lightingEn.length > 0) promptEnParts.push(`((${lightingEn.join(' and ')} lighting)):1.2`);
-                    const angleEn = translate('angle');
-                    const cameraEn = translate('camera');
-                    const colorMotionEn = translate('color_motion');
-                    const lensDetailsEn = [...angleEn, ...cameraEn, ...colorMotionEn];
-                    if (lensDetailsEn.length > 0) promptEnParts.push(`((${lensDetailsEn.join(', ')})):1.1`);
-                    finalPromptInput.value = promptEnParts.join(', ');
-                }
-            }
-            generateBtn.disabled = finalPromptInput.value.trim() === '';
-        }
-
-        function showLoading(isLoading) {
-            generateBtn.disabled = isLoading;
-            if (isLoading) {
-                generateBtn.classList.add('opacity-70');
-                loader.classList.remove('hidden');
-                placeholderText.classList.add('hidden');
-                gallery.classList.add('hidden');
-                errorMessage.textContent = '';
-            } else {
-                generateBtn.disabled = finalPromptInput.value.trim() === '';
-                loader.classList.add('hidden');
-            }
-        }
-
-        // --- 新增的辅助函数 ---
-        async function convertUrlToDataURL(url) {
-            const proxyUrl = `/.netlify/functions/image-proxy?url=${encodeURIComponent(url)}`;
-            try {
-                const response = await fetch(proxyUrl);
-                if (!response.ok) {
-                    throw new Error(`代理请求失败: ${response.status} ${response.statusText}`);
-                }
-                const blob = await response.blob();
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.onerror = reject;
-                    reader.readAsDataURL(blob);
-                });
-            } catch (e) {
-                console.error("通过代理获取图片失败", e);
-                throw e;
-            }
-        }
-
-        async function downloadImageFromUrl(url, filename) {
-            try {
-                const proxyUrl = `/.netlify/functions/image-proxy?url=${encodeURIComponent(url)}`;
-                const response = await fetch(proxyUrl);
-                const blob = await response.blob();
-                const blobUrl = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = blobUrl;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(blobUrl);
-                a.remove();
-            } catch (e) {
-                console.error("下载失败:", e);
-                window.open(url, '_blank');
-            }
-        }
-
-        async function addImageToGalleryFromUrl(imgSrc, buttonEl) {
-            const originalIconHTML = buttonEl.innerHTML;
-            buttonEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            buttonEl.disabled = true;
-            try {
-                const dataUrl = await convertUrlToDataURL(imgSrc);
-                const newImage = {
-                    id: Date.now() + Math.random(),
-                    name: `AI作品-${Date.now()}.png`,
-                    src: dataUrl,
-                    description: "AI生成于创意工坊"
-                };
-                imageDB.unshift(newImage);
-                localStorage.setItem('imageDB', JSON.stringify(imageDB));
-                buttonEl.innerHTML = '<i class="fas fa-check"></i>';
-                buttonEl.style.backgroundColor = 'var(--success)';
-                if (document.getElementById('gallery-grid')) {
-                    renderImageGallery();
-                }
-            } catch (e) {
-                console.error("添加到图库失败:", e);
-                alert("添加到图库失败！");
-                buttonEl.innerHTML = '<i class="fas fa-times"></i>';
-            } finally {
-                setTimeout(() => {
-                    buttonEl.innerHTML = originalIconHTML;
-                    buttonEl.style.backgroundColor = 'var(--primary)';
-                    buttonEl.disabled = false;
-                }, 2000);
-            }
-        }
-
-        function pgDisplayGallery(imageUrls) {
-            gallery.innerHTML = '';
-            gallery.classList.remove('hidden');
-            placeholderText.classList.add('hidden');
-
-            if (!imageUrls || imageUrls.length === 0) {
-                showError("API 未能返回有效图片。");
-                return;
-            }
-
-            let gridColsClass = 'grid-cols-1';
-            if (imageUrls.length === 2) gridColsClass = 'grid-cols-2';
-            if (imageUrls.length >= 3) gridColsClass = 'grid-cols-2 md:grid-cols-4';
-            gallery.className = `w-full h-full grid ${gridColsClass} gap-2 p-2`;
-
-            imageUrls.forEach((imgSrc, index) => {
-                const container = document.createElement('div');
-                container.className = 'card relative group w-full h-full';
-
-                const imgContainer = document.createElement('div');
-                imgContainer.className = "card-media-container";
-
-                const img = document.createElement('img');
-                img.src = imgSrc;
-                img.alt = `Generated Image ${index + 1}`;
-
-                imgContainer.appendChild(img);
-                imgContainer.addEventListener('click', () => {
-                    lightboxImage.src = imgSrc;
-                    lightbox.style.display = 'flex';
-                });
-
-                const actionsContainer = document.createElement('div');
-                actionsContainer.className = 'card-actions';
-
-                const addBtn = document.createElement('button');
-                addBtn.className = 'action-btn';
-                addBtn.title = '添加到作品图库';
-                addBtn.style.backgroundColor = 'var(--primary)';
-                addBtn.innerHTML = '<i class="fas fa-plus"></i>';
-                addBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    addImageToGalleryFromUrl(imgSrc, addBtn);
-                });
-
-                const downloadBtn = document.createElement('button');
-                downloadBtn.className = 'action-btn download-btn';
-                downloadBtn.title = '下载图片';
-                const filename = `ai-creation-${Date.now()}-${index}.png`;
-                downloadBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    downloadImageFromUrl(imgSrc, filename);
-                });
-                downloadBtn.innerHTML = '<i class="fas fa-download"></i>';
-
-                actionsContainer.appendChild(addBtn);
-                actionsContainer.appendChild(downloadBtn);
-
-                container.appendChild(imgContainer);
-                container.appendChild(actionsContainer);
-                gallery.appendChild(container);
-            });
-        }
-
-        function showError(message) {
-            errorMessage.textContent = message;
-            if (placeholderText) {
-                placeholderText.classList.remove('hidden');
-            }
-            if (gallery) {
-                gallery.classList.add('hidden');
-            }
-        }
-
-        async function pollForLiblibResult(generateUuid) {
-            const maxAttempts = 40;
-            const interval = 3000;
-            for (let i = 0; i < maxAttempts; i++) {
-                showError(`正在向 LiblibAI 查询结果... (${i * 3}秒)`);
-                await new Promise(resolve => setTimeout(resolve, interval));
-                try {
-                    const response = await fetch(`/api/liblib-image`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ generateUuid: generateUuid })
+                        container.appendChild(tagEl);
                     });
-                    if (!response.ok) continue;
-                    const result = await response.json();
-                    if (result.data && result.data.generateStatus === 5) {
-                        if (result.data.images && result.data.images.length > 0) {
-                            return result.data.images.map(img => img.imageUrl);
-                        } else { throw new Error("LiblibAI任务成功但未返回图片。"); }
-                    } else if (result.data && result.data.generateStatus < 5) {
-                        console.log(`Polling Liblib... status: ${result.data.generateStatus}`);
-                    } else { throw new Error(result.data.generateMsg || "Liblib任务失败。"); }
-                } catch (error) { throw error; }
-            }
-            throw new Error("Liblib任务超时，请稍后再试。");
-        }
-
-        generateBtn.addEventListener("click", async () => {
-            showLoading(true);
-            const englishPrompt = finalPromptInput.value.trim();
-            const negativePrompt = document.getElementById("pg-negative-prompt").value;
-            const selectedApi = apiSelector.value;
-            const imageCount = parseInt(imageCountSelector.value, 10);
-
-            if (!englishPrompt) {
-                showError("指令输入框不能为空！");
-                showLoading(false);
-                return;
+                }
             }
 
-            try {
-                let imageUrls = [];
-                if (selectedApi === 'liblib') {
-                    const initialPayload = {
-                        generateParams: {
-                            prompt: englishPrompt, negativePrompt: negativePrompt,
-                            width: 1024, height: 1024, imgCount: imageCount, seed: -1,
-                            sampler: 15, steps: 20, cfgScale: 7
+            pgUpdateOutput();
+
+            document.getElementById('pg-builder-container').addEventListener('click', (e) => {
+                if (e.target.classList.contains('pg-prompt-tag')) {
+                    const { value, group, ringColor } = e.target.dataset;
+
+                    if (group === 'style') {
+                        const currentActive = document.querySelector(`[data-group="style"].active`);
+                        if (currentActive) {
+                            currentActive.classList.remove('active', currentActive.dataset.ringColor);
                         }
-                    };
-                    const initialResponse = await fetch(`/api/liblib-image`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(initialPayload)
-                    });
-                    if (!initialResponse.ok) {
-                        const err = await initialResponse.json();
-                        throw new Error(err.error || `提交任务失败: ${initialResponse.status}`);
-                    }
-                    const initialResult = await initialResponse.json();
-                    if (initialResult.code !== 0 || !initialResult.data.generateUuid) {
-                        throw new Error(initialResult.msg || "未能获取任务UUID。");
-                    }
-                    const generateUuid = initialResult.data.generateUuid;
-                    imageUrls = await pollForLiblibResult(generateUuid);
-
-                } else if (selectedApi === 'jimeng') {
-                    const payload = {
-                        prompt: englishPrompt,
-                        negativePrompt: negativePrompt,
-                        n: imageCount
-                    };
-                    const response = await fetch(`/api/jimeng-image`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-                    if (!response.ok) {
-                        const err = await response.json();
-                        throw new Error(err.error || `提交任务失败: ${response.status}`);
-                    }
-                    const result = await response.json();
-                    if (result.data && result.data.image_urls && result.data.image_urls.length > 0) {
-                        imageUrls = result.data.image_urls;
+                        if (currentActive?.dataset.value !== value) {
+                            e.target.classList.add('active', ringColor);
+                            selectedTags.set('style', value);
+                        } else {
+                            selectedTags.delete('style');
+                        }
                     } else {
-                        throw new Error(result.message || "API返回数据格式不正确或没有图片URL。");
+                        const currentGroupTags = new Set(selectedTags.get(group) || []);
+                        if (currentGroupTags.has(value)) {
+                            currentGroupTags.delete(value);
+                            e.target.classList.remove('active', ringColor);
+                        } else {
+                            currentGroupTags.add(value);
+                            e.target.classList.add('active', ringColor);
+                        }
+                        selectedTags.set(group, Array.from(currentGroupTags));
+                    }
+                    pgUpdateOutput(true);
+                }
+            });
+
+            finalPromptInput.addEventListener('input', () => {
+                generateBtn.disabled = finalPromptInput.value.trim() === '';
+            });
+
+            clearBtn.addEventListener('click', () => {
+                document.querySelectorAll('.pg-prompt-tag.active').forEach(tag => {
+                    tag.classList.remove('active', tag.dataset.ringColor);
+                });
+                selectedTags.clear();
+                pgUpdateOutput(true);
+                gallery.innerHTML = '';
+                gallery.classList.add('hidden');
+                placeholderText.classList.remove('hidden');
+            });
+
+            inspireBtn.addEventListener('click', async () => {
+                const prompt = "Generate a creative, highly detailed, and visually stunning English prompt for an AI image generator. The subject can be anything, not just a beautiful woman. The prompt should be a single, continuous string of keywords and phrases, describing the subject, a unique and interesting scene, the atmosphere, and specific lighting and camera details. Do not use any line breaks.";
+                const inspiration = await callGemini(prompt, inspireBtn);
+                if (inspiration) {
+                    finalPromptInput.value = inspiration;
+                    pgUpdateOutput(false);
+                }
+            });
+
+            enrichBtn.addEventListener('click', async () => {
+                let currentPrompt = finalPromptInput.value.trim();
+                if (!currentPrompt) return;
+
+                const prompt = `Take the following AI image generator prompt and make it more detailed, vivid, and artistic. Add more specific details about the subject's expression, the background, the atmosphere, and the lighting. Return only the enhanced prompt as a single, continuous string of keywords and phrases. Do not use any line breaks. The prompt to enhance is: "${currentPrompt}"`;
+                const enrichment = await callGemini(prompt, enrichBtn);
+                if (enrichment) {
+                    finalPromptInput.value = enrichment;
+                    pgUpdateOutput(false);
+                }
+            });
+
+            function pgSetupCopyButton(button, textarea) {
+                button.addEventListener('click', () => {
+                    if (!textarea.value) return;
+                    navigator.clipboard.writeText(textarea.value).then(() => {
+                        const originalIcon = button.innerHTML;
+                        button.innerHTML = `<svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+                        setTimeout(() => { button.innerHTML = originalIcon; }, 2000);
+                    }).catch(err => console.error('Copy failed', err));
+                });
+            }
+            pgSetupCopyButton(copyBtnEn, finalPromptInput);
+
+            lightbox.addEventListener('click', () => {
+                lightbox.style.display = 'none';
+            });
+
+            function pgUpdateOutput(fromSelection = false) {
+                if (fromSelection) {
+                    const styleZh = selectedTags.get('style');
+                    if (!styleZh) {
+                        finalPromptInput.value = '';
+                    } else {
+                        const translate = (group) => (selectedTags.get(group) || []).map(key => promptData[group][key]);
+                        const styleEn = promptData.style[styleZh];
+                        const coreStyle = styleKeywords[styleEn];
+                        let promptEnParts = [];
+                        const qualityEn = translate('quality');
+                        promptEnParts.push(`(${(qualityEn.join(', ') || 'masterpiece, best quality')}, ${coreStyle})`);
+                        const sceneEn = translate('scene');
+                        if (sceneEn.length > 0) promptEnParts.push(`((${sceneEn.join(' and ')} scene:1.5))`);
+                        const temperamentEn = translate('temperament');
+                        const faceEn = translate('face');
+                        const hairEn = translate('hair');
+                        const clothingEn = translate('clothing');
+                        const dynamicsEn = translate('dynamics');
+                        const compositionEn = translate('composition');
+                        let characterDetailsEn = [...temperamentEn, ...faceEn, ...hairEn, ...dynamicsEn];
+                        let characterStr = `((${compositionEn.join(', ') || 'medium shot'} of a beautiful woman`;
+                        if (characterDetailsEn.length > 0) characterStr += ` with ${characterDetailsEn.join(' and ')}`;
+                        if (clothingEn.length > 0) characterStr += `, wearing ${clothingEn.join(' and ')}`;
+                        characterStr += `))`;
+                        promptEnParts.push(characterStr);
+                        const lightingEn = translate('lighting');
+                        if (lightingEn.length > 0) promptEnParts.push(`((${lightingEn.join(' and ')} lighting)):1.2`);
+                        const angleEn = translate('angle');
+                        const cameraEn = translate('camera');
+                        const colorMotionEn = translate('color_motion');
+                        const lensDetailsEn = [...angleEn, ...cameraEn, ...colorMotionEn];
+                        if (lensDetailsEn.length > 0) promptEnParts.push(`((${lensDetailsEn.join(', ')})):1.1`);
+                        finalPromptInput.value = promptEnParts.join(', ');
                     }
                 }
-                pgDisplayGallery(imageUrls);
-            } catch (error) {
-                console.error("Image generation error:", error);
-                showError(error.message || "未知错误，请检查控制台日志。");
-            } finally {
-                showLoading(false);
+                generateBtn.disabled = finalPromptInput.value.trim() === '';
             }
-        });
+
+            async function callGemini(prompt, button) {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<div class="pg-spinner-sm"></div>';
+                button.disabled = true;
+                errorMessage.textContent = '';
+                try {
+                    const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+                    const apiKey = "AIzaSyCOiaWZzimDTiPAyHVr6rF1pJqCzF4N3tI";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) throw new Error(`Gemini API Error: ${response.status}`);
+                    const result = await response.json();
+                    if (result.candidates && result.candidates[0]?.content?.parts?.[0]?.text) {
+                        return result.candidates[0].content.parts[0].text.trim();
+                    } else {
+                        console.error("Unexpected Gemini API response:", result);
+                        throw new Error("从Gemini获取灵感失败，请检查控制台。");
+                    }
+                } catch (error) {
+                    showError(error.message);
+                    return null;
+                } finally {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                }
+            }
+
+            generateBtn.addEventListener('click', async () => {
+                showLoading(true);
+                let englishPrompt = finalPromptInput.value.trim();
+                const negativePrompt = document.getElementById('pg-negative-prompt').value;
+                if (!englishPrompt) {
+                    showError('指令输入框不能为空！');
+                    showLoading(false);
+                    return;
+                }
+                if (!englishPrompt.includes('1girl') && !englishPrompt.includes('a man') && !englishPrompt.includes('a boy')) {
+                    englishPrompt = `${styleKeywords['default']}, ${englishPrompt}`;
+                }
+                const uniqueId = `id-${Date.now()}`;
+                const fullPrompt = `${englishPrompt}, ${uniqueId} --no ${negativePrompt}`;
+                try {
+                    const payload = { instances: [{ prompt: fullPrompt }], parameters: { sampleCount: 4 } };
+                    const apiKey = "AIzaSyCOiaWZzimDTiPAyHVr6rF1pJqCzF4N3tI";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+                    const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        let errorMsg = `图片生成失败 (状态码: ${response.status})。`;
+                        try { errorMsg = JSON.parse(errorText).error?.message || errorMsg; } catch (e) { if (errorText) errorMsg = errorText; }
+                        throw new Error(errorMsg);
+                    }
+                    const result = await response.json();
+                    if (result.predictions && result.predictions.length > 0) {
+                        pgDisplayGallery(result.predictions);
+                    } else {
+                        console.error('Unexpected API response:', result);
+                        if (result.predictions?.[0]?.safetyRatings) { throw new Error('图片因安全策略被拦截。请调整提示词。'); }
+                        throw new Error('API返回数据格式异常，无法获取图片。');
+                    }
+                } catch (error) {
+                    console.error('Image generation error:', error);
+                    showError(error.message || '未知错误，请检查控制台日志。');
+                } finally {
+                    showLoading(false);
+                }
+            });
+
+            function showLoading(isLoading) {
+                generateBtn.disabled = isLoading;
+                if (isLoading) {
+                    generateBtn.classList.add('opacity-70');
+                    loader.classList.remove('hidden');
+                    placeholderText.classList.add('hidden');
+                    gallery.classList.add('hidden');
+                    errorMessage.textContent = '';
+                } else {
+                    generateBtn.disabled = finalPromptInput.value.trim() === '';
+                    loader.classList.add('hidden');
+                }
+            }
+
+            function pgDisplayGallery(predictions) {
+                gallery.innerHTML = '';
+                gallery.classList.remove('hidden');
+                placeholderText.classList.add('hidden');
+                predictions.forEach((prediction, index) => {
+                    if (prediction.bytesBase64Encoded) {
+                        const imgSrc = `data:image/png;base64,${prediction.bytesBase64Encoded}`;
+                        const container = document.createElement('div');
+                        container.className = 'relative group w-full h-full';
+                        const img = document.createElement('img');
+                        img.src = imgSrc;
+                        img.className = 'w-full h-full object-cover rounded-md cursor-pointer hover:opacity-80 transition-opacity';
+                        img.addEventListener('click', () => { lightboxImage.src = imgSrc; lightbox.style.display = 'flex'; });
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = imgSrc;
+                        downloadLink.download = `ai-creation-${Date.now()}-${index}.png`;
+                        downloadLink.className = 'absolute bottom-2 right-2 bg-black/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black/80';
+                        downloadLink.title = '下载图片';
+                        downloadLink.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>`;
+                        const addToGalleryBtn = document.createElement('button');
+                        addToGalleryBtn.className = 'absolute top-2 right-2 bg-blue-500/60 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-blue-500/80';
+                        addToGalleryBtn.title = '添加到作品图库';
+                        addToGalleryBtn.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>`;
+                        addToGalleryBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            const newImage = { id: Date.now(), name: `AI作品-${Date.now()}.png`, src: imgSrc, description: "AI生成于创意工坊" };
+                            imageDB.push(newImage);
+                            localStorage.setItem('imageDB', JSON.stringify(imageDB));
+                            renderImageGallery();
+                            alert('已成功添加到作品图库！');
+                        };
+                        container.appendChild(img);
+                        container.appendChild(downloadLink);
+                        container.appendChild(addToGalleryBtn);
+                        gallery.appendChild(container);
+                    }
+                });
+            }
+
+            function showError(message) {
+                errorMessage.textContent = message;
+                placeholderText.classList.remove('hidden');
+                gallery.classList.add('hidden');
+            }
         }
     </script>
 </body>
+
+</html>
