@@ -7,6 +7,7 @@
     <title>AI创意工坊</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -884,9 +885,14 @@
 
     <script>
         // --- Database Setup ---
-        let imageDB = JSON.parse(localStorage.getItem('imageDB')) || [];
-        let videoDB = JSON.parse(localStorage.getItem('videoDB')) || [];
-        let musicDB = JSON.parse(localStorage.getItem('musicDB')) || [];
+        const SUPABASE_URL = 'https://chwblzydtdufvinshswl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNod2JsenlkdGR1ZnZpbnNoc3dsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAzNDMzNDMsImV4cCI6MjA2NTkxOTM0M30._ZBKAFIBNcrTBWlazJsUS3jxLngRRErGUz1Ym8W-fzU';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // 这些数组现在只是临时变量，用于存放从云端获取的数据
+        let imageDB = [];
+        let videoDB = [];
+        let musicDB = [];
 
         // --- Page Navigation ---
         function showPage(pageId) {
@@ -916,6 +922,7 @@
         }
 
         // --- Image Gallery ---
+        // 新的、基于Supabase的图片上传逻辑
         function initImageGallery() {
             const grid = document.getElementById('gallery-grid');
             const uploader = document.getElementById('image-upload');
@@ -923,35 +930,90 @@
             const statusEl = document.getElementById('upload-status');
 
             uploadBtn.addEventListener('click', () => uploader.click());
-
             uploader.addEventListener('change', async (e) => {
                 const files = e.target.files;
                 if (!files.length) return;
 
-                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
+                statusEl.textContent = `正在上传 ${files.length} 个文件到云端...`;
                 statusEl.style.color = 'var(--primary)';
 
                 for (const file of files) {
-                    if (!file.type.match('image.*') || file.size > 10 * 1024 * 1024) {
-                        alert(`文件 "${file.name}" 不合格（必须是小于10MB的图片），已跳过。`);
-                        continue;
-                    }
                     try {
-                        const fileSrc = await readFileAsDataURL(file);
-                        const newImage = { id: Date.now() + Math.random(), name: file.name, src: fileSrc, description: "本地上传的作品" };
-                        imageDB.unshift(newImage);
+                        // 1. 上传文件到 Supabase Storage
+                        const filePath = `images/<span class="math-inline">\{Date\.now\(\)\}\-</span>{file.name}`; // 创建一个唯一的文件路径
+                        const { data: uploadData, error: uploadError } = await supabase.storage
+                            .from('media') // 'media' 是我们之前创建的Bucket名
+                            .upload(filePath, file);
+
+                        if (uploadError) throw uploadError;
+
+                        // 2. 获取上传后文件的公开URL
+                        const { data: urlData } = supabase.storage
+                            .from('media')
+                            .getPublicUrl(filePath);
+
+                        const publicURL = urlData.publicUrl;
+
+                        // 3. 将文件信息存入 Supabase 数据库
+                        const { error: insertError } = await supabase
+                            .from('works') // 'works' 是我们之前创建的Table名
+                            .insert({
+                                name: file.name,
+                                description: "云端上传的作品",
+                                file_url: publicURL,
+                                media_type: 'image'
+                            });
+
+                        if (insertError) throw insertError;
+
                     } catch (error) {
-                        alert(`读取文件 "${file.name}" 失败，请重试。`);
+                        console.error('上传失败:', error);
+                        alert(`文件 "${file.name}" 上传失败: ${error.message}`);
                     }
                 }
 
-                localStorage.setItem('imageDB', JSON.stringify(imageDB));
-                statusEl.textContent = `上传完成！`;
-                renderImageGallery();
+                statusEl.textContent = '上传完成！正在刷新图库...';
+                // 上传后，重新从云端加载所有图片
+                loadAllWorks();
                 uploader.value = '';
             });
-            renderImageGallery();
+
+            // 页面加载时，也要从云端加载
+            loadAllWorks();
         }
+
+        // 新增一个函数，用于从Supabase加载所有作品
+        async function loadAllWorks() {
+            const { data: works, error } = await supabase
+                .from('works')
+                .select('*') // 获取所有列
+                .order('created_at', { ascending: false }); // 按创建时间倒序
+
+            if (error) {
+                console.error('加载作品失败:', error);
+                return;
+            }
+
+            // 将加载到的作品分类
+            imageDB = works.filter(w => w.media_type === 'image');
+            videoDB = works.filter(w => w.media_type === 'video');
+            musicDB = works.filter(w => w.media_type === 'music');
+
+            // 重新渲染所有图库
+            renderImageGallery();
+            renderVideoGallery();
+            renderMusic();
+        }
+
+        // 在页面初始化时调用这个总的加载函数
+        document.addEventListener('DOMContentLoaded', function () {
+            loadAllWorks();
+            initImageGallery(); // 仅设置事件监听器
+            initVideoGallery(); // ...
+            initMusicGallery(); // ...
+            initChat();
+            initGames();
+        });
 
         function renderImageGallery() {
             const grid = document.getElementById('gallery-grid');
@@ -1000,34 +1062,50 @@
             const statusEl = document.getElementById('video-upload-status');
 
             uploadBtn.addEventListener('click', () => uploader.click());
-
             uploader.addEventListener('change', async (e) => {
                 const files = e.target.files;
                 if (!files.length) return;
 
-                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
+                statusEl.textContent = `正在上传 ${files.length} 个视频到云端...`;
                 statusEl.style.color = 'var(--primary)';
 
                 for (const file of files) {
-                    if (!file.type.match('video.*') || file.size > 50 * 1024 * 1024) {
-                        alert(`文件 "${file.name}" 不合格（必须是小于50MB的视频），已跳过。`);
-                        continue;
-                    }
                     try {
-                        const fileSrc = await readFileAsDataURL(file);
-                        const newVideo = { id: Date.now() + Math.random(), name: file.name, src: fileSrc, description: "本地上传的视频", type: file.type };
-                        videoDB.unshift(newVideo);
+                        // 1. 上传文件到 Supabase Storage
+                        const filePath = `videos/${Date.now()}-${file.name}`; // 存放在videos目录下
+                        const { data: uploadData, error: uploadError } = await supabase.storage
+                            .from('media') // 'media' 是您创建的Bucket名
+                            .upload(filePath, file);
+
+                        if (uploadError) throw uploadError;
+
+                        // 2. 获取文件的公开URL
+                        const { data: urlData } = supabase.storage
+                            .from('media')
+                            .getPublicUrl(filePath);
+
+                        // 3. 将文件信息存入数据库
+                        const { error: insertError } = await supabase
+                            .from('works') // 'works' 是您创建的Table名
+                            .insert({
+                                name: file.name,
+                                description: "云端上传的视频",
+                                file_url: urlData.publicUrl,
+                                media_type: 'video' // 类型标记为 video
+                            });
+
+                        if (insertError) throw insertError;
+
                     } catch (error) {
-                        alert(`读取文件 "${file.name}" 失败，请重试。`);
+                        console.error('上传失败:', error);
+                        alert(`文件 "${file.name}" 上传失败: ${error.message}`);
                     }
                 }
 
-                localStorage.setItem('videoDB', JSON.stringify(videoDB));
-                statusEl.textContent = `上传完成！`;
-                renderVideoGallery();
+                statusEl.textContent = '上传完成！正在刷新...';
+                loadAllWorks(); // 上传后，重新从云端加载所有作品
                 uploader.value = '';
             });
-            renderVideoGallery();
         }
 
         function renderVideoGallery() {
@@ -1098,36 +1176,48 @@
             const statusEl = document.getElementById('music-upload-status');
 
             uploadBtn.addEventListener('click', () => uploader.click());
-
             uploader.addEventListener('change', async (e) => {
                 const files = e.target.files;
                 if (!files.length) return;
 
-                statusEl.textContent = `正在处理 ${files.length} 个文件...`;
+                statusEl.textContent = `正在上传 ${files.length} 首音乐到云端...`;
 
                 for (const file of files) {
-                    if (!file.type.match('audio.*') || file.size > 20 * 1024 * 1024) {
-                        alert(`文件 "${file.name}" 不合格（必须是小于20MB的音频），已跳过。`);
-                        continue;
-                    }
                     try {
-                        const fileSrc = await readFileAsDataURL(file);
-                        const newMusic = {
-                            id: Date.now() + Math.random(), name: file.name, src: fileSrc,
-                            thumbnail: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=2070",
-                            artist: "本地上传", duration: "未知"
-                        };
-                        musicDB.unshift(newMusic);
+                        // 1. 上传文件到 Supabase Storage
+                        const filePath = `music/${Date.now()}-${file.name}`; // 存放在music目录下
+                        const { data: uploadData, error: uploadError } = await supabase.storage
+                            .from('media') // 'media' 是您创建的Bucket名
+                            .upload(filePath, file);
+
+                        if (uploadError) throw uploadError;
+
+                        // 2. 获取文件的公开URL
+                        const { data: urlData } = supabase.storage
+                            .from('media')
+                            .getPublicUrl(filePath);
+
+                        // 3. 将文件信息存入数据库
+                        const { error: insertError } = await supabase
+                            .from('works') // 'works' 是您创建的Table名
+                            .insert({
+                                name: file.name,
+                                description: "云端上传的音乐",
+                                file_url: urlData.publicUrl,
+                                media_type: 'music' // 类型标记为 music
+                            });
+
+                        if (insertError) throw insertError;
                     } catch (error) {
-                        alert(`读取文件 "${file.name}" 失败，请重试。`);
+                        console.error('上传失败:', error);
+                        alert(`文件 "${file.name}" 上传失败: ${error.message}`);
                     }
                 }
-                localStorage.setItem('musicDB', JSON.stringify(musicDB));
-                statusEl.textContent = '上传完成！';
-                renderMusic();
+
+                statusEl.textContent = '上传完成！正在刷新...';
+                loadAllWorks(); // 上传后，重新从云端加载所有作品
                 uploader.value = '';
             });
-            renderMusic();
         }
 
         function renderMusic() {
