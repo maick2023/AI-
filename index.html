@@ -961,7 +961,9 @@
                     }
                 }
                 statusEl.textContent = '上传完成！正在刷新...';
-                loadAllWorks();
+                setTimeout(() => {
+                    loadAllWorks();
+                }, 1000);
                 uploader.value = '';
             });
         }
@@ -989,7 +991,9 @@
                     }
                 }
                 statusEl.textContent = '上传完成！正在刷新...';
-                loadAllWorks();
+                setTimeout(() => {
+                    loadAllWorks();
+                }, 1000);
                 uploader.value = '';
             });
         }
@@ -1017,7 +1021,9 @@
                     }
                 }
                 statusEl.textContent = '上传完成！正在刷新...';
-                loadAllWorks();
+                setTimeout(() => {
+                    loadAllWorks();
+                }, 1000);
                 uploader.value = '';
             });
         }
@@ -1213,6 +1219,7 @@
                         const temperamentEn = translate('temperament');
                         const faceEn = translate('face');
                         const hairEn = translate('hair');
+                        const clothingEn = translate('clothing');  // 【新增定义】
                         const dynamicsEn = translate('dynamics');
                         const compositionEn = translate('composition');
                         let characterDetailsEn = [...temperamentEn, ...faceEn, ...hairEn, ...dynamicsEn];
