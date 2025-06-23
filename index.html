@@ -890,6 +890,7 @@
         // 【最终修正】为我们自己的客户端实例创建一个不与全局库冲突的新名称
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // 这些数组现在只是临时变量，用于存放从云端获取的数据
         let imageDB = [];
         let videoDB = [];
         let musicDB = [];
@@ -904,9 +905,10 @@
             window.scrollTo(0, 0);
         }
 
-        // --- App Initialization ---
+        // --- App Initialization (统一的加载入口) ---
         document.addEventListener('DOMContentLoaded', function () {
-            loadAllWorks();
+            loadAllWorks(); // 首先从云端加载所有数据
+            // 然后初始化各个模块的功能（主要是绑定事件）
             initImageGallery();
             initVideoGallery();
             initMusicGallery();
@@ -915,7 +917,7 @@
             initGames();
         });
 
-        // --- Data Loading ---
+        // --- 核心函数，用于从Supabase加载所有作品 ---
         async function loadAllWorks() {
             // 【修正】使用新的客户端实例名 supabaseClient
             const { data: works, error } = await supabaseClient
@@ -937,7 +939,7 @@
             renderMusic();
         }
 
-        // --- Upload Functions ---
+        // --- 上传函数 ---
         function initImageGallery() {
             const uploader = document.getElementById('image-upload');
             const uploadBtn = document.getElementById('image-upload-button');
@@ -950,7 +952,6 @@
                 for (const file of files) {
                     try {
                         const filePath = `images/${Date.now()}-${file.name}`;
-                        // 【修正】使用新的客户端实例名 supabaseClient
                         const { error: uploadError } = await supabaseClient.storage.from('media').upload(filePath, file);
                         if (uploadError) throw uploadError;
                         const { data: urlData } = supabaseClient.storage.from('media').getPublicUrl(filePath);
@@ -961,13 +962,10 @@
                     }
                 }
                 statusEl.textContent = '上传完成！正在刷新...';
-                setTimeout(() => {
-                    loadAllWorks();
-                }, 1000);
+                loadAllWorks();
                 uploader.value = '';
             });
         }
-
         function initVideoGallery() {
             const uploader = document.getElementById('video-upload');
             const uploadBtn = document.getElementById('video-upload-button');
@@ -980,7 +978,6 @@
                 for (const file of files) {
                     try {
                         const filePath = `videos/${Date.now()}-${file.name}`;
-                        // 【修正】使用新的客户端实例名 supabaseClient
                         const { error: uploadError } = await supabaseClient.storage.from('media').upload(filePath, file);
                         if (uploadError) throw uploadError;
                         const { data: urlData } = supabaseClient.storage.from('media').getPublicUrl(filePath);
@@ -991,13 +988,10 @@
                     }
                 }
                 statusEl.textContent = '上传完成！正在刷新...';
-                setTimeout(() => {
-                    loadAllWorks();
-                }, 1000);
+                loadAllWorks();
                 uploader.value = '';
             });
         }
-
         function initMusicGallery() {
             const uploader = document.getElementById('music-upload');
             const uploadBtn = document.getElementById('music-upload-button');
@@ -1010,7 +1004,6 @@
                 for (const file of files) {
                     try {
                         const filePath = `music/${Date.now()}-${file.name}`;
-                        // 【修正】使用新的客户端实例名 supabaseClient
                         const { error: uploadError } = await supabaseClient.storage.from('media').upload(filePath, file);
                         if (uploadError) throw uploadError;
                         const { data: urlData } = supabaseClient.storage.from('media').getPublicUrl(filePath);
@@ -1021,14 +1014,12 @@
                     }
                 }
                 statusEl.textContent = '上传完成！正在刷新...';
-                setTimeout(() => {
-                    loadAllWorks();
-                }, 1000);
+                loadAllWorks();
                 uploader.value = '';
             });
         }
 
-        // --- 渲染函数 (这部分无需修改) ---
+        // --- 渲染函数 ---
         function renderImageGallery() {
             const grid = document.getElementById('gallery-grid');
             grid.innerHTML = '';
@@ -1068,7 +1059,6 @@
             event.stopPropagation();
             if (!confirm('确定要从云端删除这个项目吗？此操作不可恢复。')) return;
             try {
-                // 【修正】使用新的客户端实例名 supabaseClient
                 const { error } = await supabaseClient.from('works').delete().eq('id', id);
                 if (error) throw error;
                 alert('删除成功！');
@@ -1082,8 +1072,9 @@
         function playMusic(src, title) { const modal = document.getElementById('music-player-modal'); const player = document.getElementById('audio-player'); const musicTitle = document.getElementById('music-title'); musicTitle.textContent = title; player.src = src; modal.style.display = 'flex'; player.play(); }
         function closeMusicPlayer() { const player = document.getElementById('audio-player'); player.pause(); player.src = ''; document.getElementById('music-player-modal').style.display = 'none'; }
 
-        // --- 【已更新】AI绘画功能区 ---
+        // --- AI绘画功能区 ---
         function initPromptGenerator() {
+            // 这部分保持原样，仅在内部函数中修改了 supabase 的调用
             const promptData = { style: { "逼真写实": "photorealistic", "二次元动漫": "anime", "CG渲染": "cg render", "油画质感": "oil painting", "水墨国风": "ink wash painting", "复古港风": "hong kong retro", "赛博朋克": "cyberpunk", "蒸汽朋克": "steampunk", "水彩": "watercolor", "素描": "sketch", "奇幻": "fantasy art", "科幻": "sci-fi art", "卡通": "cartoon", "像素艺术": "pixel art", "印象派": "impressionist", "超现实主义": "surrealism", "抽象艺术": "abstract art", "立体主义": "cubism", "波普艺术": "pop art", "极简主义": "minimalist", "哥特式": "gothic art", "巴洛克": "baroque art", "新艺术运动": "art nouveau", "现代艺术": "modern art", "浮世绘": "ukiyo-e", "卡通渲染": "toon render", "点彩画": "pointillism", "涂鸦艺术": "graffiti art", "概念艺术": "concept art", "漫画": "comic book art", "卡通插画": "cartoon illustration", "插画风": "illustration", "矢量图": "vector art", "故障艺术": "glitch art", "低多边形": "low poly", "剪纸": "paper cutting art", "儿童插画": "children's illustration" }, quality: { "杰作": "masterpiece", "最佳质量": "best quality", "极其精细": "ultra-detailed", "8K画质": "8k", "逼真细节": "photorealistic details", "复杂细节": "intricate details", "高质量": "high quality", "4K画质": "4k", "超高分辨率": "high resolution", "电影级别": "cinematic quality", "专业级": "professional grade", "艺术品级别": "artistic level", "工作室品质": "studio quality", "细节丰富": "rich details", "精细纹理": "fine texture", "完美": "perfect", "获奖作品": "award-winning", "高细节": "high detail", "照片级": "photo-realistic", "高清晰度": "high definition", "史诗般": "epic", "宏伟": "grand", "令人惊叹": "stunning" }, temperament: { "清冷御姐": "cold and elegant lady", "纯欲少女": "pure and seductive girl", "元气少女": "energetic girl", "书卷气": "scholarly", "赛博魅影": "cyber phantom", "复古女郎": "retro lady", "高冷女神": "aloof goddess", "温柔可人": "gentle and lovely", "活泼开朗": "lively and cheerful", "邻家女孩": "girl next door", "霸气总裁": "domineering CEO", "阳光少年": "sunny youth", "文艺青年": "artistic youth", "神秘莫测": "mysterious and unpredictable", "沉稳内敛": "calm and reserved", "慵懒随性": "lazy and casual", "甜美可爱": "sweet and cute", "性感迷人": "sexy and charming", "酷飒": "cool and bold", "飒爽英气": "valiant and spirited", "精致优雅": "exquisite and elegant", "古典美人": "classical beauty", "未来战士": "futuristic warrior", "哥特萝莉": "gothic lolita", "田园牧歌": "pastoral charm", "都市丽人": "urban fashionista", "朋克叛逆": "punk rebellious", "日系甜美": "Japanese sweet style", "韩系时尚": "Korean trendy style", "欧美复古": "European and American vintage", "国风少年": "traditional Chinese style youth", "仙气飘飘": "ethereal and graceful" }, face: { "精致脸庞": "delicate face", "鹅蛋脸": "oval face", "心形脸": "heart-shaped face", "桃花眼": "peach blossom eyes", "蓝色眼眸": "blue eyes", "微笑": "smile", "红唇": "red lips", "长睫毛": "long eyelashes", "无辜表情": "innocent expression", "泪痣": "tear mole", "水光唇釉": "glossy lips", "雀斑": "freckles", "大眼睛": "big eyes", "丹凤眼": "phoenix eyes", "杏眼": "apricot eyes", "柳叶眉": "willow leaf eyebrows", "剑眉": "sword eyebrows", "浓眉": "thick eyebrows", "淡眉": "light eyebrows", "酒窝": "dimples", "美人尖": "widow's peak" }, hair: { "及腰长发": "waist-length long hair", "银色长发": "silver long hair", "双马尾": "twintails", "麻花辫": "braids", "蓬松卷发": "fluffy curly hair", "飘逸的": "flowing hair", "绸缎黑发": "silky black hair", "铂金渐变挑染": "platinum ombre highlights", "湿发": "wet hair", "短发": "short hair", "齐肩发": "shoulder-length hair", "波波头": "bob cut", "长直发": "long straight hair", "大波浪": "large waves", "小卷发": "tight curls", "马尾辫": "ponytail", "丸子头": "bun hair", "公主切": "hime cut", "刘海": "bangs", "中分": "middle part", "侧分": "side part", "挑染": "highlights", "渐变色": "ombre hair", "黑色头发": "black hair", "棕色头发": "brown hair", "金色头发": "blonde hair", "红色头发": "red hair", "蓝色头发": "blue hair", "绿色头发": "green hair", "粉色头发": "pink hair", "紫色头发": "purple hair", "灰色头发": "grey hair", "白色头发": "white hair", "编发": "braided hair", "脏辫": "dreadlocks", "莫西干头": "mohawk", "寸头": "buzz cut", "卷发": "curly hair", "直发": "straight hair", "柔顺的": "smooth hair", "凌乱的": "messy hair", "光泽的": "lustrous hair", "爆炸头": "afro", "发髻": "hair bun", "长发及地": "floor-length hair", "齐耳短发": "ear-length short hair", "齐刘海": "blunt bangs", "空气刘海": "airy bangs", "八字刘海": "s-shaped bangs", "内扣发型": "inward curl hairstyle", "外翻发型": "outward flip hairstyle", "玉米烫": "corn perm", "羊毛卷": "wool roll perm", "法式卷发": "french curls", "复古卷发": "vintage curls", "波浪卷发": "wavy hair", "发带": "headband", "发箍": "hair hoop", "发夹": "hair clip", "发网": "hairnet", "蓬松发型": "voluminous hair", "顺滑发质": "smooth hair texture", "粗糙发质": "coarse hair texture" }, clothing: { "白色连衣裙": "white dress", "丝绸旗袍": "silk cheongsam", "JK校服": "JK uniform", "哥特式长裙": "gothic long dress", "机能风外套": "techwear jacket", "婚纱": "wedding dress", "缎面吊带裙": "satin slip dress", "牛仔喇叭裤": "denim flare pants", "宽大男友衬衫": "oversized boyfriend shirt", "荧光纹身": "fluorescent tattoo", "翡翠耳坠": "jade earrings", "皮夹克": "leather jacket", "T恤": "T-shirt", "牛仔裤": "jeans", "短裙": "skirt", "长裤": "trousers", "西装": "suit", "衬衫": "shirt", "毛衣": "sweater", "卫衣": "hoodie", "大衣": "coat", "风衣": "trench coat", "比基尼": "bikini", "泳衣": "swimsuit", "运动服": "sportswear", "晚礼服": "evening gown", "休闲装": "casual wear", "睡衣": "pajamas", "制服": "uniform", "盔甲": "armor", "斗篷": "cloak", "围巾": "scarf", "帽子": "hat", "手套": "gloves", "项链": "necklace", "手镯": "bracelet", "戒指": "ring", "耳环": "earrings", "眼镜": "glasses", "墨镜": "sunglasses", "背包": "backpack", "手提包": "handbag", "高跟鞋": "high heels", "运动鞋": "sneakers", "靴子": "boots", "凉鞋": "sandals", "袜裤": "stockings", "蕾丝内衣": "lace lingerie", "纹身": "tattoo", "耳钉": "ear stud", "鼻环": "nose ring", "肚脐环": "belly button ring", "手环": "wristband", "腰带": "belt", "领带": "tie", "领结": "bow tie", "吊带袜": "garter stockings", "洛丽塔裙": "lolita dress", "公主裙": "princess dress", "旗袍": "cheongsam", "和服": "kimono", "水手服": "sailor uniform", "皮革手套": "leather gloves", "丝袜": "silk stockings", "透明材质": "transparent material", "薄纱": "sheer fabric", "破洞牛仔裤": "ripped jeans", "渔网袜": "fishnet stockings", "工装裤": "cargo pants", "棒球帽": "baseball cap" }, dynamics: { "回头看": "looking back", "奔跑中": "running", "跳舞": "dancing", "沉思": "pondering", "害羞地笑": "shyly smiling", "自信地凝视": "confidently gazing", "咬唇思索": "biting lip and pondering", "撩发回眸": "flicking hair and looking back", "抱膝远眺": "hugging knees and gazing into the distance", "湿发贴颈": "wet hair sticking to neck", "动态抓拍": "dynamic action shot", "行走中": "walking", "跳跃": "jumping", "站立": "standing", "坐着": "sitting", "躺着": "lying down", "飞行": "flying", "打斗": "fighting", "阅读": "reading", "绘画": "painting", "唱歌": "singing", "弹奏乐器": "playing an instrument", "冥想": "meditating", "挥手": "waving", "打电话": "talking on the phone", "看书": "reading a book", "喝咖啡": "drinking coffee", "使用电脑": "using a computer", "玩手机": "playing with phone", "惊讶": "surprised", "沮丧": "frustrated", "兴奋": "excited", "愤怒": "angry", "悲伤": "sad", "开怀大笑": "laughing heartily", "小跑": "jogging", "瑜伽姿势": "yoga pose", "武术姿势": "martial arts stance", "优雅的姿态": "graceful pose", "慵懒的姿势": "languid pose", "正在对话": "in conversation", "正在思考": "deep in thought" }, scene: { "樱花树下": "under a cherry blossom tree", "未来都市": "futuristic city", "巴洛克城堡": "baroque castle", "海边": "seaside", "雨中街头": "rainy street", "图书馆": "library", "极光雪原": "aurora snowfield", "薰衣草田": "lavender field", "霓虹街巷": "neon alley", "地铁隧道": "subway tunnel", "天台夜景": "rooftop night view", "复古咖啡馆": "retro cafe", "音乐节后台": "backstage at a music festival", "魔法森林": "enchanted forest", "废弃工厂": "abandoned factory", "宇宙飞船内部": "inside a spaceship", "沙漠绿洲": "desert oasis", "高山湖泊": "mountain lake", "深海世界": "deep sea world", "古老神庙": "ancient temple", "中世纪村庄": "medieval village", "童话小镇": "fairy tale town", "蒸汽朋克城市": "steampunk city", "末日废土": "post-apocalyptic wasteland", "宁静的卧室": "cozy bedroom", "繁华购物中心": "bustling shopping mall", "艺术画廊": "art gallery", "雪山之巅": "snowy mountain peak", "热带雨林": "tropical rainforest", "火山爆发旁": "next to a volcanic eruption", "幽暗地牢": "dark dungeon", "星空之下": "under a starry sky", "迷雾沼泽": "misty swamp", "古老遗迹": "ancient ruins", "日式庭院": "Japanese garden", "欧式街道": "European street", "沙漠营地": "desert camp", "冰洞": "ice cave", "瀑布深潭": "waterfall pool", "空中城堡": "floating castle", "海底城市": "underwater city", "赛博格斗场": "cyberpunk arena", "秘密基地": "secret base" }, lighting: { "电影感光效": "cinematic lighting", "黄金时刻": "golden hour", "伦勃朗光": "Rembrandt lighting", "霓虹灯光": "neon light", "体积光": "volumetric light", "戏剧性阴影": "dramatic shadows", "丁达尔效应": "Tyndall effect", "晨光": "morning light", "夕阳": "sunset light", "柔焦光晕": "soft focus halo", "菲林颗粒": "film grain", "发丝轮廓光": "rim light on hair", "自然光": "natural light", "柔和光": "soft lighting", "硬光": "hard lighting", "工作室光": "studio lighting", "环境光": "ambient lighting", "逆光": "backlight", "侧光": "side light", "顶光": "top light", "底光": "underlight", "月光": "moonlight", "烛光": "candlelight", "篝火光": "bonfire light", "舞台灯光": "stage lighting", "雨后光线": "post-rain light", "雾中光线": "light in fog", "穿透云层": "light piercing clouds", "强对比度": "high contrast", "低对比度": "low contrast", "高光溢出": "blown out highlights", "暗调": "low key lighting", "高调": "high key lighting", "闪烁的光": "flickering light", "放射光": "radiant light", "反射光": "reflected light", "水下光线": "underwater lighting", "神秘光线": "mysterious light", "暖色调": "warm tones", "冷色调": "cool tones", "梦幻光效": "dreamy lighting", "哥特式光线": "gothic lighting", "明亮": "bright", "昏暗": "dim", "阴影": "shadows", "光束": "light beams", "剪影": "silhouette", "散射光": "diffused light" }, composition: { "全身像": "full body shot", "半身像": "medium shot", "大特写": "extreme close-up", "脸部特写": "close-up", "远景": "long shot", "建环镜头": "establishing shot", "黄金分割": "golden ratio composition", "对称构图": "symmetrical composition", "三分法构图": "rule of thirds", "引导线构图": "leading lines", "画中画构图": "frame within a frame", "牛仔景别": "cowboy shot", "特写": "tight shot", "近景": "close shot", "中景": "medium shot", "大远景": "extreme long shot", "鸟瞰图": "aerial view", "仰视": "low angle shot", "俯视": "high angle shot", "斜角构图": "dutch angle", "对角线构图": "diagonal composition", "C形构图": "C-shape composition", "S形构图": "S-shape composition", "螺旋构图": "spiral composition", "三角形构图": "triangular composition", "放射线构图": "radial composition", "重复构图": "repetitive composition", "空白构图": "negative space composition", "景深构图": "depth of field composition", "前景": "foreground", "中景": "midground", "背景": "background", "肩部以上": "bust shot", "膝盖以上": "knee shot", "人物中心构图": "centered composition", "失衡构图": "unbalanced composition", "特写镜头": "macro shot", "广角镜头": "wide angle shot", "长焦镜头": "telephoto lens shot", "鱼眼镜头": "fisheye lens", "肖像模式": "portrait mode", "水平构图": "horizontal composition", "垂直构图": "vertical composition" }, angle: { "低角度": "low angle shot", "高角度": "high angle shot", "鸟瞰视角": "bird's-eye view", "仰视视角": "worm's-eye view", "荷兰角": "dutch angle", "单点透视": "one-point perspective", "大气透视": "atmospheric perspective", "正常视角": "eye-level shot", "背部视角": "from behind", "过肩视角": "over the shoulder shot", "主观视角": "first-person view", "客观视角": "third-person view", "多点透视": "multi-point perspective", "两点透视": "two-point perspective", "三点透视": "three-point perspective", "广角透视": "wide-angle perspective", "长焦透视": "telephoto perspective", "对称视角": "symmetrical view", "不对称视角": "asymmetrical view", "倾斜视角": "tilted angle", "俯瞰": "overhead shot", "平行视角": "parallel perspective", "水下视角": "underwater view", "通过...看": "view through...", "倒影视角": "reflection view", "螺旋视角": "spiral view" }, camera: { "85mm f/1.2": "85mm f/1.2 lens", "35mm 电影感": "35mm cinematic", "鱼眼镜头": "fisheye lens", "哈苏色彩": "Hasselblad natural colors", "富士胶片色彩": "Fujifilm film color", "浅景深": "shallow depth of field", "大景深": "deep depth of field", "50mm 标准镜头": "50mm standard lens", "24mm 广角镜头": "24mm wide-angle lens", "135mm 长焦镜头": "135mm telephoto lens", "微距镜头": "macro lens", "变焦镜头": "zoom lens", "定焦镜头": "prime lens", "移轴镜头": "tilt-shift lens", "徕卡色彩": "Leica colors", "蔡司镜头": "Zeiss lens", "尼康色彩": "Nikon colors", "佳能色彩": "Canon colors", "柔焦效果": "soft focus", "虚化背景": "bokeh background", "前景清晰": "sharp foreground", "长曝光": "long exposure", "高速快门": "fast shutter speed", "慢门": "slow shutter speed", "曝光过度": "overexposed", "曝光不足": "underexposed", "高ISO": "high ISO", "低ISO": "low ISO", "闪光灯": "flash photography", "自然景深": "natural depth of field", "电影胶片": "cinematic film", "老式相机": "vintage camera look", "胶片颗粒感": "film grain", "高动态范围 (HDR)": "high dynamic range (HDR)", "低光摄影": "low light photography", "纪实摄影": "documentary photography", "肖像摄影": "portrait photography", "风光摄影": "landscape photography", "街头摄影": "street photography", "广角": "wide angle", "长焦": "telephoto", "失真": "distortion" }, color_motion: { "鲜艳色彩": "vibrant colors", "单色调": "monochromatic", "对比色": "contrasting colors", "高饱和度": "highly saturated colors", "动态模糊": "motion blur", "摇摄": "panning shot", "柔和色彩": "soft colors", "低饱和度": "desaturated colors", "暖色调": "warm colors", "冷色调": "cool colors", "复古色彩": "vintage colors", "赛博朋克色彩": "cyberpunk colors", "霓虹色彩": "neon colors", "柔和渐变": "soft gradient", "色彩斑斓": "colorful", "黑白": "black and white", "色彩分离": "color separation", "色调分离": "tonal separation", "光线追踪": "ray tracing", "光线散射": "light scattering", "景深模糊": "depth of field blur", "径向模糊": "radial blur", "缩放模糊": "zoom blur", "快门速度效应": "shutter speed effect", "拖影": "ghosting effect", "粒子效果": "particle effect", "光效": "light effect", "色彩飞溅": "color splash", "电影调色": "cinematic color grading", "漫画色彩": "comic book colors", "模糊背景": "blurred background", "模糊前景": "blurred foreground", "失真色彩": "distorted colors" } };
             const styleKeywords = { 'photorealistic': '1girl', 'anime': 'anime style, anime artwork, key visual, 1girl', 'cg render': 'cgstation, 3d render, octane render, 1girl', 'oil painting': 'oil painting, impressionistic, thick brush strokes, 1girl', 'ink wash painting': 'Chinese ink painting, guofeng, traditional art, 1girl', 'hong kong retro': 'cinematic film still, Hong Kong movie style, 1990s, kodak portra 400, 1girl', 'cyberpunk': 'cyberpunk, futuristic, neon, night city, cinematic, 1girl', 'steampunk': 'steampunk, victorian, gears, brass, 1girl', 'watercolor': 'watercolor painting, vibrant, soft edges, paper texture, 1girl', 'sketch': 'graphite pencil sketch, detailed, black and white, hatching, 1girl', 'default': '1girl' };
             const colors = [{ bg: 'bg-red-200', text: 'text-red-800', ring: 'ring-red-400' }, { bg: 'bg-yellow-200', text: 'text-yellow-800', ring: 'ring-yellow-400' }, { bg: 'bg-green-200', text: 'text-green-800', ring: 'ring-green-400' }, { bg: 'bg-blue-200', text: 'text-blue-800', ring: 'ring-blue-400' }, { bg: 'bg-indigo-200', text: 'text-indigo-800', ring: 'ring-indigo-400' }, { bg: 'bg-purple-200', text: 'text-purple-800', ring: 'ring-purple-400' }, { bg: 'bg-pink-200', text: 'text-pink-800', ring: 'ring-pink-400' }, { bg: 'bg-teal-200', text: 'text-teal-800', ring: 'ring-teal-400' }, { bg: 'bg-orange-200', text: 'text-orange-800', ring: 'ring-orange-400' }];
@@ -1118,9 +1109,7 @@
                     });
                 }
             }
-
             pgUpdateOutput();
-
             document.getElementById('pg-builder-container').addEventListener('click', (e) => {
                 if (e.target.classList.contains('pg-prompt-tag')) {
                     const { value, group, ringColor } = e.target.dataset;
@@ -1147,9 +1136,7 @@
                     pgUpdateOutput(true);
                 }
             });
-
             finalPromptInput.addEventListener('input', () => { generateBtn.disabled = finalPromptInput.value.trim() === ''; });
-
             clearBtn.addEventListener('click', () => {
                 document.querySelectorAll('.pg-prompt-tag.active').forEach(tag => {
                     tag.classList.remove('active', tag.dataset.ringColor);
@@ -1160,7 +1147,6 @@
                 gallery.classList.add('hidden');
                 placeholderText.classList.remove('hidden');
             });
-
             enrichBtn.addEventListener('click', async () => {
                 const currentPrompt = finalPromptInput.value.trim();
                 if (!currentPrompt) { alert("请先输入一些基础提示词！"); return; }
@@ -1188,7 +1174,6 @@
                     enrichBtn.innerHTML = '✨ 丰富';
                 }
             });
-
             function pgSetupCopyButton(button, textarea) {
                 button.addEventListener('click', () => {
                     if (!textarea.value) return;
@@ -1201,7 +1186,6 @@
             }
             pgSetupCopyButton(document.getElementById('pg-copy-button-en'), finalPromptInput);
             lightbox.addEventListener('click', () => { lightbox.style.display = 'none'; });
-
             function pgUpdateOutput(fromSelection = false) {
                 if (fromSelection) {
                     const styleZh = selectedTags.get('style');
@@ -1219,7 +1203,6 @@
                         const temperamentEn = translate('temperament');
                         const faceEn = translate('face');
                         const hairEn = translate('hair');
-                        const clothingEn = translate('clothing');  // 【新增定义】
                         const dynamicsEn = translate('dynamics');
                         const compositionEn = translate('composition');
                         let characterDetailsEn = [...temperamentEn, ...faceEn, ...hairEn, ...dynamicsEn];
@@ -1240,7 +1223,6 @@
                 }
                 generateBtn.disabled = finalPromptInput.value.trim() === '';
             }
-
             function showLoading(isLoading) {
                 generateBtn.disabled = isLoading;
                 if (isLoading) {
@@ -1254,7 +1236,6 @@
                     loader.classList.add('hidden');
                 }
             }
-
             async function addImageToGalleryFromUrl(imgSrc, buttonEl) {
                 const originalIconHTML = buttonEl.innerHTML;
                 buttonEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
@@ -1286,13 +1267,11 @@
                     }, 2000);
                 }
             }
-
             function pgDisplayGallery(imageUrls) {
                 const gallery = document.getElementById('pg-image-gallery');
                 const placeholderText = document.getElementById('pg-placeholder-text');
                 const lightbox = document.getElementById('pg-lightbox');
                 const lightboxImage = document.getElementById('pg-lightbox-image');
-
                 gallery.innerHTML = '';
                 gallery.classList.remove('hidden');
                 placeholderText.classList.add('hidden');
@@ -1332,7 +1311,6 @@
                     gallery.appendChild(container);
                 });
             }
-
             function showError(message) {
                 const errorMessage = document.getElementById('pg-error-message');
                 errorMessage.textContent = message;
@@ -1341,7 +1319,6 @@
                 const gallery = document.getElementById('pg-image-gallery');
                 if (gallery) { gallery.classList.add('hidden'); }
             }
-
             async function pollForLiblibResult(generateUuid) {
                 const maxAttempts = 40; const interval = 3000;
                 for (let i = 0; i < maxAttempts; i++) {
@@ -1361,7 +1338,6 @@
                 }
                 throw new Error("Liblib任务超时，请稍后再试。");
             }
-
             generateBtn.addEventListener("click", async () => {
                 const finalPromptInput = document.getElementById('pg-final-prompt-input');
                 const negativePrompt = document.getElementById("pg-negative-prompt").value;
@@ -1369,7 +1345,6 @@
                 const imageCountSelector = document.getElementById('image-count-selector');
                 const gallery = document.getElementById('pg-image-gallery');
                 const loader = document.getElementById('pg-loader');
-
                 showLoading(true);
                 const englishPrompt = finalPromptInput.value.trim();
                 const selectedApi = apiSelector.value;
@@ -1401,7 +1376,6 @@
                     showLoading(false);
                 }
             });
-
             async function downloadImageFromUrl(url, filename) {
                 try {
                     const proxyUrl = `/.netlify/functions/image-proxy?url=${encodeURIComponent(url)}`;
@@ -1423,6 +1397,7 @@
             }
         }
 
+        // --- 其他功能区 ---
         function initGames() {
             const gamesDB = [{ id: 1, name: "益智解谜", description: "挑战您的逻辑思维能力，解决复杂的谜题关卡", link: "#", icon: "fa-puzzle-piece" }, { id: 2, name: "跑酷冒险", description: "在奇幻世界中奔跑跳跃，收集金币避开障碍", link: "#", icon: "fa-running" }, { id: 3, name: "策略棋类", description: "与AI对战，测试您的策略和战术能力", link: "#", icon: "fa-chess" }];
             const gamesGrid = document.getElementById('games-grid');
@@ -1443,6 +1418,7 @@
             const apiKey = localStorage.getItem('gemini-api-key');
             if (apiKey) { chatInput.disabled = false; sendBtn.disabled = false; chatInput.placeholder = "输入您的问题..."; addMessage("您好！我已准备好回答您的问题。", 'ai'); }
             else { addMessage("请点击右上角的设置按钮，输入您的API密钥以开始对话。", 'ai'); }
+
             async function sendMessage() {
                 const messageText = chatInput.value.trim();
                 if (!messageText) return;
@@ -1466,9 +1442,15 @@
                     addMessage(`请求出错: ${error.message}`, 'ai');
                 }
             }
+
             sendBtn.addEventListener('click', sendMessage);
-            chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
         }
+
         function saveApiKey() {
             const apiKey = document.getElementById('api-key').value.trim();
             if (!apiKey) { alert('请输入API密钥'); return; }
@@ -1477,9 +1459,13 @@
             const chatInput = document.getElementById('chat-input');
             const sendBtn = document.getElementById('send-btn');
             const chatMessages = document.getElementById('chat-messages');
-            chatInput.disabled = false; sendBtn.disabled = false; chatInput.placeholder = "输入您的问题..."; chatMessages.innerHTML = '';
+            chatInput.disabled = false;
+            sendBtn.disabled = false;
+            chatInput.placeholder = "输入您的问题...";
+            chatMessages.innerHTML = '';
             addMessage("API密钥已保存！现在可以开始对话了。", 'ai');
         }
+
         function addMessage(text, sender) {
             const messageContainer = document.getElementById('chat-messages');
             const messageElement = document.createElement('div');
