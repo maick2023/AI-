@@ -951,6 +951,7 @@
                 statusEl.textContent = `正在上传 ${files.length} 个文件到云端...`;
                 for (const file of files) {
                     try {
+                        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
                         const filePath = `images/${Date.now()}-${file.name}`;
                         const { error: uploadError } = await supabaseClient.storage.from('media').upload(filePath, file);
                         if (uploadError) throw uploadError;
@@ -977,6 +978,7 @@
                 statusEl.textContent = `正在上传 ${files.length} 个视频到云端...`;
                 for (const file of files) {
                     try {
+                        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
                         const filePath = `videos/${Date.now()}-${file.name}`;
                         const { error: uploadError } = await supabaseClient.storage.from('media').upload(filePath, file);
                         if (uploadError) throw uploadError;
@@ -1003,6 +1005,7 @@
                 statusEl.textContent = `正在上传 ${files.length} 首音乐到云端...`;
                 for (const file of files) {
                     try {
+                        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
                         const filePath = `music/${Date.now()}-${file.name}`;
                         const { error: uploadError } = await supabaseClient.storage.from('media').upload(filePath, file);
                         if (uploadError) throw uploadError;
@@ -1157,7 +1160,7 @@
                     const response = await fetch(`/.netlify/functions/gemini`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
                     if (!response.ok) {
                         const errorResult = await response.json();
-                        throw new Error(errorResult.error || `API 请求失败: ${response.status}`);
+                        throw new Error(errorResult.error.message || JSON.stringify(errorResult.error) || `API 请求失败: ${response.status}`);
                     }
                     const result = await response.json();
                     if (result.text) {
